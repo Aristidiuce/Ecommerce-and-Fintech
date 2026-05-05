@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+Allow: /index.html
+Allow: /product.html
+Allow: /category.html
+Allow: /search.html
+Allow: /about.html
+Allow: /faq.html
+Allow: /contact.html
+Allow: /terms.html
+Allow: /privacy.html
+Allow: /shipping.html
+Allow: /returns.html
+
+# Block all internal/account pages from Google indexing
+Disallow: /admin.html
+Disallow: /dashboard.html
+Disallow: /supplier.html
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /cart.html
+Disallow: /order-tracking.html
+Disallow: /404.html
+
+# Block API from indexing
+Disallow: /api/
+
+Sitemap: https://kilismart.co.tz/sitemap.xml

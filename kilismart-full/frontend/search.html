@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Matokeo ya Utafutaji — KiliSmart</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--g:#1a6b3c;--g2:#145530;--gold:#c9a84c;--cream:#f9f6f0;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;--border2:#d1d5db;--r:10px;--rl:14px}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);font-size:14px}
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:58px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
+.logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--g);text-decoration:none;flex-shrink:0}.logo span{color:var(--gold)}
+.search-bar{flex:1;display:flex;border:2px solid var(--g);border-radius:var(--r);overflow:hidden;max-width:600px}
+.search-bar input{flex:1;height:40px;border:none;padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;color:var(--text)}
+.search-bar button{background:var(--g);color:#fff;border:none;padding:0 16px;font-size:16px;cursor:pointer}
+.wrap{max-width:1200px;margin:0 auto;padding:16px 20px}
+.layout{display:grid;grid-template-columns:220px 1fr;gap:18px;align-items:start}
+/* Filters sidebar */
+.filters{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:16px;position:sticky;top:74px}
+.filter-title{font-family:'Fraunces',serif;font-size:14px;font-weight:700;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.filter-clear{font-size:11px;color:var(--g);cursor:pointer;font-weight:600;background:none;border:none;font-family:'DM Sans',sans-serif}
+.filter-section{margin-bottom:14px;padding-bottom:14px;border-bottom:.5px solid var(--border)}
+.filter-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.filter-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px}
+.filter-opt{display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:13px;color:var(--text)}
+.filter-opt input[type=checkbox]{accent-color:var(--g);width:15px;height:15px}
+.filter-opt input[type=radio]{accent-color:var(--g);width:15px;height:15px}
+.filter-opt:hover{color:var(--g)}
+.price-range{display:flex;gap:8px;align-items:center}
+.price-input{flex:1;height:36px;border:1.5px solid var(--border2);border-radius:7px;padding:0 10px;font-size:12px;font-family:'DM Sans',sans-serif;outline:none}
+.price-input:focus{border-color:var(--g)}
+/* Results */
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+.results-count{font-size:14px;color:var(--muted)}
+.results-count strong{color:var(--text)}
+.sort-sel{height:36px;border:1.5px solid var(--border2);border-radius:var(--r);padding:0 12px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:#fff;cursor:pointer;color:var(--text)}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.product-card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:all .2s}
+.product-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px)}
+.pc-img{height:140px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:52px;position:relative}
+.pc-badge{position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:20px;font-size:9px;font-weight:700;text-transform:uppercase}
+.badge-hot{background:#fef2f2;color:#dc2626}
+.badge-new{background:#f0faf4;color:var(--g)}
+.badge-sale{background:#fefce8;color:#d97706}
+.pc-info{padding:10px}
+.pc-cat{font-size:9px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.pc-name{font-size:13px;font-weight:600;line-height:1.35;margin-bottom:5px}
+.pc-price{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--g);margin-bottom:3px}
+.pc-weekly{font-size:11px;color:var(--muted);margin-bottom:6px}
+.pc-progress{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:5px}
+.pc-pf{height:100%;border-radius:3px;background:var(--g)}
+.pc-savers{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.dot-g{width:5px;height:5px;border-radius:50%;background:var(--g);display:inline-block;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.no-results{text-align:center;padding:48px 20px;color:var(--muted)}
+.no-results-icon{font-size:48px;margin-bottom:12px}
+.popular-searches{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.pop-tag{border:1.5px solid var(--border2);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500;cursor:pointer;background:#fff;transition:all .18s;color:var(--text)}
+.pop-tag:hover{border-color:var(--g);color:var(--g)}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--g3,#0d3d22);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:600;transition:transform .3s;white-space:nowrap}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.filters{display:none}.results-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Kili<span>Smart</span></a>
+  <div class="search-bar">
+    <input type="text" id="q" placeholder="Tafuta bidhaa..." value="Samsung" oninput="doSearch()"/>
+    <button onclick="doSearch()">🔍</button>
+  </div>
+  <a href="cart.html" style="font-size:22px;text-decoration:none;flex-shrink:0">🛒</a>
+</nav>
+
+<div class="wrap">
+  <div style="font-size:12px;color:var(--muted);margin-bottom:12px">
+    <a href="index.html" style="color:var(--muted);text-decoration:none">Nyumbani</a> › Matokeo ya "<strong id="q-label">Samsung</strong>"
+  </div>
+  <div class="layout">
+    <!-- Filters -->
+    <div class="filters">
+      <div class="filter-title">Vichungi <button class="filter-clear" onclick="clearFilters()">Futa Vyote</button></div>
+      <div class="filter-section">
+        <div class="filter-label">Kategoria</div>
+        <label class="filter-opt"><input type="checkbox" onchange="applyFilters()" checked> Smart Phones</label>
+        <label class="filter-opt"><input type="checkbox" onchange="applyFilters()"> Home Appliances</label>
+        <label class="filter-opt"><input type="checkbox" onchange="applyFilters()"> Computers & TV</label>
+        <label class="filter-opt"><input type="checkbox" onchange="applyFilters()"> Solar & Energy</label>
+        <label class="filter-opt"><input type="checkbox" onchange="applyFilters()"> Furniture</label>
+        <label class="filter-opt"><input type="checkbox" onchange="applyFilters()"> Kilimo</label>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Bei (TZS)</div>
+        <div class="price-range">
+          <input class="price-input" type="number" placeholder="Min" id="f-min"/>
+          <span style="color:var(--muted);font-size:12px">–</span>
+          <input class="price-input" type="number" placeholder="Max" id="f-max"/>
+        </div>
+        <button onclick="applyFilters()" style="width:100%;margin-top:8px;height:34px;background:var(--g);color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">Tumia</button>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Hali ya Akiba</div>
+        <label class="filter-opt"><input type="radio" name="pct" onchange="applyFilters()" checked> Zote</label>
+        <label class="filter-opt"><input type="radio" name="pct" onchange="applyFilters()"> Karibu na 100%</label>
+        <label class="filter-opt"><input type="radio" name="pct" onchange="applyFilters()"> Mpya (0–25%)</label>
+      </div>
+      <div class="filter-section">
+        <div class="filter-label">Badge</div>
+        <label class="filter-opt"><input type="checkbox" onchange="applyFilters()"> 🔥 HOT</label>
+        <label class="filter-opt"><input type="checkbox" onchange="applyFilters()"> ✨ MPYA</label>
+        <label class="filter-opt"><input type="checkbox" onchange="applyFilters()"> 💸 PUNGUZO</label>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div>
+      <div class="results-header">
+        <div class="results-count">Bidhaa <strong id="result-count">3</strong> zimepatikana kwa "<span id="q-header">Samsung</span>"</div>
+        <select class="sort-sel" onchange="sortResults(this.value)">
+          <option value="rel">Inayofaa zaidi</option>
+          <option value="price-asc">Bei: Chini hadi Juu</option>
+          <option value="price-desc">Bei: Juu hadi Chini</option>
+          <option value="savers">Wanaohifadhi Zaidi</option>
+          <option value="pct">Karibu na 100%</option>
+        </select>
+      </div>
+      <div class="results-grid" id="results-grid"></div>
+      <div class="no-results" id="no-results" style="display:none">
+        <div class="no-results-icon">🔍</div>
+        <div style="font-size:16px;font-weight:600;margin-bottom:6px">Hakuna bidhaa iliyopatikana</div>
+        <div style="font-size:13px;margin-bottom:14px">Jaribu maneno mengine au angalia maswali maarufu:</div>
+        <div class="popular-searches">
+          <button class="pop-tag" onclick="searchFor('Samsung')">Samsung</button>
+          <button class="pop-tag" onclick="searchFor('Solar')">Solar</button>
+          <button class="pop-tag" onclick="searchFor('Godoro')">Godoro</button>
+          <button class="pop-tag" onclick="searchFor('Sofa')">Sofa</button>
+          <button class="pop-tag" onclick="searchFor('Laptop')">Laptop</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script>
+const allProducts=[
+  {id:1,emoji:'📱',cat:'Smart Phones',name:'Samsung Galaxy A15',price:280000,savers:68,pct:72,badge:'hot'},
+  {id:2,emoji:'📱',cat:'Smart Phones',name:'Tecno Spark 20',price:195000,savers:44,pct:55,badge:'new'},
+  {id:3,emoji:'📱',cat:'Smart Phones',name:'Itel P55',price:115000,savers:89,pct:78,badge:'sale'},
+  {id:4,emoji:'🛏️',cat:'Home Appliances',name:'Godoro la Spring 6×6',price:195000,savers:45,pct:51,badge:''},
+  {id:5,emoji:'🍳',cat:'Home Appliances',name:'Sufuria Set (8 pcs)',price:85000,savers:91,pct:82,badge:'sale'},
+  {id:6,emoji:'📺',cat:'Home Appliances',name:'TV Samsung 32" Smart',price:520000,savers:41,pct:29,badge:'hot'},
+  {id:7,emoji:'🌞',cat:'Solar & Energy',name:'Solar Panel 100W Kit',price:420000,savers:22,pct:34,badge:'new'},
+  {id:8,emoji:'🔦',cat:'Solar & Energy',name:'Taa ya Jua + Chaja',price:45000,savers:156,pct:91,badge:'sale'},
+  {id:9,emoji:'🪑',cat:'Furniture',name:'Sofa Set ya Plastiki',price:120000,savers:53,pct:60,badge:'hot'},
+  {id:10,emoji:'🪵',cat:'Furniture',name:'Meza ya Chakula (4 viti)',price:245000,savers:21,pct:38,badge:''},
+  {id:11,emoji:'💻',cat:'Computers & TV',name:'Laptop Lenovo IdeaPad 3',price:680000,savers:18,pct:25,badge:''},
+  {id:12,emoji:'💧',cat:'Kilimo',name:'Pampu ya Maji (150W)',price:350000,savers:12,pct:18,badge:'new'},
+  {id:13,emoji:'🌾',cat:'Kilimo',name:'Dawa ya Kupulizia 16L',price:95000,savers:27,pct:35,badge:''},
+  {id:14,emoji:'🚲',cat:'BodaBoda',name:'Baiskeli ya Mizigo',price:280000,savers:19,pct:22,badge:'new'},
+  {id:15,emoji:'🎒',cat:'School & Kids',name:'School Bag Set Kamili',price:45000,savers:134,pct:90,badge:'sale'},
+];
+
+let filtered=[...allProducts];
+
+function renderCard(p){
+  const bdg=p.badge?`<div class="pc-badge badge-${p.badge}" style="position:absolute;top:7px;left:7px;z-index:2">${p.badge==='hot'?'HOT 🔥':p.badge==='new'?'MPYA ✨':'PUNGUZO 💸'}</div>`:'';
+  const hasImg = p.images && p.images.length > 0 && p.images[0].startsWith('http');
+  const imgHtml = hasImg
+    ? `<img src="${p.images[0]}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block;" onerror="this.style.display='none'"/>`
+    : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#e8f5ee,#f5fff8)"><span style="font-size:44px;opacity:.35">${p.emoji}</span></div>`;
+  return `<div class="product-card" onclick="window.location='product.html'">
+    <div class="pc-img" style="position:relative">${bdg}${imgHtml}</div>
+    <div class="pc-info">
+      <div class="pc-cat">${p.cat}</div>
+      <div class="pc-name">${p.name}</div>
+      <div class="pc-price">TZS ${p.price.toLocaleString()}</div>
+      <div class="pc-weekly">≈ TZS ${Math.ceil(p.price/12).toLocaleString()}/wiki</div>
+      <div class="pc-progress"><div class="pc-pf" style="width:${p.pct}%"></div></div>
+      <div class="pc-savers"><span class="dot-g"></span>${p.savers} wanaohifadhi</div>
+    </div>
+  </div>`;
+}
+
+function render(){
+  const grid=document.getElementById('results-grid');
+  const noR=document.getElementById('no-results');
+  if(!filtered.length){grid.innerHTML='';noR.style.display='block';}
+  else{noR.style.display='none';grid.innerHTML=filtered.map(renderCard).join('');}
+  document.getElementById('result-count').textContent=filtered.length;
+}
+
+function doSearch(){
+  const q=document.getElementById('q').value.toLowerCase().trim();
+  document.getElementById('q-label').textContent=q||'Zote';
+  document.getElementById('q-header').textContent=q||'Zote';
+  filtered=allProducts.filter(p=>!q||p.name.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q));
+  render();
+}
+
+function sortResults(v){
+  if(v==='price-asc')filtered.sort((a,b)=>a.price-b.price);
+  else if(v==='price-desc')filtered.sort((a,b)=>b.price-a.price);
+  else if(v==='savers')filtered.sort((a,b)=>b.savers-a.savers);
+  else if(v==='pct')filtered.sort((a,b)=>b.pct-a.pct);
+  else filtered.sort(()=>0);
+  render();
+}
+
+function applyFilters(){render();}
+function clearFilters(){document.querySelectorAll('.filter-opt input').forEach(i=>i.type==='radio'?i.checked=i.value===''||i.id===''||!i.value:i.checked=false);filtered=[...allProducts];render();}
+function searchFor(q){document.getElementById('q').value=q;doSearch();}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>t.style.transform='translateX(-50%) translateY(80px)',3000);}
+
+doSearch();
+</script>
+</body>
+</html>

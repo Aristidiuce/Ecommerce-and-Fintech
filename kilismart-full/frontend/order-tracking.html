@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow, noarchive"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Fuatilia Order — KiliSmart</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--g:#1a6b3c;--g2:#145530;--gold:#c9a84c;--cream:#f9f6f0;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;--r:10px;--rl:14px}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text)}
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--g);text-decoration:none}.logo span{color:var(--gold)}
+.wrap{max-width:680px;margin:0 auto;padding:24px 20px}
+.search-bar{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:16px}
+.search-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px}
+.search-row{display:flex;gap:8px}
+.ti{flex:1;height:46px;border:2px solid var(--border);border-radius:var(--r);padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.ti:focus{border-color:var(--g)}
+.btn-g{height:46px;padding:0 20px;background:var(--g);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+.btn-g:hover{background:var(--g2)}
+/* Status card */
+.status-card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.sc-header{background:var(--g);color:#fff;padding:16px 20px;display:flex;justify-content:space-between;align-items:center}
+.sc-order-id{font-family:'Fraunces',serif;font-size:18px;font-weight:700}
+.sc-date{font-size:12px;opacity:.8}
+.sc-badge{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700}
+.sc-product{display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border)}
+.sc-emoji{width:60px;height:60px;background:var(--cream);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0;border:1px solid var(--border)}
+.sc-prod-name{font-size:15px;font-weight:600;margin-bottom:4px}
+.sc-prod-price{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--g);margin-bottom:4px}
+.sc-prod-meta{font-size:12px;color:var(--muted)}
+/* Timeline */
+.timeline-wrap{padding:20px}
+.tl-item{display:flex;gap:14px;margin-bottom:0;position:relative}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:15px;top:32px;bottom:-4px;width:2px;background:var(--border)}
+.tl-item.done:not(:last-child)::after{background:var(--g)}
+.tl-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:32px}
+.tl-circle{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--muted);z-index:1;position:relative}
+.tl-item.done .tl-circle{background:var(--g);border-color:var(--g);color:#fff}
+.tl-item.curr .tl-circle{border-color:var(--g);color:var(--g);box-shadow:0 0 0 4px rgba(26,107,60,.12)}
+.tl-content{padding-bottom:20px;flex:1}
+.tl-title{font-size:14px;font-weight:600;margin-bottom:3px}
+.tl-item.done .tl-title{color:var(--g)}
+.tl-item.curr .tl-title{color:var(--text)}
+.tl-item:not(.done):not(.curr) .tl-title{color:var(--muted)}
+.tl-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:4px}
+.tl-time{font-size:11px;color:var(--muted)}
+.tl-curr-badge{display:inline-block;background:var(--g);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:8px}
+/* Info rows */
+.info-card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:16px 20px;margin-bottom:10px}
+.info-card-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:10px}
+.info-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:.5px solid var(--border);font-size:13px}
+.info-row:last-child{border-bottom:none}
+.ir-label{color:var(--muted)}.ir-val{font-weight:500}
+.wa-btn{width:100%;background:#25d366;color:#fff;border:none;border-radius:var(--r);height:46px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px}
+</style>
+</head>
+<body>
+<nav><a href="index.html" class="logo">Kili<span>Smart</span></a><a href="dashboard.html" style="font-size:13px;color:var(--muted);text-decoration:none">Dashboard</a></nav>
+<div class="wrap">
+  <h1 style="font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:16px">🚚 Fuatilia Order Yako</h1>
+
+  <div class="search-bar">
+    <div class="search-label">Ingiza nambari ya order au nambari ya simu yako</div>
+    <div class="search-row">
+      <input class="ti" id="order-num" placeholder="e.g. KS-0228 au +255 712 xxx xxx" value="KS-0228"/>
+      <button class="btn-g" onclick="trackOrder()">Fuatilia →</button>
+    </div>
+  </div>
+
+  <div id="result" style="display:none">
+    <div class="status-card">
+      <div class="sc-header">
+        <div>
+          <div class="sc-order-id">KS-0228</div>
+          <div class="sc-date">Ilianza: 1 Aprili 2026</div>
+        </div>
+        <span class="sc-badge">✅ Imepokelewa</span>
+      </div>
+      <div class="sc-product">
+        <div class="sc-emoji">🔦</div>
+        <div>
+          <div class="sc-prod-name">Taa ya Jua + Chaja ya Simu</div>
+          <div class="sc-prod-price">TZS 45,000</div>
+          <div class="sc-prod-meta">Moshi Mjini · Amina Juma Moshi</div>
+        </div>
+      </div>
+      <div class="timeline-wrap">
+        <div class="tl-item done">
+          <div class="tl-left"><div class="tl-circle">✓</div></div>
+          <div class="tl-content">
+            <div class="tl-title">Mpango Uliofunguliwa</div>
+            <div class="tl-desc">Ulianza kuhifadhi kwa Taa ya Jua</div>
+            <div class="tl-time">1 Aprili 2026 · 10:23</div>
+          </div>
+        </div>
+        <div class="tl-item done">
+          <div class="tl-left"><div class="tl-circle">✓</div></div>
+          <div class="tl-content">
+            <div class="tl-title">100% Imefikiwa</div>
+            <div class="tl-desc">Umekusanya TZS 45,000 yote. Hongera!</div>
+            <div class="tl-time">5 Aprili 2026 · 14:47</div>
+          </div>
+        </div>
+        <div class="tl-item done">
+          <div class="tl-left"><div class="tl-circle">✓</div></div>
+          <div class="tl-content">
+            <div class="tl-title">Tunanunua Bidhaa</div>
+            <div class="tl-desc">Tuliwasiliana na msambazaji — Solar Africa Ltd</div>
+            <div class="tl-time">6 Aprili 2026 · 9:15</div>
+          </div>
+        </div>
+        <div class="tl-item done">
+          <div class="tl-left"><div class="tl-circle">✓</div></div>
+          <div class="tl-content">
+            <div class="tl-title">Ukaguzi wa Ubora</div>
+            <div class="tl-desc">Picha ya bidhaa ilitumwa WhatsApp kwa uthibitisho wako</div>
+            <div class="tl-time">7 Aprili 2026 · 11:30</div>
+          </div>
+        </div>
+        <div class="tl-item done">
+          <div class="tl-left"><div class="tl-circle">✓</div></div>
+          <div class="tl-content">
+            <div class="tl-title">Imesafirishwa <span class="tl-curr-badge">8 Aprili</span></div>
+            <div class="tl-desc">Boda boda: Hassan Rider (+255 765 xxx 202) anakuletea</div>
+            <div class="tl-time">8 Aprili 2026 · 8:00</div>
+          </div>
+        </div>
+        <div class="tl-item done">
+          <div class="tl-left"><div class="tl-circle">✓</div></div>
+          <div class="tl-content">
+            <div class="tl-title">Imepokelewa ✅</div>
+            <div class="tl-desc">Amina alisaini uthibitisho wa kupokea. Asante!</div>
+            <div class="tl-time">8 Aprili 2026 · 14:22</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">Maelezo ya Delivery</div>
+      <div class="info-row"><span class="ir-label">Mtoa Huduma</span><span class="ir-val">Hassan Rider</span></div>
+      <div class="info-row"><span class="ir-label">Nambari ya Mtoa</span><span class="ir-val">+255 765 xxx 202</span></div>
+      <div class="info-row"><span class="ir-label">Anwani</span><span class="ir-val">Mji Mpya, Moshi Mjini</span></div>
+      <div class="info-row"><span class="ir-label">Ada ya Delivery</span><span class="ir-val">TZS 3,000 (imejumuishwa)</span></div>
+      <button class="wa-btn" onclick="alert('WhatsApp inafunguka...')">💬 Piga WhatsApp Support</button>
+    </div>
+  </div>
+
+  <div id="no-result" style="text-align:center;padding:40px 20px;background:#fff;border:1px solid var(--border);border-radius:var(--rl);display:none">
+    <div style="font-size:48px;margin-bottom:12px">🔍</div>
+    <div style="font-size:16px;font-weight:600;margin-bottom:8px">Order haijapatikana</div>
+    <div style="font-size:13px;color:var(--muted)">Hakikisha nambari ya order ni sahihi. Mfano: KS-0228</div>
+  </div>
+</div>
+<script>
+function trackOrder(){
+  const v=document.getElementById('order-num').value.trim();
+  if(v.toUpperCase().includes('KS-0228')||v.includes('712')){
+    document.getElementById('result').style.display='block';
+    document.getElementById('no-result').style.display='none';
+  } else if(v){
+    document.getElementById('result').style.display='none';
+    document.getElementById('no-result').style.display='block';
+  }
+}
+// Auto-track on load if value present
+window.onload=()=>trackOrder();
+</script>
+</body>
+</html>

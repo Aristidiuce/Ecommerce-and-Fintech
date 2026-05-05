@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow, noarchive"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KiliSmart — Supplier Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--g:#1a6b3c;--g2:#145530;--g3:#0d3d22;--gold:#c9a84c;--cream:#f9f6f0;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;--border2:#d1d5db;--danger:#dc2626;--warning:#d97706;--success:#16a34a;--info:#1d4ed8;--r:10px;--rl:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);font-size:13px}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sb{background:var(--g3);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.mn{overflow-x:hidden;display:flex;flex-direction:column}
+/* Sidebar */
+.sb-logo{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-logo-t{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:#fff}
+.sb-logo-t span{color:var(--gold)}
+.sb-badge{display:inline-block;background:rgba(201,168,76,.2);border:1px solid rgba(201,168,76,.4);color:#fcd34d;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.8px;margin-top:4px}
+.sb-supplier{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-sup-name{font-size:13px;font-weight:600;color:#fff;margin-bottom:2px}
+.sb-sup-loc{font-size:10px;color:rgba(255,255,255,.4)}
+.sb-cats{font-size:10px;color:rgba(255,255,255,.35);margin-top:4px;line-height:1.5}
+.sb-nav{flex:1;padding:8px 0}
+.sb-sec{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:10px 16px 4px}
+.si{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:12px;font-weight:500;color:rgba(255,255,255,.65);cursor:pointer;border-left:3px solid transparent;transition:all .18s}
+.si:hover{background:rgba(255,255,255,.06);color:#fff}
+.si.on{background:rgba(255,255,255,.1);color:#fff;border-left-color:var(--gold)}
+.si-icon{width:16px;text-align:center;font-size:14px;flex-shrink:0}
+.si-badge{margin-left:auto;border-radius:20px;padding:1px 7px;font-size:9px;font-weight:700;background:var(--danger);color:#fff}
+.si-badge.orange{background:var(--warning)}
+.sb-bot{padding:12px 16px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-out{font-size:11px;color:rgba(255,255,255,.4);cursor:pointer;display:flex;align-items:center;gap:6px}
+.sb-out:hover{color:#fff}
+/* Topbar */
+.tb{background:#fff;border-bottom:1px solid var(--border);padding:0 22px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.tb-title{font-family:'Fraunces',serif;font-size:16px;font-weight:700}
+.tb-r{display:flex;align-items:center;gap:8px}
+.btn{height:32px;padding:0 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;transition:all .2s}
+.btn-g{background:var(--g);color:#fff}.btn-g:hover{background:var(--g2)}
+.btn-wa{background:#25d366;color:#fff}.btn-wa:hover{opacity:.88}
+.btn-out{background:none;border:1.5px solid var(--border2);color:var(--text)}
+/* Pages */
+.pg{display:none;padding:18px 22px}.pg.on{display:block}
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;position:relative;overflow:hidden}
+.kc::after{content:attr(data-icon);position:absolute;right:10px;top:10px;font-size:22px;opacity:.1}
+.kc-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;font-weight:600}
+.kc-val{font-family:'Fraunces',serif;font-size:22px;font-weight:700;line-height:1;margin-bottom:4px}
+.kc-sub{font-size:11px;color:var(--muted)}
+.kc-sub.up{color:var(--success)}
+/* Cards */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:12px}
+.card-title{font-family:'Fraunces',serif;font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+/* Order cards */
+.order-card{border:1px solid var(--border);border-left:3px solid var(--warning);border-radius:var(--rl);padding:14px;margin-bottom:10px;background:#fff;transition:border-color .2s}
+.order-card.done{border-left-color:var(--success);opacity:.75}
+.order-card.dispatched{border-left-color:var(--info)}
+.oh{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.o-prod{font-size:14px;font-weight:600}
+.o-id{font-size:11px;color:var(--muted);margin-top:1px}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700}
+.pill-orange{background:#fff3ed;color:var(--warning)}
+.pill-green{background:#f0fdf4;color:var(--success)}
+.pill-blue{background:#eff6ff;color:var(--info)}
+.pill-gray{background:#f3f4f6;color:var(--muted)}
+.pill-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.om{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.om-item{background:var(--cream);border-radius:8px;padding:8px 10px}
+.om-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.om-val{font-size:12px;font-weight:600;color:var(--text)}
+.oa{display:flex;gap:7px}
+.ab{padding:6px 12px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;transition:all .2s}
+.ab-g{background:var(--success);color:#fff;flex:1}.ab-g:hover{opacity:.88}
+.ab-wa{background:#dcfce7;color:#16a34a;flex:1}
+.ab-warn{background:#fff3ed;color:var(--warning)}
+/* Products grid */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.pc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:box-shadow .2s;position:relative}
+.pc:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.pc-img{height:120px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:44px;position:relative}
+.pc-badge{position:absolute;top:7px;left:7px;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700}
+.badge-hot{background:#fef2f2;color:var(--danger)}
+.badge-new{background:#f0fdf4;color:var(--g)}
+.badge-sale{background:#fefce8;color:var(--warning)}
+.pc-body{padding:10px 12px}
+.pc-cat{font-size:9px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.pc-name{font-size:13px;font-weight:600;margin-bottom:4px}
+.pc-retail{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--g)}
+.pc-wholesale{font-size:11px;color:var(--muted);margin-bottom:4px}
+.pc-savers{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.pc-prog{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-bottom:8px}
+.pc-pf{height:100%;border-radius:2px;background:var(--g)}
+.pc-acts{display:flex;gap:6px}
+.mini-btn{flex:1;height:28px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;transition:all .2s}
+.mini-g{background:var(--g);color:#fff}
+.mini-out{background:none;border:1.5px solid var(--border2);color:var(--muted)}
+/* Table */
+.tw{background:#fff;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:12px}
+table{width:100%;border-collapse:collapse}
+thead{background:#f9fafb}
+th{padding:9px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border)}
+td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+/* Forecast bars */
+.forecast-item{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.fi-emoji{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+.fi-name{font-size:13px;font-weight:500;flex:1}
+.fi-bar-wrap{width:120px;flex-shrink:0}
+.fi-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.fi-fill{height:100%;border-radius:3px;background:var(--g)}
+.fi-pct{font-size:11px;color:var(--muted);width:32px;text-align:right;flex-shrink:0}
+.fi-eta{font-size:11px;color:var(--warning);font-weight:600;flex-shrink:0;white-space:nowrap}
+/* Modal */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.mo.open{display:flex;animation:mfi .2s}
+@keyframes mfi{from{opacity:0}to{opacity:1}}
+.mb{background:#fff;border-radius:var(--rl);width:100%;max-height:88vh;overflow-y:auto;animation:msu .22s ease}
+@keyframes msu{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+.mh{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+.mh h3{font-family:'Fraunces',serif;font-size:14px;font-weight:700}
+.mc{width:28px;height:28px;border:1.5px solid var(--border2);border-radius:50%;background:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.mbody{padding:16px 18px}
+/* Form */
+.fg{margin-bottom:12px}
+.fl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);display:block;margin-bottom:5px}
+.fi{width:100%;height:42px;border:1.5px solid var(--border2);border-radius:var(--r);padding:0 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border-color .2s}
+.fi:focus{border-color:var(--g)}
+.fta{width:100%;border:1.5px solid var(--border2);border-radius:var(--r);padding:10px 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;resize:vertical;min-height:80px;transition:border-color .2s;line-height:1.6}
+.fta:focus{border-color:var(--g)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-actions{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.btn-full{width:100%;height:42px;border-radius:var(--r);font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;border:none}
+/* Info rows */
+.ir{display:flex;justify-content:space-between;padding:7px 0;border-bottom:.5px solid var(--border);font-size:12px}
+.ir:last-child{border-bottom:none}
+.ir-l{color:var(--muted)}.ir-v{font-weight:600}
+.ir-v.g{color:var(--g)}
+/* Alert */
+.alert{border-radius:var(--rl);padding:12px 14px;margin-bottom:12px;font-size:12px;line-height:1.6}
+.alert-orange{background:#fff3ed;border:1px solid #fdba74;color:var(--warning)}
+.alert-green{background:#f0fdf4;border:1px solid #a7f3d0;color:var(--success)}
+.alert-blue{background:#eff6ff;border:1px solid #bfdbfe;color:var(--info)}
+/* Profile */
+.profile-avatar{width:64px;height:64px;border-radius:50%;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;flex-shrink:0}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--g3);color:#fff;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:500;z-index:600;transition:transform .3s;white-space:nowrap}
+@media(max-width:800px){.app{grid-template-columns:1fr}.sb{display:none}.kpi-grid{grid-template-columns:repeat(2,1fr)}.pg{padding:12px}.frow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<div class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-t">Kili<span>Smart</span></div>
+    <span class="sb-badge">SUPPLIER PORTAL</span>
+  </div>
+  <div class="sb-supplier">
+    <div class="sb-sup-name">TechMoshi Ltd</div>
+    <div class="sb-sup-loc">📍 Moshi Mjini, Kilimanjaro</div>
+    <div class="sb-cats">Smart Phones · Kompyuta · Accessories</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Dashboard</div>
+    <div class="si on" onclick="nav('overview',this)"><span class="si-icon">📊</span>Dashboard</div>
+    <div class="si" onclick="nav('pending',this)"><span class="si-icon">⏳</span>Pending Orders<span class="si-badge">3</span></div>
+    <div class="si" onclick="nav('fulfilled',this)"><span class="si-icon">✅</span>Completed Orders</div>
+    <div class="sb-sec">My Stock</div>
+    <div class="si" onclick="nav('products',this)"><span class="si-icon">📦</span>My Products<span class="si-badge orange">4</span></div>
+    <div class="si" onclick="nav('add-product',this)"><span class="si-icon">➕</span>Add New Product</div>
+    <div class="si" onclick="nav('forecast',this)"><span class="si-icon">📈</span>Demand Forecast</div>
+    <div class="sb-sec">Account</div>
+    <div class="si" onclick="nav('orders-history',this)"><span class="si-icon">📋</span>Order History</div>
+    <div class="si" onclick="nav('earnings',this)"><span class="si-icon">💰</span>Earnings</div>
+    <div class="si" onclick="nav('profile',this)"><span class="si-icon">🏭</span>Business Profile</div>
+  </nav>
+  <div class="sb-bot">
+    <div class="sb-out" onclick="showToast('Logging out...')">🚪 Logout</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="mn">
+  <div class="tb">
+    <div class="tb-title" id="pg-title">Dashboard</div>
+    <div class="tb-r">
+      <button class="btn btn-wa" onclick="showToast('Opening WhatsApp to KiliSmart team...')">📱 Notify KiliSmart</button>
+      <button class="btn btn-g" onclick="nav('add-product',document.querySelectorAll('.si')[5])">+ Add Product</button>
+    </div>
+  </div>
+
+  <!-- ══ OVERVIEW ══ -->
+  <div class="pg on" id="pg-overview">
+    <div class="kpi-grid">
+      <div class="kc" data-icon="⏳"><div class="kc-label">Pending Orders</div><div class="kc-val" style="color:var(--warning)">3</div><div class="kc-sub">Awaiting your action</div></div>
+      <div class="kc" data-icon="✅"><div class="kc-label">Fulfilled This Month</div><div class="kc-val" style="color:var(--success)">17</div><div class="kc-sub up">↑ +5 vs last month</div></div>
+      <div class="kc" data-icon="💰"><div class="kc-label">Earnings This Month</div><div class="kc-val">TZS 3.4M</div><div class="kc-sub up">↑ +18%</div></div>
+      <div class="kc" data-icon="👥"><div class="kc-label">Customers Saving</div><div class="kc-val" style="color:var(--info)">130</div><div class="kc-sub">Across 4 products</div></div>
+    </div>
+    <div class="alert alert-orange">
+      🔔 <strong>3 orders need your action.</strong> Customers have paid in full. Please confirm stock availability and prepare items within 24 hours.
+      <button onclick="nav('pending',document.querySelectorAll('.si')[1])" style="margin-left:10px;background:var(--warning);color:#fff;border:none;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">View Pending →</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div class="card">
+        <div class="card-title">Demand Forecast — Next 4 Weeks</div>
+        <div id="forecast-mini"></div>
+        <button onclick="nav('forecast',document.querySelectorAll('.si')[6])" style="width:100%;margin-top:10px;background:none;border:1.5px solid var(--border2);border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--muted)">Full Forecast →</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Recent Activity</div>
+        <div id="activity-feed"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PENDING ORDERS ══ -->
+  <div class="pg" id="pg-pending">
+    <div class="alert alert-orange">⚠️ <strong>Action Required:</strong> These customers have paid 100%. Confirm stock and prepare items within 24 hours.</div>
+    <div id="pending-list"></div>
+  </div>
+
+  <!-- ══ FULFILLED ══ -->
+  <div class="pg" id="pg-fulfilled">
+    <div class="card">
+      <div class="card-title">Recently Completed Orders</div>
+      <div id="fulfilled-list"></div>
+    </div>
+  </div>
+
+  <!-- ══ MY PRODUCTS ══ -->
+  <div class="pg" id="pg-products">
+    <div class="alert alert-blue">📦 These are your products listed on KiliSmart. Customers save toward these prices. Click Edit to update details, pricing, or availability.</div>
+    <div class="prod-grid" id="prod-grid"></div>
+  </div>
+
+  <!-- ══ ADD PRODUCT ══ -->
+  <div class="pg" id="pg-add-product">
+    <div class="card" style="max-width:600px">
+      <div class="card-title">➕ Add New Product to KiliSmart</div>
+      <div class="alert alert-blue" style="margin-bottom:14px">📋 Fill in your product details. KiliSmart admin will review and approve within 48 hours before it goes live on the website.</div>
+
+      <div class="fg"><label class="fl">Product Emoji / Icon</label><input class="fi" id="ap-emoji" placeholder="e.g. 📱" maxlength="4"/><div style="font-size:11px;color:var(--muted);margin-top:3px">Used as placeholder until real photos are uploaded</div></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Product Name (English) *</label><input class="fi" id="ap-name" placeholder="Samsung Galaxy A15"/></div>
+        <div class="fg"><label class="fl">Jina (Kiswahili) *</label><input class="fi" id="ap-name-sw" placeholder="Samsung Galaxy A15"/></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Category *</label>
+          <select class="fi" style="cursor:pointer;appearance:none" id="ap-cat">
+            <option value="">— Select —</option>
+            <option>Smart Phones</option><option>Home Appliances</option>
+            <option>Solar & Energy</option><option>Furniture</option>
+            <option>Computers & TV</option><option>Kilimo & Farming</option>
+            <option>BodaBoda & Vehicles</option><option>School & Kids</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Stock Available (Units)</label><input class="fi" type="number" id="ap-stock" placeholder="e.g. 20" min="1"/></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Your Wholesale Price (TZS) *</label><input class="fi" type="number" id="ap-wholesale" placeholder="220000" oninput="calcMarginAP()"/></div>
+        <div class="fg"><label class="fl">Suggested Retail Price (TZS) *</label><input class="fi" type="number" id="ap-retail" placeholder="280000" oninput="calcMarginAP()"/></div>
+      </div>
+      <div class="fg">
+        <div class="fi" style="background:var(--cream);display:flex;align-items:center;color:var(--g);font-weight:700;cursor:default" id="ap-margin-display">Margin: — (fill prices above)</div>
+      </div>
+      <div class="fg"><label class="fl">Lead Time (days to prepare)</label><input class="fi" type="number" id="ap-lead" value="2" min="1"/></div>
+      <div class="fg"><label class="fl">Product Description (Swahili) *</label><textarea class="fta" id="ap-desc" rows="3" placeholder="Maelezo ya bidhaa hii kwa Kiswahili..."></textarea></div>
+      <div class="fg"><label class="fl">Warranty</label><input class="fi" id="ap-warranty" placeholder="e.g. Mwaka 1 (Samsung Tanzania)"/></div>
+      <div class="fg"><label class="fl">Colors Available (comma separated)</label><input class="fi" id="ap-colors" placeholder="Nyeusi, Nyeupe, Bluu"/></div>
+      <div class="fg"><label class="fl">Key Specifications (one per line)</label><textarea class="fta" id="ap-specs" rows="4" placeholder="Screen: 6.5 inch Super AMOLED&#10;RAM: 4GB&#10;Betri: 5000mAh&#10;OS: Android 14"></textarea></div>
+
+      <!-- Image upload section -->
+      <div class="fg">
+        <label class="fl">Product Photos (up to 4)</label>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:6px">
+          <div onclick="fakeUpload(0,this)" style="aspect-ratio:1;border:2px dashed var(--border2);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:var(--cream);transition:all .2s;font-size:11px;color:var(--muted);text-align:center;padding:6px" id="img-slot-0">
+            <span style="font-size:22px;margin-bottom:4px">📷</span>Main Photo
+          </div>
+          <div onclick="fakeUpload(1,this)" style="aspect-ratio:1;border:2px dashed var(--border2);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:var(--cream);transition:all .2s;font-size:11px;color:var(--muted);text-align:center;padding:6px" id="img-slot-1">
+            <span style="font-size:22px;margin-bottom:4px">📷</span>Back View
+          </div>
+          <div onclick="fakeUpload(2,this)" style="aspect-ratio:1;border:2px dashed var(--border2);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:var(--cream);transition:all .2s;font-size:11px;color:var(--muted);text-align:center;padding:6px" id="img-slot-2">
+            <span style="font-size:22px;margin-bottom:4px">📷</span>Side View
+          </div>
+          <div onclick="fakeUpload(3,this)" style="aspect-ratio:1;border:2px dashed var(--border2);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:var(--cream);transition:all .2s;font-size:11px;color:var(--muted);text-align:center;padding:6px" id="img-slot-3">
+            <span style="font-size:22px;margin-bottom:4px">📷</span>Detail Shot
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.6">Bonyeza kila slot kupakia picha. JPG/PNG, max 5MB kila moja. Picha nzuri = savers zaidi!</div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-full btn-g" onclick="submitProduct()">Submit for Review →</button>
+        <button class="btn-full" style="background:none;border:1.5px solid var(--border2);color:var(--muted)" onclick="nav('products',document.querySelectorAll('.si')[4])">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DEMAND FORECAST ══ -->
+  <div class="pg" id="pg-forecast">
+    <div class="alert alert-blue">📈 This shows how many customers are currently saving for your products and when they are expected to reach 100%. Use this to prepare your stock in advance.</div>
+    <div class="card">
+      <div class="card-title">Upcoming Orders Forecast</div>
+      <div id="forecast-full"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Stock Preparation Advice</div>
+      <div class="ir"><span class="ir-l">Samsung Galaxy A15 — 72% avg progress</span><span class="ir-v" style="color:var(--warning)">Prepare 5–8 units this week</span></div>
+      <div class="ir"><span class="ir-l">Lenovo IdeaPad 3 — 25% avg progress</span><span class="ir-v" style="color:var(--muted)">No action needed yet</span></div>
+      <div class="ir"><span class="ir-l">Tecno Spark 20 — 55% avg progress</span><span class="ir-v" style="color:var(--info)">Start contacting distributor</span></div>
+      <div class="ir"><span class="ir-l">Itel P55 — 78% avg progress</span><span class="ir-v" style="color:var(--warning)">High priority — prepare now</span></div>
+    </div>
+  </div>
+
+  <!-- ══ ORDER HISTORY ══ -->
+  <div class="pg" id="pg-orders-history">
+    <div class="tw">
+      <table><thead><tr><th>Order #</th><th>Product</th><th>Customer District</th><th>Date</th><th>Your Payout</th><th>Status</th></tr></thead>
+      <tbody id="history-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ EARNINGS ══ -->
+  <div class="pg" id="pg-earnings">
+    <div class="kpi-grid">
+      <div class="kc" data-icon="💰"><div class="kc-label">Total Earned (All Time)</div><div class="kc-val">TZS 42.6M</div><div class="kc-sub">Since joining KiliSmart</div></div>
+      <div class="kc" data-icon="📅"><div class="kc-label">This Month</div><div class="kc-val">TZS 3.4M</div><div class="kc-sub up">17 orders</div></div>
+      <div class="kc" data-icon="📊"><div class="kc-label">Avg per Order</div><div class="kc-val">TZS 200K</div><div class="kc-sub">Wholesale average</div></div>
+      <div class="kc" data-icon="🎯"><div class="kc-label">Top Product</div><div class="kc-val" style="font-size:15px">Samsung A15</div><div class="kc-sub">14 orders this month</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Earnings by Product (This Month)</div>
+      <table><thead><tr><th>Product</th><th>Orders</th><th>Wholesale Total</th><th>Avg per Order</th></tr></thead>
+      <tbody>
+        <tr><td>📱 Samsung Galaxy A15</td><td>14</td><td style="color:var(--g);font-weight:600">TZS 3,080,000</td><td>TZS 220,000</td></tr>
+        <tr><td>📱 Tecno Spark 20</td><td>2</td><td style="color:var(--g);font-weight:600">TZS 296,000</td><td>TZS 148,000</td></tr>
+        <tr><td>💻 Lenovo IdeaPad 3</td><td>1</td><td style="color:var(--g);font-weight:600">TZS 540,000</td><td>TZS 540,000</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-title">Payment Schedule</div>
+      <div class="alert alert-green" style="margin-bottom:12px">✅ KiliSmart pays you within 48 hours after each order is delivered and confirmed by the customer.</div>
+      <table><thead><tr><th>Order #</th><th>Product</th><th>Amount</th><th>Status</th><th>Expected Pay Date</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--g);font-weight:600">KS-0244</td><td>Lenovo IdeaPad 3</td><td style="font-weight:600">TZS 540,000</td><td><span class="pill pill-blue">Processing</span></td><td>2 May 2026</td></tr>
+        <tr><td style="color:var(--g);font-weight:600">KS-0239</td><td>Samsung A15</td><td style="font-weight:600">TZS 220,000</td><td><span class="pill pill-green">Paid ✅</span></td><td>28 Apr 2026</td></tr>
+        <tr><td style="color:var(--g);font-weight:600">KS-0235</td><td>Tecno Spark 20</td><td style="font-weight:600">TZS 148,000</td><td><span class="pill pill-green">Paid ✅</span></td><td>22 Apr 2026</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ PROFILE ══ -->
+  <div class="pg" id="pg-profile">
+    <div class="card" style="max-width:520px">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;padding:14px;background:var(--cream);border-radius:var(--rl);border:1px solid var(--border)">
+        <div class="profile-avatar">TM</div>
+        <div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:3px">TechMoshi Ltd</div>
+          <div style="font-size:12px;color:var(--muted)">Supplier since January 2026</div>
+          <div style="margin-top:6px"><span class="pill pill-green"><span class="pill-dot"></span>Verified Supplier</span></div>
+        </div>
+      </div>
+      <div class="card-title">Business Information</div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Business Name</label><input class="fi" value="TechMoshi Ltd"/></div>
+        <div class="fg"><label class="fl">Contact Person</label><input class="fi" value="James Kileo"/></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">WhatsApp Number</label><input class="fi" type="tel" value="+255 712 xxx 101"/></div>
+        <div class="fg"><label class="fl">Email</label><input class="fi" type="email" value="info@techmoshi.co.tz"/></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">Location</label><input class="fi" value="Moshi Mjini, Kilimanjaro"/></div>
+        <div class="fg"><label class="fl">Average Lead Time (days)</label><input class="fi" type="number" value="2" min="1"/></div>
+      </div>
+      <div class="fg"><label class="fl">Stock Categories You Sell</label>
+        <textarea class="fta" rows="2">Smart Phones · Kompyuta · Accessories · Electronics</textarea>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">These appear on your supplier profile and help admin match orders to you</div>
+      </div>
+      <div class="fg"><label class="fl">Business Notes / Special Conditions</label><textarea class="fta" rows="2" placeholder="e.g. Cash on delivery only for orders above TZS 500,000..."></textarea></div>
+      <div class="fg"><label class="fl">M-Pesa Payout Number</label><input class="fi" type="tel" value="+255 712 xxx 101"/><div style="font-size:11px;color:var(--muted);margin-top:3px">KiliSmart pays your wholesale amount to this number after delivery confirmation</div></div>
+      <button class="btn-full btn-g" style="margin-top:8px" onclick="showToast('✅ Profile saved! KiliSmart team will review any changes.')">Save Profile</button>
+    </div>
+  </div>
+
+</div><!-- end main -->
+</div><!-- end app -->
+
+<!-- PRODUCT EDIT MODAL -->
+<div class="mo" id="edit-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mb" style="max-width:540px">
+    <div class="mh"><h3 id="edit-modal-title">Edit Product</h3><button class="mc" onclick="document.getElementById('edit-modal').classList.remove('open')">×</button></div>
+    <div class="mbody" id="edit-modal-body"></div>
+  </div>
+</div>
+
+<!-- ORDER DETAIL MODAL -->
+<div class="mo" id="order-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="mb" style="max-width:480px">
+    <div class="mh"><h3>📦 Order Details</h3><button class="mc" onclick="document.getElementById('order-modal').classList.remove('open')">×</button></div>
+    <div class="mbody" id="order-modal-body"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script>
+// ── DATA ────────────────────────────────────────────────────
+const myProducts=[
+  {id:1,emoji:'📱',cat:'Smart Phones',name:'Samsung Galaxy A15',wholesale:220000,retail:280000,savers:68,pct:72,badge:'hot',stock:12,status:'active'},
+  {id:2,emoji:'📱',cat:'Smart Phones',name:'Tecno Spark 20',wholesale:148000,retail:195000,savers:44,pct:55,badge:'new',stock:8,status:'active'},
+  {id:3,emoji:'📱',cat:'Smart Phones',name:'Itel P55',wholesale:84000,retail:115000,savers:89,pct:78,badge:'sale',stock:22,status:'active'},
+  {id:4,emoji:'💻',cat:'Computers & TV',name:'Lenovo IdeaPad 3',wholesale:540000,retail:680000,savers:18,pct:25,badge:'',stock:5,status:'active'},
+];
+const pendingOrders=[
+  {id:'KS-0244',prod:'Lenovo IdeaPad 3',emoji:'💻',cust:'Peter Swai',district:'Siha',phone:'+255 713 xxx 004',paid:'TZS 680,000',wholesale:'TZS 540,000',date:'28 Apr 2026',note:'Please confirm availability — customer has paid in full.'},
+  {id:'KS-0245',prod:'Samsung Galaxy A15',emoji:'📱',cust:'Fatuma Hassan',district:'Moshi Vijijini',phone:'+255 712 xxx 007',paid:'TZS 280,000',wholesale:'TZS 220,000',date:'27 Apr 2026',note:'Delivery to customer home required.'},
+  {id:'KS-0246',prod:'Samsung Galaxy A15',emoji:'📱',cust:'David Urassa',district:'Same',phone:'+255 765 xxx 006',paid:'TZS 280,000',wholesale:'TZS 220,000',date:'26 Apr 2026',note:'Customer prefers collection point pickup.'},
+];
+const fulfilledOrders=[
+  {id:'KS-0239',prod:'Tecno Spark 20',district:'Hai',date:'24 Apr 2026',payout:'TZS 148,000',status:'paid'},
+  {id:'KS-0235',prod:'Samsung Galaxy A15',district:'Moshi Mjini',date:'20 Apr 2026',payout:'TZS 220,000',status:'paid'},
+  {id:'KS-0228',prod:'Itel P55',district:'Rombo',date:'15 Apr 2026',payout:'TZS 84,000',status:'paid'},
+  {id:'KS-0221',prod:'Samsung Galaxy A15',district:'Moshi Mjini',date:'10 Apr 2026',payout:'TZS 220,000',status:'paid'},
+  {id:'KS-0214',prod:'Lenovo IdeaPad 3',district:'Moshi Vijijini',date:'4 Apr 2026',payout:'TZS 540,000',status:'paid'},
+];
+const forecastData=[
+  {emoji:'📱',name:'Samsung Galaxy A15',savers:68,pct:72,eta:'~2 weeks',urgent:true},
+  {emoji:'📱',name:'Itel P55',savers:89,pct:78,eta:'~3 weeks',urgent:true},
+  {emoji:'📱',name:'Tecno Spark 20',savers:44,pct:55,eta:'~5 weeks',urgent:false},
+  {emoji:'💻',name:'Lenovo IdeaPad 3',savers:18,pct:25,eta:'~12 weeks',urgent:false},
+];
+const activityFeed=[
+  {icon:'💰',text:'<strong>KS-0239</strong> paid: TZS 148,000 M-Pesa received',time:'2 hours ago'},
+  {icon:'📦',text:'<strong>KS-0244</strong> new order — Lenovo IdeaPad 3 pending',time:'5 hours ago'},
+  {icon:'💰',text:'<strong>KS-0235</strong> paid: TZS 220,000 M-Pesa received',time:'Yesterday'},
+  {icon:'✅',text:'<strong>KS-0228</strong> delivery confirmed by customer',time:'2 days ago'},
+];
+const fmt=n=>'TZS '+Math.round(n).toLocaleString();
+
+// ── NAVIGATION ────────────────────────────────────────────────
+const pgTitles={overview:'Dashboard','pending':'Pending Orders',fulfilled:'Completed Orders',products:'My Products','add-product':'Add New Product',forecast:'Demand Forecast','orders-history':'Order History',earnings:'Earnings',profile:'Business Profile'};
+function nav(name,el){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.si').forEach(s=>s.classList.remove('on'));
+  const pg=document.getElementById('pg-'+name);
+  if(pg)pg.classList.add('on');
+  if(el)el.classList.add('on');
+  document.getElementById('pg-title').textContent=pgTitles[name]||name;
+  window.scrollTo(0,0);
+}
+
+// ── RENDER ───────────────────────────────────────────────────
+function renderAll(){
+  // Forecast mini
+  document.getElementById('forecast-mini').innerHTML=forecastData.slice(0,3).map(p=>`
+    <div class="forecast-item">
+      <div class="fi-emoji">${p.emoji}</div>
+      <div class="fi-name">${p.name.split(' ').slice(0,2).join(' ')}</div>
+      <div class="fi-bar-wrap"><div class="fi-bar"><div class="fi-fill" style="width:${p.pct}%"></div></div></div>
+      <div class="fi-pct">${p.pct}%</div>
+      <div class="fi-eta">${p.eta}</div>
+    </div>`).join('');
+
+  // Forecast full
+  document.getElementById('forecast-full').innerHTML=forecastData.map(p=>`
+    <div class="forecast-item" style="padding:10px 0;border-bottom:.5px solid var(--border)">
+      <div class="fi-emoji">${p.emoji}</div>
+      <div class="fi-name">${p.name}<br><span style="font-size:11px;color:var(--muted)">${p.savers} customers saving</span></div>
+      <div class="fi-bar-wrap" style="width:160px"><div class="fi-bar"><div class="fi-fill" style="width:${p.pct}%;background:${p.urgent?'var(--warning)':'var(--g)'}"></div></div><div style="font-size:10px;color:var(--muted);margin-top:2px">${p.pct}% average progress</div></div>
+      <div class="fi-eta" style="color:${p.urgent?'var(--warning)':'var(--muted)'}">Est: ${p.eta}</div>
+      ${p.urgent?'<span class="pill pill-orange">Prepare Now!</span>':'<span class="pill pill-gray">Not urgent</span>'}
+    </div>`).join('');
+
+  // Activity feed
+  document.getElementById('activity-feed').innerHTML=activityFeed.map(a=>`
+    <div style="display:flex;gap:8px;padding:8px 0;border-bottom:.5px solid var(--border)">
+      <span style="font-size:16px;flex-shrink:0">${a.icon}</span>
+      <div style="flex:1"><div style="font-size:12px;line-height:1.5">${a.text}</div><div style="font-size:10px;color:var(--muted);margin-top:2px">${a.time}</div></div>
+    </div>`).join('');
+
+  // Pending orders
+  document.getElementById('pending-list').innerHTML=pendingOrders.map(o=>`
+    <div class="order-card">
+      <div class="oh">
+        <div><div class="o-prod">${o.emoji} ${o.prod}</div><div class="o-id">${o.id} · ${o.date}</div></div>
+        <span class="pill pill-orange">⏳ Pending Your Action</span>
+      </div>
+      <div class="om">
+        <div class="om-item"><div class="om-label">Customer District</div><div class="om-val">${o.district}</div></div>
+        <div class="om-item"><div class="om-label">Amount Paid (Retail)</div><div class="om-val" style="color:var(--g)">${o.paid}</div></div>
+        <div class="om-item"><div class="om-label">Your Payout (Wholesale)</div><div class="om-val" style="color:var(--info)">${o.wholesale}</div></div>
+        <div class="om-item"><div class="om-label">KiliSmart Note</div><div class="om-val" style="font-weight:400;font-size:11px">${o.note}</div></div>
+      </div>
+      <div class="oa">
+        <button class="ab ab-g" onclick="confirmOrder('${o.id}','${o.prod}',this)">✅ Confirm Stock Ready</button>
+        <button class="ab ab-wa" onclick="showToast('WhatsApp to KiliSmart: ${o.prod} is ready!')">📱 Notify KiliSmart</button>
+        <button class="ab ab-warn" onclick="showToast('Marked unavailable — KiliSmart notified to find alternative')">⚠ Unavailable</button>
+      </div>
+    </div>`).join('');
+
+  // Fulfilled
+  document.getElementById('fulfilled-list').innerHTML=fulfilledOrders.map(o=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:.5px solid var(--border)">
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">${o.prod}</div><div style="font-size:11px;color:var(--muted);margin-top:1px">${o.id} · ${o.district} · ${o.date}</div></div>
+      <div style="text-align:right">
+        <div style="font-size:13px;font-weight:700;color:var(--success)">${o.payout}</div>
+        <span class="pill pill-green" style="margin-top:3px"><span class="pill-dot"></span>Paid</span>
+      </div>
+    </div>`).join('');
+
+  // Products grid
+  document.getElementById('prod-grid').innerHTML=myProducts.map(p=>{
+    const bdg=p.badge?`<div class="pc-badge badge-${p.badge}">${p.badge.toUpperCase()}</div>`:'';
+    const margin=Math.round((p.retail-p.wholesale)/p.retail*100);
+    return `<div class="pc">
+      <div class="pc-img">${bdg}<span style="font-size:44px">${p.emoji}</span></div>
+      <div class="pc-body">
+        <div class="pc-cat">${p.cat}</div>
+        <div class="pc-name">${p.name}</div>
+        <div class="pc-retail">${fmt(p.retail)}</div>
+        <div class="pc-wholesale">Wholesale: ${fmt(p.wholesale)} (${margin}% margin)</div>
+        <div class="pc-prog"><div class="pc-pf" style="width:${p.pct}%"></div></div>
+        <div class="pc-savers"><span style="width:5px;height:5px;border-radius:50%;background:var(--g);display:inline-block;animation:pulse 2s infinite"></span>${p.savers} customers saving · Stock: ${p.stock} units</div>
+        <div class="pc-acts">
+          <button class="mini-btn mini-g" onclick="openEditModal(${p.id})">Edit</button>
+          <button class="mini-btn mini-out" onclick="showToast('Price update request sent to KiliSmart admin')">Update Price</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // History table
+  document.getElementById('history-tbody').innerHTML=fulfilledOrders.map(o=>`
+    <tr>
+      <td style="font-weight:600;color:var(--g)">${o.id}</td>
+      <td>${o.prod}</td>
+      <td>${o.district}</td>
+      <td>${o.date}</td>
+      <td style="font-weight:600;color:var(--success)">${o.payout}</td>
+      <td><span class="pill pill-green"><span class="pill-dot"></span>Paid</span></td>
+    </tr>`).join('');
+}
+
+// ── EDIT PRODUCT MODAL ────────────────────────────────────────
+function openEditModal(id){
+  const p=myProducts.find(x=>x.id===id);
+  if(!p)return;
+  document.getElementById('edit-modal-title').textContent='Edit: '+p.name;
+  document.getElementById('edit-modal-body').innerHTML=`
+    <div class="fg"><label class="fl">Product Name</label><input class="fi" value="${p.name}"/></div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Wholesale Price (TZS)</label><input class="fi" type="number" value="${p.wholesale}" id="em-w" oninput="calcEM()"/></div>
+      <div class="fg"><label class="fl">Retail Price (TZS)</label><input class="fi" type="number" value="${p.retail}" id="em-r" oninput="calcEM()"/></div>
+    </div>
+    <div class="fg"><div class="fi" style="background:var(--cream);display:flex;align-items:center;color:var(--g);font-weight:600;cursor:default" id="em-margin">Margin: ${Math.round((p.retail-p.wholesale)/p.retail*100)}% (TZS ${(p.retail-p.wholesale).toLocaleString()})</div></div>
+    <div class="frow">
+      <div class="fg"><label class="fl">Stock Available (Units)</label><input class="fi" type="number" value="${p.stock}"/></div>
+      <div class="fg"><label class="fl">Lead Time (days)</label><input class="fi" type="number" value="2"/></div>
+    </div>
+    <div class="fg"><label class="fl">Stock Status</label>
+      <select class="fi" style="cursor:pointer;appearance:none">
+        <option ${p.status==='active'?'selected':''}>Active — Available</option>
+        <option>Low Stock — &lt;5 units</option>
+        <option>Out of Stock — Temporarily</option>
+        <option>Discontinued</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">Notes to KiliSmart</label><textarea class="fta" rows="2" placeholder="Any updates about this product..."></textarea></div>
+    <div class="form-actions">
+      <button class="btn-full btn-g" onclick="showToast('✅ Product update sent for review!');document.getElementById('edit-modal').classList.remove('open')">Submit Update</button>
+      <button class="btn-full" style="background:none;border:1.5px solid var(--border2);color:var(--muted)" onclick="document.getElementById('edit-modal').classList.remove('open')">Cancel</button>
+    </div>`;
+  document.getElementById('edit-modal').classList.add('open');
+}
+function calcEM(){
+  const w=parseFloat(document.getElementById('em-w')?.value)||0;
+  const r=parseFloat(document.getElementById('em-r')?.value)||0;
+  const em=document.getElementById('em-margin');
+  if(em&&r>0&&w>0){
+    const m=Math.round((r-w)/r*100);
+    em.textContent=`Margin: ${m}% (TZS ${(r-w).toLocaleString()})`;
+    em.style.color=m>=15?'var(--g)':'var(--danger)';
+  }
+}
+
+// ── CONFIRM ORDER ─────────────────────────────────────────────
+function confirmOrder(id,prod,btn){
+  showToast('✅ '+prod+' confirmed ready! KiliSmart has been notified.');
+  const card=btn.closest('.order-card');
+  setTimeout(()=>{
+    card.style.borderLeftColor='var(--success)';
+    card.querySelector('.pill').outerHTML='<span class="pill pill-green"><span class="pill-dot"></span>Confirmed ✅</span>';
+    card.querySelector('.oa').innerHTML='<span style="font-size:12px;color:var(--success);font-weight:600">✅ KiliSmart will arrange delivery. You will receive payment within 48 hours of delivery.</span>';
+  },400);
+}
+
+// ── ADD PRODUCT ────────────────────────────────────────────────
+function calcMarginAP(){
+  const w=parseFloat(document.getElementById('ap-wholesale')?.value)||0;
+  const r=parseFloat(document.getElementById('ap-retail')?.value)||0;
+  const d=document.getElementById('ap-margin-display');
+  if(d&&r>0&&w>0){
+    const m=Math.round((r-w)/r*100);
+    d.textContent=`Margin: ${m}% (TZS ${(r-w).toLocaleString()}) — ${m>=15?'Good ✅':m>=10?'Acceptable ⚠️':'Low — KiliSmart may negotiate ❌'}`;
+    d.style.color=m>=15?'var(--g)':m>=10?'var(--warning)':'var(--danger)';
+  }
+}
+function fakeUpload(idx,slot){
+  const emojis=['📱','💻','🛏️','🍳','🪑','🌞'];
+  const e=emojis[Math.floor(Math.random()*emojis.length)];
+  slot.style.borderStyle='solid';slot.style.borderColor='var(--g)';slot.style.background='#f0faf4';
+  slot.innerHTML=`<span style="font-size:28px">${e}</span><div style="font-size:9px;color:var(--g);font-weight:700;margin-top:3px">Uploaded ✓</div>`;
+  showToast('Photo uploaded!');
+}
+function submitProduct(){
+  const name=document.getElementById('ap-name')?.value;
+  if(!name){showToast('❌ Please fill in the product name.');return;}
+  showToast('✅ Product submitted for KiliSmart review! Expect approval within 48 hours.');
+  setTimeout(()=>nav('products',document.querySelectorAll('.si')[4]),1200);
+}
+
+// ── UTILITIES ─────────────────────────────────────────────────
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>t.style.transform='translateX(-50%) translateY(80px)',3200);
+}
+
+renderAll();
+</script>
+</body>
+</html>

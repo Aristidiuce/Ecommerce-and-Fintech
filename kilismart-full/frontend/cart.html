@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow, noarchive"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KiliSmart — Gari la Bidhaa</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--g:#1a6b3c;--g2:#145530;--g3:#0d3d22;--gold:#c9a84c;--cream:#f9f6f0;--white:#fff;--text:#1a1a1a;--muted:#6b7280;--border:#e5e7eb;--border2:#d1d5db;--danger:#dc2626;--r:10px;--rl:14px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);font-size:14px}
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--g);text-decoration:none}
+.logo span{color:var(--gold)}
+.nav-r{display:flex;align-items:center;gap:10px}
+.nav-r a{font-size:13px;color:var(--muted);text-decoration:none}
+.nav-r a:hover{color:var(--g)}
+.page{display:none}.page.on{display:block}
+.wrap{max-width:960px;margin:0 auto;padding:24px 20px}
+.two-col{display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:start}
+/* Progress steps */
+.steps{display:flex;align-items:center;justify-content:center;margin-bottom:24px;gap:0}
+.step{display:flex;flex-direction:column;align-items:center;flex:0 0 auto}
+.step-circle{width:32px;height:32px;border-radius:50%;border:2px solid var(--border2);background:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--muted);transition:all .3s}
+.step.done .step-circle{background:var(--g);border-color:var(--g);color:#fff}
+.step.curr .step-circle{border-color:var(--g);color:var(--g);box-shadow:0 0 0 4px rgba(26,107,60,.1)}
+.step-label{font-size:11px;margin-top:5px;color:var(--muted);font-weight:500}
+.step.done .step-label,.step.curr .step-label{color:var(--g);font-weight:600}
+.step-line{flex:1;height:2px;background:var(--border);margin:0 4px;margin-bottom:16px}
+.step.done+.step-line,.step.done+.step-line+.step{background:var(--g)}
+/* Cart */
+.section-title{font-family:'Fraunces',serif;font-size:20px;font-weight:700;margin-bottom:16px}
+.cart-item{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:10px;display:flex;gap:14px;align-items:flex-start}
+.ci-emoji{width:64px;height:64px;border-radius:10px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0;border:1px solid var(--border)}
+.ci-info{flex:1}
+.ci-cat{font-size:10px;color:var(--g);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.ci-name{font-size:14px;font-weight:600;margin-bottom:4px}
+.ci-price{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--g);margin-bottom:4px}
+.ci-weekly{font-size:11px;color:var(--muted)}
+.ci-actions{display:flex;gap:8px;margin-top:8px}
+.ci-btn{border:1.5px solid var(--border2);background:#fff;border-radius:7px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+.ci-btn:hover{border-color:var(--g);color:var(--g)}
+.ci-btn.remove{border-color:var(--danger);color:var(--danger)}
+.ci-btn.remove:hover{background:var(--danger);color:#fff}
+/* Summary card */
+.summary-card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:18px;position:sticky;top:78px}
+.summary-title{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:14px}
+.sum-row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:.5px solid var(--border)}
+.sum-row:last-of-type{border-bottom:none;font-weight:700;font-size:14px;padding-top:10px}
+.sum-label{color:var(--muted)}
+.sum-val{font-weight:500}
+.sum-val.g{color:var(--g)}
+.btn-main{width:100%;height:50px;background:var(--g);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s;margin-top:12px}
+.btn-main:hover{background:var(--g2)}
+.trust-mini{display:flex;flex-direction:column;gap:5px;margin-top:12px}
+.trust-mini-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+/* Form */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:18px;margin-bottom:14px}
+.card-title{font-family:'Fraunces',serif;font-size:16px;font-weight:700;margin-bottom:14px}
+.form-group{margin-bottom:13px}
+.form-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);display:block;margin-bottom:5px}
+.form-input{width:100%;height:44px;border:1.5px solid var(--border2);border-radius:var(--r);padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);outline:none;transition:border-color .2s}
+.form-input:focus{border-color:var(--g)}
+.form-select{width:100%;height:44px;border:1.5px solid var(--border2);border-radius:var(--r);padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+.form-select:focus{border-color:var(--g);outline:none}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.channel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.channel-card{border:2px solid var(--border2);border-radius:var(--r);padding:12px;cursor:pointer;text-align:center;transition:all .18s;background:#fff;font-family:'DM Sans',sans-serif}
+.channel-card:hover,.channel-card.sel{border-color:var(--g);background:#f0faf4}
+.channel-icon{font-size:24px;display:block;margin-bottom:4px}
+.channel-name{font-size:12px;font-weight:600}
+/* Confirmation */
+.confirm-hero{text-align:center;padding:40px 20px}
+.confirm-icon{font-size:64px;margin-bottom:16px;animation:pop .4s ease}
+@keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+.confirm-title{font-family:'Fraunces',serif;font-size:28px;font-weight:700;color:var(--g);margin-bottom:8px}
+.confirm-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.7;max-width:440px;margin-left:auto;margin-right:auto}
+.confirm-order-box{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:20px;max-width:460px;margin:0 auto 20px;text-align:left}
+.order-info-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:.5px solid var(--border);font-size:13px}
+.order-info-row:last-child{border-bottom:none}
+.oir-label{color:var(--muted)}
+.oir-val{font-weight:600}
+.oir-val.g{color:var(--g)}
+.confirm-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.cf-btn{padding:12px 24px;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;transition:all .2s;border:none}
+.cf-btn-g{background:var(--g);color:#fff}
+.cf-btn-g:hover{background:var(--g2)}
+.cf-btn-out{background:none;border:1.5px solid var(--border2);color:var(--muted)}
+.next-steps{max-width:460px;margin:20px auto 0;background:var(--cream);border-radius:var(--rl);padding:16px}
+.ns-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:10px}
+.ns-item{display:flex;gap:10px;font-size:13px;color:var(--text);margin-bottom:8px;line-height:1.5}
+.ns-num{width:20px;height:20px;border-radius:50%;background:var(--g);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--g3);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;z-index:600;transition:transform .3s;white-space:nowrap}
+@media(max-width:700px){
+  .two-col{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .steps{gap:0}
+  .step-label{font-size:10px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="logo">Kili<span>Smart</span></a>
+  <div class="nav-r">
+    <a href="index.html">← Endelea Kununua</a>
+    <a href="dashboard.html">Akaunti Yangu</a>
+  </div>
+</nav>
+
+<!-- ══ CART PAGE ══ -->
+<div class="page on" id="page-cart">
+  <div class="wrap">
+    <div class="steps">
+      <div class="step curr"><div class="step-circle">1</div><div class="step-label">Gari</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-circle">2</div><div class="step-label">Checkout</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-circle">3</div><div class="step-label">Uthibitisho</div></div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="section-title">🛒 Gari Lako la Bidhaa</div>
+        <!-- Cart items -->
+        <div class="cart-item">
+          <div class="ci-emoji">📱</div>
+          <div class="ci-info">
+            <div class="ci-cat">Smart Phones</div>
+            <div class="ci-name">Samsung Galaxy A15</div>
+            <div class="ci-price">TZS 280,000</div>
+            <div class="ci-weekly">≈ TZS 5,000/wiki kwa miezi 3</div>
+            <div class="ci-actions">
+              <button class="ci-btn" onclick="showToast('Bidhaa imehamishwa kwenye wishlist')">🤍 Wishlist</button>
+              <button class="ci-btn remove" onclick="removeItem(this)">🗑 Ondoa</button>
+            </div>
+          </div>
+        </div>
+        <div class="cart-item" id="item2">
+          <div class="ci-emoji">🌞</div>
+          <div class="ci-info">
+            <div class="ci-cat">Solar & Energy</div>
+            <div class="ci-name">Taa ya Jua + Chaja ya Simu</div>
+            <div class="ci-price">TZS 45,000</div>
+            <div class="ci-weekly">≈ TZS 937/wiki kwa miezi 3</div>
+            <div class="ci-actions">
+              <button class="ci-btn" onclick="showToast('Bidhaa imehamishwa kwenye wishlist')">🤍 Wishlist</button>
+              <button class="ci-btn remove" onclick="removeItem(this)">🗑 Ondoa</button>
+            </div>
+          </div>
+        </div>
+        <!-- Recommended add -->
+        <div style="background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-top:6px">
+          <div style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">💡 Watu Walionunua Hivi Pia Walinunua</div>
+          <div style="display:flex;gap:10px;overflow-x:auto;scrollbar-width:none">
+            <div style="flex-shrink:0;width:130px;border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;cursor:pointer" onclick="showToast('Imeongezwa kwenye gari!')">
+              <div style="font-size:28px;margin-bottom:4px">🍳</div>
+              <div style="font-size:11px;font-weight:600;margin-bottom:4px">Sufuria Set</div>
+              <div style="font-size:12px;font-weight:700;color:var(--g)">TZS 85,000</div>
+              <div style="margin-top:6px;background:var(--g);color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%">+ Ongeza</div>
+            </div>
+            <div style="flex-shrink:0;width:130px;border:1px solid var(--border);border-radius:10px;padding:10px;text-align:center;cursor:pointer" onclick="showToast('Imeongezwa kwenye gari!')">
+              <div style="font-size:28px;margin-bottom:4px">🎒</div>
+              <div style="font-size:11px;font-weight:600;margin-bottom:4px">School Bag Set</div>
+              <div style="font-size:12px;font-weight:700;color:var(--g)">TZS 45,000</div>
+              <div style="margin-top:6px;background:var(--g);color:#fff;border:none;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%">+ Ongeza</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="summary-card">
+          <div class="summary-title">Muhtasari wa Akiba</div>
+          <div class="sum-row"><span class="sum-label">Samsung Galaxy A15</span><span class="sum-val">TZS 280,000</span></div>
+          <div class="sum-row"><span class="sum-label">Taa ya Jua</span><span class="sum-val">TZS 45,000</span></div>
+          <div class="sum-row"><span class="sum-label">Jumla ya Kuanza Kuhifadhi</span><span class="sum-val g">TZS 325,000</span></div>
+          <div style="background:var(--cream);border-radius:8px;padding:10px 12px;margin:10px 0;font-size:12px;color:var(--muted);line-height:1.6">
+            💡 Utaanza kupanga mipango 2 ya akiba. Unaweza kuweka pesa kwenye mipango yote kwa wakati mmoja.
+          </div>
+          <div class="trust-mini">
+            <div class="trust-mini-item">🔒 Fedha zako zinalindwa salama</div>
+            <div class="trust-mini-item">🔄 Rudisha pesa wakati wowote (ada 5%)</div>
+            <div class="trust-mini-item">📱 Piga M-Pesa, Tigo, au Airtel</div>
+          </div>
+          <button class="btn-main" onclick="goCheckout()">Endelea Checkout →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHECKOUT PAGE ══ -->
+<div class="page" id="page-checkout">
+  <div class="wrap">
+    <div class="steps">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Gari</div></div>
+      <div class="step-line" style="background:var(--g)"></div>
+      <div class="step curr"><div class="step-circle">2</div><div class="step-label">Checkout</div></div>
+      <div class="step-line"></div>
+      <div class="step"><div class="step-circle">3</div><div class="step-label">Uthibitisho</div></div>
+    </div>
+    <div class="two-col">
+      <div>
+        <div class="card">
+          <div class="card-title">📍 Anwani ya Delivery</div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Jina Kamili</label><input class="form-input" value="Amina Juma Moshi"/></div>
+            <div class="form-group"><label class="form-label">Nambari ya Simu</label><input class="form-input" value="+255 712 xxx xxx" type="tel"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Wilaya</label>
+              <select class="form-select"><option selected>Moshi Mjini</option><option>Moshi Vijijini</option><option>Hai</option><option>Rombo</option><option>Siha</option><option>Mwanga</option><option>Same</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Kata</label><input class="form-input" value="Mji Mpya"/></div>
+          </div>
+          <div class="form-group"><label class="form-label">Alama ya Karibu (kwa boda boda)</label><input class="form-input" placeholder="e.g. Karibu na KKKT, nyumba ya rangi nyekundu"/></div>
+        </div>
+        <div class="card">
+          <div class="card-title">💰 Njia ya Malipo ya Kwanza</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">Chagua jinsi utakavyoweka amana yako ya kwanza. Unaweza kubadilisha baadaye.</p>
+          <div class="channel-grid">
+            <div class="channel-card sel" onclick="selChan(this)"><span class="channel-icon">📱</span><span class="channel-name">M-Pesa</span></div>
+            <div class="channel-card" onclick="selChan(this)"><span class="channel-icon">📲</span><span class="channel-name">Tigo Pesa</span></div>
+            <div class="channel-card" onclick="selChan(this)"><span class="channel-icon">📡</span><span class="channel-name">Airtel Money</span></div>
+          </div>
+          <div style="background:var(--cream);border-radius:8px;padding:12px;margin-top:12px;font-size:12px;color:var(--muted);line-height:1.7">
+            <strong style="color:var(--text)">Jinsi ya kuweka pesa:</strong><br>
+            Baada ya kufungua mipango yako, tuma pesa kwenye:<br>
+            <strong>Paybill: XXXXXXX · Akaunti: +255712XXXXXX</strong><br>
+            au tumia STK Push kutoka dashboard yako.
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">💡 Amana ya Kwanza (Optional)</div>
+          <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">Weka amana yako ya kwanza sasa ili kuanza mara moja. Au unaweza kuanza baadaye kutoka dashboard.</p>
+          <div class="form-group">
+            <label class="form-label">Kiasi (TZS 2,000 minimum)</label>
+            <input class="form-input" type="number" placeholder="e.g. 10000" id="first-deposit"/>
+          </div>
+          <div style="font-size:12px;color:var(--muted)">Unaweza kuanza na kiasi chochote, hata TZS 2,000 tu.</div>
+        </div>
+      </div>
+      <div>
+        <div class="summary-card">
+          <div class="summary-title">Muhtasari wa Order</div>
+          <div class="sum-row"><span class="sum-label">📱 Samsung Galaxy A15</span><span class="sum-val">TZS 280,000</span></div>
+          <div class="sum-row"><span class="sum-label">🌞 Taa ya Jua + Chaja</span><span class="sum-val">TZS 45,000</span></div>
+          <div class="sum-row" style="border-top:2px solid var(--border)"><span class="sum-label">Jumla ya Akiba</span><span class="sum-val g">TZS 325,000</span></div>
+          <div style="background:var(--cream);border-radius:8px;padding:10px 12px;margin:10px 0;font-size:12px;color:var(--muted);line-height:1.6">
+            ⏱ Muda wa kukamilisha (ukiweka TZS 5,000/wiki): wiki 65 tu
+          </div>
+          <div class="trust-mini">
+            <div class="trust-mini-item">🔒 Hakuna malipo ya ziada</div>
+            <div class="trust-mini-item">🔄 Futa wakati wowote (ada 5%)</div>
+            <div class="trust-mini-item">✅ Imesajiliwa BRELA Tanzania</div>
+          </div>
+          <button class="btn-main" onclick="goConfirmation()">Thibitisha na Fungua Mipango →</button>
+          <button onclick="goCart()" style="width:100%;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif">← Rudi Garini</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRMATION PAGE ══ -->
+<div class="page" id="page-confirmation">
+  <div class="wrap">
+    <div class="steps">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Gari</div></div>
+      <div class="step-line" style="background:var(--g)"></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Checkout</div></div>
+      <div class="step-line" style="background:var(--g)"></div>
+      <div class="step curr"><div class="step-circle">✓</div><div class="step-label">Uthibitisho</div></div>
+    </div>
+    <div class="confirm-hero">
+      <div class="confirm-icon">🎉</div>
+      <div class="confirm-title">Mipango imefunguliwa!</div>
+      <p class="confirm-sub">Hongera Amina! Mipango yako 2 ya akiba imefunguliwa. Anza kuweka pesa leo na bidhaa yako itakuja hivi karibuni!</p>
+      <div class="confirm-order-box">
+        <div class="order-info-row"><span class="oir-label">Nambari ya Order</span><span class="oir-val">#KS-2026-0489</span></div>
+        <div class="order-info-row"><span class="oir-label">Mipango Iliyofunguliwa</span><span class="oir-val">2 (Samsung A15 + Taa ya Jua)</span></div>
+        <div class="order-info-row"><span class="oir-label">Jumla ya Kukusanya</span><span class="oir-val g">TZS 325,000</span></div>
+        <div class="order-info-row"><span class="oir-label">Bonus Uliyopata</span><span class="oir-val g">🎁 TZS 2,000 kwenye wallet</span></div>
+        <div class="order-info-row"><span class="oir-label">Delivery baada ya 100%</span><span class="oir-val">Moshi Mjini · Siku 1–3</span></div>
+        <div class="order-info-row"><span class="oir-label">Ujumbe wa WhatsApp</span><span class="oir-val">✅ Umetumwa</span></div>
+      </div>
+      <div class="confirm-btns">
+        <a href="dashboard.html" class="cf-btn cf-btn-g">Nenda Dashboard →</a>
+        <a href="index.html" class="cf-btn cf-btn-out">Endelea Kununua</a>
+      </div>
+      <div class="next-steps">
+        <div class="ns-title">Hatua Zako Zinazofuata</div>
+        <div class="ns-item"><div class="ns-num">1</div><span>Fungua dashboard yako na uweke amana yako ya kwanza leo</span></div>
+        <div class="ns-item"><div class="ns-num">2</div><span>Weka pesa kidogo kidogo kupitia M-Pesa kila wiki</span></div>
+        <div class="ns-item"><div class="ns-num">3</div><span>Ukifika 100% tutakupigia WhatsApp na kupanga delivery</span></div>
+        <div class="ns-item"><div class="ns-num">4</div><span>Pokea bidhaa yako nyumbani kwako! 🏠</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script>
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);}
+function goCart(){showPage('page-cart');}
+function goCheckout(){showPage('page-checkout');}
+function goConfirmation(){showPage('page-confirmation');}
+function removeItem(btn){const item=btn.closest('.cart-item');item.style.opacity='0';item.style.transform='translateX(20px)';item.style.transition='all .3s';setTimeout(()=>item.remove(),300);showToast('Bidhaa imeondolewa garini');}
+function selChan(el){document.querySelectorAll('.channel-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.transform='translateX(-50%) translateY(0)';setTimeout(()=>t.style.transform='translateX(-50%) translateY(80px)',3000);}
+</script>
+</body>
+</html>

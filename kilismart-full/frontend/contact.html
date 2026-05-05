@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="sw"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>KiliSmart — Wasiliana Nasi</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>:root{--g:#1a6b3c;--g2:#145530;--g3:#0d3d22;--gold:#c9a84c;--cream:#f9f6f0;--border:#e5e7eb;--muted:#6b7280}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'DM Sans',sans-serif;background:var(--cream);color:#1a1a1a}
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--g);text-decoration:none}.logo span{color:var(--gold)}
+.hero{background:linear-gradient(135deg,var(--g3),var(--g));color:#fff;padding:48px 20px;text-align:center}
+.hero h1{font-family:'Fraunces',serif;font-size:clamp(24px,4vw,40px);margin-bottom:10px}
+.hero p{font-size:14px;opacity:.85}
+.wrap{max-width:900px;margin:0 auto;padding:40px 20px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:24px}
+.card h2{font-family:'Fraunces',serif;font-size:18px;font-weight:700;margin-bottom:16px;color:var(--g)}
+.contact-item{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.c-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.c-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:3px}
+.c-val{font-size:14px;font-weight:500}
+.fg{margin-bottom:14px}
+label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#374151;display:block;margin-bottom:5px}
+input,select,textarea{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;background:#fff}
+input:focus,select:focus,textarea:focus{border-color:var(--g)}
+textarea{resize:vertical;min-height:100px}
+.btn{width:100%;background:var(--g);color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+.btn:hover{background:var(--g2)}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:#25d366;color:#fff;border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;margin-bottom:10px}
+footer{background:var(--g3);color:#fff;padding:24px 20px;text-align:center;font-size:12px;opacity:.6;margin-top:24px}
+@media(max-width:600px){.wrap{grid-template-columns:1fr}}</style></head><body>
+<nav><a href="index.html" class="logo">Kili<span>Smart</span></a></nav>
+<div class="hero"><h1>Wasiliana Nasi</h1><p>Tuko hapa kukusaidia. Jibu lako linakuja haraka — kawaida ndani ya masaa 2.</p></div>
+<div class="wrap">
+  <div class="card">
+    <h2>Njia za Kuwasiliana</h2>
+    <div class="contact-item"><span class="c-icon">📱</span><div><div class="c-label">WhatsApp (Haraka zaidi)</div><div class="c-val">+255 700 000 000</div><div style="font-size:12px;color:var(--muted)">Jumatatu–Jumapili · 7:00 – 21:00</div></div></div>
+    <div class="contact-item"><span class="c-icon">📞</span><div><div class="c-label">Simu</div><div class="c-val">+255 700 000 000</div><div style="font-size:12px;color:var(--muted)">Jumatatu–Ijumaa · 8:00 – 18:00</div></div></div>
+    <div class="contact-item"><span class="c-icon">📧</span><div><div class="c-label">Email</div><div class="c-val">info@kilismart.co.tz</div></div></div>
+    <div class="contact-item"><span class="c-icon">📍</span><div><div class="c-label">Ofisi</div><div class="c-val">Moshi Mjini, Kilimanjaro</div><div style="font-size:12px;color:var(--muted)">Karibu na Kituo cha Polisi cha Moshi</div></div></div>
+    <div style="margin-top:16px">
+      <button class="wa-btn" onclick="window.open('https://wa.me/255700000000','_blank')">💬 Anza Mazungumzo WhatsApp</button>
+    </div>
+    <div style="background:#e8f5ee;border-radius:8px;padding:12px 14px;font-size:12px;color:var(--g2);line-height:1.6;margin-top:10px">
+      <strong>Jibu la haraka zaidi:</strong> Piga WhatsApp. Hujibu email haraka kuliko whatsApp kwa wateja wetu.
+    </div>
+  </div>
+  <div class="card">
+    <h2>Tuma Ujumbe</h2>
+    <div class="fg"><label>Jina lako</label><input placeholder="Amina Moshi"/></div>
+    <div class="fg"><label>Nambari ya Simu</label><input type="tel" placeholder="+255 712 000 000"/></div>
+    <div class="fg"><label>Aina ya Swali</label>
+      <select><option>Tatizo la akaunti</option><option>Swali kuhusu bidhaa</option><option>Tatizo la malipo</option><option>Delivery</option><option>Kutoa pesa</option><option>Nyingine</option></select>
+    </div>
+    <div class="fg"><label>Ujumbe wako</label><textarea placeholder="Eleza tatizo lako hapa..."></textarea></div>
+    <button class="btn" onclick="alert('Ujumbe wako umepokelewa! Tutajibu hivi karibuni.')">Tuma Ujumbe →</button>
+  </div>
+</div>
+<footer><p>© 2026 KiliSmart Ltd · Moshi, Kilimanjaro</p></footer>
+</body></html>

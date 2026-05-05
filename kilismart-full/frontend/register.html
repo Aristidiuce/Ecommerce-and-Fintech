@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow, noarchive"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KiliSmart — Jisajili</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --green:#1a6b3c;--green2:#145530;--green3:#0d3d22;
+  --gold:#c9a84c;--cream:#f9f6f0;--white:#fff;
+  --text:#1a1a1a;--muted:#6b7280;--light:#9ca3af;
+  --border:#e5e7eb;--border2:#d1d5db;
+  --danger:#dc2626;--danger-bg:#fef2f2;
+  --radius:10px;--radius-lg:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);font-size:14px;min-height:100vh;display:flex;flex-direction:column}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* NAV */
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.nav-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--green);text-decoration:none}
+.nav-logo span{color:var(--gold)}
+.nav-signin{font-size:13px;color:var(--muted)}
+.nav-signin a{color:var(--green);font-weight:600;text-decoration:none}
+
+/* LAYOUT */
+.page-wrap{display:grid;grid-template-columns:1fr 480px;flex:1;min-height:0}
+.left-panel{background:var(--green3);color:#fff;padding:48px 40px;display:flex;flex-direction:column;justify-content:space-between;position:sticky;top:0;height:calc(100vh - 58px)}
+.left-logo{font-family:'Fraunces',serif;font-size:26px;font-weight:700;margin-bottom:6px}
+.left-logo span{color:var(--gold)}
+.left-tagline{font-size:14px;opacity:.7;margin-bottom:32px;line-height:1.6}
+.left-steps{display:flex;flex-direction:column;gap:0}
+.left-step{display:flex;gap:14px;position:relative}
+.left-step:not(:last-child)::after{content:'';position:absolute;left:15px;top:34px;width:1px;height:calc(100% - 10px);background:rgba(255,255,255,.15)}
+.step-circle{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;border:2px solid rgba(255,255,255,.2);color:rgba(255,255,255,.5);transition:all .3s;margin-bottom:20px}
+.step-circle.done{background:var(--green);border-color:var(--green);color:#fff}
+.step-circle.active{background:#fff;border-color:#fff;color:var(--green)}
+.step-text{}
+.step-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:2px}
+.step-sub{font-size:11px;color:rgba(255,255,255,.5)}
+.left-trust{margin-top:auto;padding-top:24px;border-top:1px solid rgba(255,255,255,.1)}
+.trust-items{display:flex;flex-direction:column;gap:8px}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.6)}
+.trust-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0}
+
+/* FORM PANEL */
+.right-panel{background:#fff;overflow-y:auto;padding:32px 36px}
+.form-step{display:none}
+.form-step.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.step-header{margin-bottom:24px}
+.step-num{font-size:11px;font-weight:700;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.step-header h2{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:5px}
+.step-header p{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* PROGRESS BAR */
+.progress-bar{height:4px;background:var(--border);border-radius:2px;margin-bottom:28px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:2px;transition:width .4s ease}
+
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-group{margin-bottom:16px}
+.form-label{font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:4px;text-transform:uppercase;letter-spacing:.5px}
+.required-star{color:var(--danger);font-size:13px}
+.form-input{width:100%;height:46px;border:1.5px solid var(--border2);border-radius:var(--radius);padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(26,107,60,.08)}
+.form-input.error{border-color:var(--danger);background:var(--danger-bg)}
+.form-input:disabled{background:var(--cream);color:var(--muted);cursor:not-allowed}
+.form-select{width:100%;height:46px;border:1.5px solid var(--border2);border-radius:var(--radius);padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px;transition:border-color .2s}
+.form-select:focus{border-color:var(--green);outline:none}
+.form-hint{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}
+.error-msg{font-size:11px;color:var(--danger);margin-top:4px;display:none}
+.form-group.has-error .error-msg{display:block}
+.form-group.has-error .form-input{border-color:var(--danger)}
+
+/* OTP */
+.otp-wrap{display:flex;gap:10px;justify-content:center;margin:20px 0}
+.otp-input{width:52px;height:58px;border:2px solid var(--border2);border-radius:var(--radius);text-align:center;font-size:22px;font-weight:700;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;color:var(--text)}
+.otp-input:focus{border-color:var(--green)}
+.otp-sent-to{text-align:center;font-size:13px;color:var(--muted);margin-bottom:4px}
+.otp-resend{text-align:center;font-size:12px;color:var(--muted);margin-top:12px}
+.otp-resend a{color:var(--green);font-weight:600;cursor:pointer;text-decoration:none}
+
+/* ID TYPE TOGGLE */
+.id-type-toggle{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.id-type-btn{border:2px solid var(--border2);background:#fff;border-radius:var(--radius);padding:12px 10px;cursor:pointer;text-align:center;transition:all .2s;font-family:'DM Sans',sans-serif}
+.id-type-btn.selected{border-color:var(--green);background:#f0faf4}
+.id-type-icon{font-size:20px;margin-bottom:4px}
+.id-type-label{font-size:12px;font-weight:600;color:var(--text)}
+.id-type-sub{font-size:10px;color:var(--muted);margin-top:2px}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--border2);border-radius:var(--radius-lg);padding:24px 16px;text-align:center;cursor:pointer;transition:all .2s;background:var(--cream);margin-bottom:4px}
+.upload-zone:hover{border-color:var(--green);background:#f0faf4}
+.upload-zone.uploaded{border-color:var(--green);background:#f0faf4;border-style:solid}
+.upload-icon{font-size:28px;margin-bottom:8px}
+.upload-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px}
+.upload-sub{font-size:11px;color:var(--muted)}
+.upload-success{font-size:12px;color:var(--green);font-weight:600;margin-top:6px;display:none}
+
+/* PASSWORD STRENGTH */
+.pwd-wrap{position:relative}
+.pwd-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted)}
+.strength-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px}
+.strength-seg{height:3px;border-radius:2px;background:var(--border);transition:background .3s}
+.strength-label{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* LOCATION */
+.location-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.ward-full{grid-column:1/-1}
+
+/* WORK TYPE GRID */
+.work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:8px}
+.work-card{border:2px solid var(--border);border-radius:var(--radius);padding:12px 10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px}
+.work-card:hover{border-color:var(--green)}
+.work-card.selected{border-color:var(--green);background:#f0faf4}
+.work-icon{font-size:20px;flex-shrink:0}
+.work-label{font-size:12px;font-weight:600;color:var(--text)}
+.work-sub{font-size:10px;color:var(--muted);margin-top:1px}
+
+/* REVIEW */
+.review-section{margin-bottom:16px}
+.review-section-title{font-size:11px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.review-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:13px;border-bottom:.5px solid var(--border)}
+.review-row:last-child{border-bottom:none}
+.review-label{color:var(--muted)}
+.review-val{font-weight:600;color:var(--text);text-align:right;max-width:60%}
+.terms-box{background:var(--cream);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.terms-check{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text);margin-bottom:10px;cursor:pointer}
+.terms-check input{margin-top:2px;accent-color:var(--green);width:16px;height:16px;flex-shrink:0;cursor:pointer}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;margin-top:24px}
+.btn-next{flex:1;height:48px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s;letter-spacing:.2px}
+.btn-next:hover{background:var(--green2)}
+.btn-next:disabled{opacity:.4;cursor:not-allowed}
+.btn-back{height:48px;padding:0 20px;background:none;border:1.5px solid var(--border2);border-radius:var(--radius);font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--muted);transition:all .2s}
+.btn-back:hover{border-color:var(--green);color:var(--green)}
+
+/* SUCCESS */
+.success-wrap{text-align:center;padding:20px 0}
+.success-icon{font-size:60px;margin-bottom:16px;animation:pop .4s ease}
+@keyframes pop{0%{transform:scale(0)}80%{transform:scale(1.1)}100%{transform:scale(1)}}
+.success-title{font-family:'Fraunces',serif;font-size:24px;font-weight:700;margin-bottom:8px;color:var(--green)}
+.success-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.7;max-width:340px;margin-left:auto;margin-right:auto}
+.success-info{background:var(--cream);border-radius:var(--radius-lg);padding:16px;margin-bottom:20px;text-align:left}
+.success-info-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:.5px solid var(--border)}
+.success-info-row:last-child{border-bottom:none}
+.success-info-label{color:var(--muted)}
+.success-info-val{font-weight:600;color:var(--green)}
+
+@media(max-width:768px){
+  .page-wrap{grid-template-columns:1fr}
+  .left-panel{display:none}
+  .right-panel{padding:20px 18px}
+  .form-row,.location-grid{grid-template-columns:1fr}
+  .work-grid{grid-template-columns:1fr 1fr}
+  .otp-input{width:44px;height:52px;font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Kili<span>Smart</span></a>
+  <div class="nav-signin">Una akaunti tayari? <a href="login.html">Ingia hapa</a></div>
+</nav>
+
+<div class="page-wrap">
+  <!-- LEFT PANEL -->
+  <div class="left-panel">
+    <div>
+      <div class="left-logo">Kili<span>Smart</span></div>
+      <div class="left-tagline">Jisajili mara moja — tunakuhitaji ujue vizuri ili tukusaidie vizuri zaidi.</div>
+      <div class="left-steps">
+        <div class="left-step">
+          <div class="step-circle active" id="sc1">1</div>
+          <div class="step-text">
+            <div class="step-title">Nambari ya Simu</div>
+            <div class="step-sub">Thibitisha OTP</div>
+          </div>
+        </div>
+        <div class="left-step">
+          <div class="step-circle" id="sc2">2</div>
+          <div class="step-text">
+            <div class="step-title">Utambulisho</div>
+            <div class="step-sub">NIDA au Leseni</div>
+          </div>
+        </div>
+        <div class="left-step">
+          <div class="step-circle" id="sc3">3</div>
+          <div class="step-text">
+            <div class="step-title">Mahali Unapoishi</div>
+            <div class="step-sub">Wilaya na Kata</div>
+          </div>
+        </div>
+        <div class="left-step">
+          <div class="step-circle" id="sc4">4</div>
+          <div class="step-text">
+            <div class="step-title">Kazi Unayofanya</div>
+            <div class="step-sub">Chanzo cha mapato</div>
+          </div>
+        </div>
+        <div class="left-step">
+          <div class="step-circle" id="sc5">5</div>
+          <div class="step-text">
+            <div class="step-title">Nenosiri</div>
+            <div class="step-sub">Linda akaunti yako</div>
+          </div>
+        </div>
+        <div class="left-step">
+          <div class="step-circle" id="sc6">6</div>
+          <div class="step-text">
+            <div class="step-title">Pitia na Thibitisha</div>
+            <div class="step-sub">Hakikisha kila kitu sawa</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="left-trust">
+      <div class="trust-items">
+        <div class="trust-item"><div class="trust-dot"></div>Taarifa zako zinalindwa — Encrypted</div>
+        <div class="trust-item"><div class="trust-dot"></div>Imesajiliwa BRELA Tanzania</div>
+        <div class="trust-item"><div class="trust-dot"></div>Utapata TZS 2,000 bonus ukimaliza</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="right-panel">
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:16%"></div></div>
+
+    <!-- ══ STEP 1: PHONE + OTP ══ -->
+    <div class="form-step active" id="step1">
+      <div class="step-header">
+        <div class="step-num">Hatua 1 ya 6</div>
+        <h2>Nambari yako ya simu</h2>
+        <p>Tutakutumia OTP (nambari ya kuthibitisha) kwa SMS. Hakuna malipo.</p>
+      </div>
+      <div class="form-group" id="phone-group">
+        <label class="form-label">Nambari ya Simu <span class="required-star">*</span></label>
+        <input class="form-input" id="phone" type="tel" placeholder="+255 7XX XXX XXX" maxlength="16" oninput="formatPhone(this)"/>
+        <div class="form-hint">Tumia nambari inayopokea SMS — Vodacom, Tigo, Airtel, au TTCL</div>
+        <div class="error-msg" id="phone-err">Tafadhali weka nambari sahihi ya Tanzania (+255...)</div>
+      </div>
+
+      <!-- OTP section (hidden initially) -->
+      <div id="otp-section" style="display:none">
+        <div class="otp-sent-to" id="otp-sent-text">SMS imetumwa kwa +255 7XX XXX XXX</div>
+        <div class="otp-wrap">
+          <input class="otp-input" maxlength="1" oninput="otpNext(this,0)" id="otp0" type="tel"/>
+          <input class="otp-input" maxlength="1" oninput="otpNext(this,1)" id="otp1" type="tel"/>
+          <input class="otp-input" maxlength="1" oninput="otpNext(this,2)" id="otp2" type="tel"/>
+          <input class="otp-input" maxlength="1" oninput="otpNext(this,3)" id="otp3" type="tel"/>
+          <input class="otp-input" maxlength="1" oninput="otpNext(this,4)" id="otp4" type="tel"/>
+          <input class="otp-input" maxlength="1" oninput="otpNext(this,5)" id="otp5" type="tel"/>
+        </div>
+        <div class="otp-resend">Hukupokea? <a onclick="showToast('OTP mpya imetumwa!')">Tuma tena</a></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-next" id="btn1" onclick="handleStep1()">Tuma OTP →</button>
+      </div>
+    </div>
+
+    <!-- ══ STEP 2: ID ══ -->
+    <div class="form-step" id="step2">
+      <div class="step-header">
+        <div class="step-num">Hatua 2 ya 6</div>
+        <h2>Utambulisho wako</h2>
+        <p>Tunahitaji NIDA yako au Leseni ya Udereva kuthibitisha utambulisho wako. Taarifa hii inasaidia kulinda usalama wa fedha zako.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Jina Kamili (kama ilivyo kwenye kitambulisho) <span class="required-star">*</span></label>
+        <input class="form-input" id="fullname" placeholder="Mfano: Amina Juma Moshi" oninput="saveField('fullname',this.value)"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Aina ya Kitambulisho <span class="required-star">*</span></label>
+        <div class="id-type-toggle">
+          <div class="id-type-btn selected" id="id-nida" onclick="selectIdType('nida')">
+            <div class="id-type-icon">🪪</div>
+            <div class="id-type-label">NIDA</div>
+            <div class="id-type-sub">Kitambulisho cha Taifa</div>
+          </div>
+          <div class="id-type-btn" id="id-license" onclick="selectIdType('license')">
+            <div class="id-type-icon">🚗</div>
+            <div class="id-type-label">Leseni ya Udereva</div>
+            <div class="id-type-sub">Driving Licence</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group" id="nida-group">
+        <label class="form-label">Nambari ya NIDA <span class="required-star">*</span></label>
+        <input class="form-input" id="nida-num" placeholder="19XXXXXXXXXXXXXXXXXX (nambari 20)" maxlength="20" oninput="saveField('idNumber',this.value)"/>
+        <div class="form-hint">Nambari ya NIDA ina tarakimu 20. Inapatikana kwenye kadi yako ya NIDA.</div>
+      </div>
+
+      <div class="form-group" style="display:none" id="license-group">
+        <label class="form-label">Nambari ya Leseni <span class="required-star">*</span></label>
+        <input class="form-input" id="license-num" placeholder="Mfano: TZ0001234" oninput="saveField('idNumber',this.value)"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Pakia picha ya kitambulisho <span class="required-star">*</span></label>
+        <div class="upload-zone" id="id-upload" onclick="fakeUpload('id-upload','id-upload-success','id-upload-icon','id-upload-title')">
+          <div class="upload-icon" id="id-upload-icon">📷</div>
+          <div class="upload-title" id="id-upload-title">Bonyeza kupakia picha ya NIDA yako</div>
+          <div class="upload-sub">JPG, PNG — chini ya 5MB</div>
+          <div class="upload-success" id="id-upload-success">✅ Picha imepakiwa</div>
+        </div>
+        <div class="form-hint">Picha iwe wazi na inasomeka vizuri. Sehemu zote za jina na nambari zionekane.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Tarehe ya Kuzaliwa <span class="required-star">*</span></label>
+        <input class="form-input" type="date" id="dob" oninput="saveField('dob',this.value)"/>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Jinsia <span class="required-star">*</span></label>
+        <select class="form-select" id="gender" onchange="saveField('gender',this.value)">
+          <option value="">— Chagua —</option>
+          <option>Mwanaume</option>
+          <option>Mwanamke</option>
+          <option>Napendelea kutosema</option>
+        </select>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goStep(1)">← Rudi</button>
+        <button class="btn-next" onclick="goStep(3)">Endelea →</button>
+      </div>
+    </div>
+
+    <!-- ══ STEP 3: LOCATION ══ -->
+    <div class="form-step" id="step3">
+      <div class="step-header">
+        <div class="step-num">Hatua 3 ya 6</div>
+        <h2>Mahali unapoishi</h2>
+        <p>Tunahitaji anwani yako sahihi kwa ajili ya delivery ya bidhaa na uthibitisho wa akaunti yako.</p>
+      </div>
+
+      <div class="location-grid">
+        <div class="form-group">
+          <label class="form-label">Mkoa <span class="required-star">*</span></label>
+          <select class="form-select" id="region" onchange="updateDistricts()">
+            <option value="">— Chagua Mkoa —</option>
+            <option value="kilimanjaro" selected>Kilimanjaro</option>
+          </select>
+          <div class="form-hint">KiliSmart inafanya kazi Kilimanjaro pekee (kwa sasa)</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Wilaya <span class="required-star">*</span></label>
+          <select class="form-select" id="district" onchange="saveField('district',this.value)">
+            <option value="">— Chagua Wilaya —</option>
+            <option>Moshi Mjini</option>
+            <option>Moshi Vijijini</option>
+            <option>Hai</option>
+            <option>Rombo</option>
+            <option>Siha</option>
+            <option>Mwanga</option>
+            <option>Same</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kata <span class="required-star">*</span></label>
+          <input class="form-input" id="ward" placeholder="Mfano: Mji Mpya" oninput="saveField('ward',this.value)"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mtaa / Kijiji <span class="required-star">*</span></label>
+          <input class="form-input" id="street" placeholder="Mfano: Mtaa wa Mji" oninput="saveField('street',this.value)"/>
+        </div>
+        <div class="form-group ward-full">
+          <label class="form-label">Nambari ya Nyumba / Alama ya Karibu</label>
+          <input class="form-input" id="house" placeholder="Mfano: Karibu na kanisa la KKKT, nyumba ya rangi nyekundu" oninput="saveField('house',this.value)"/>
+          <div class="form-hint">Hii inasaidia boda boda wetu kukupata haraka wakati wa delivery</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nambari ya Simu ya Delivery (kama ni tofauti)</label>
+        <input class="form-input" id="delivery-phone" type="tel" placeholder="Achilia wazi kama ni nambari ile ile ya awali" oninput="saveField('deliveryPhone',this.value)"/>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goStep(2)">← Rudi</button>
+        <button class="btn-next" onclick="goStep(4)">Endelea →</button>
+      </div>
+    </div>
+
+    <!-- ══ STEP 4: KAZI ══ -->
+    <div class="form-step" id="step4">
+      <div class="step-header">
+        <div class="step-num">Hatua 4 ya 6</div>
+        <h2>Kazi unayofanya</h2>
+        <p>Hii inasaidia mfumo wetu kukupendekeza bidhaa zinazofaa mapato yako na mipango bora ya kuhifadhi.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Aina ya Kazi <span class="required-star">*</span></label>
+        <div class="work-grid" id="work-grid">
+          <div class="work-card" onclick="selectWork(this,'Mkulima')"><div class="work-icon">🌾</div><div><div class="work-label">Mkulima</div><div class="work-sub">Kilimo / Ufugaji</div></div></div>
+          <div class="work-card" onclick="selectWork(this,'Biashara ndogo')"><div class="work-icon">🏪</div><div><div class="work-label">Biashara ndogo</div><div class="work-sub">Duka / Soko</div></div></div>
+          <div class="work-card" onclick="selectWork(this,'Mwajiriwa')"><div class="work-icon">💼</div><div><div class="work-label">Mwajiriwa</div><div class="work-sub">Ofisi / Kampuni</div></div></div>
+          <div class="work-card" onclick="selectWork(this,'Bodaboda / Daladala')"><div class="work-icon">🏍️</div><div><div class="work-label">Bodaboda / Daladala</div><div class="work-sub">Usafiri wa abiria</div></div></div>
+          <div class="work-card" onclick="selectWork(this,'Mwalimu')"><div class="work-icon">📚</div><div><div class="work-label">Mwalimu</div><div class="work-sub">Shule / Chuo</div></div></div>
+          <div class="work-card" onclick="selectWork(this,'Fundi')"><div class="work-icon">🔧</div><div><div class="work-label">Fundi</div><div class="work-sub">Ujenzi / Umeme</div></div></div>
+          <div class="work-card" onclick="selectWork(this,'Muuguzi / Daktari')"><div class="work-icon">🏥</div><div><div class="work-label">Muuguzi / Daktari</div><div class="work-sub">Sekta ya afya</div></div></div>
+          <div class="work-card" onclick="selectWork(this,'Nyingine')"><div class="work-icon">➕</div><div><div class="work-label">Nyingine</div><div class="work-sub">Taja hapa chini</div></div></div>
+        </div>
+      </div>
+
+      <div class="form-group" id="other-work-group" style="display:none">
+        <label class="form-label">Eleza kazi yako <span class="required-star">*</span></label>
+        <input class="form-input" id="other-work" placeholder="Mfano: Msusi wa nywele, Mpishi, n.k." oninput="saveField('jobOther',this.value)"/>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Kipato cha Wastani (kwa mwezi) <span class="required-star">*</span></label>
+          <select class="form-select" id="income" onchange="saveField('income',this.value)">
+            <option value="">— Chagua kiwango —</option>
+            <option>Chini ya TZS 200,000</option>
+            <option>TZS 200,000 – 500,000</option>
+            <option>TZS 500,000 – 1,000,000</option>
+            <option>TZS 1,000,000 – 2,000,000</option>
+            <option>Zaidi ya TZS 2,000,000</option>
+          </select>
+          <div class="form-hint">Hii inatuambia kiasi cha amana unachoweza kuweka kwa wiki</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Siku za Kulipwa</label>
+          <select class="form-select" id="payday" onchange="saveField('payday',this.value)">
+            <option value="">— Chagua —</option>
+            <option>Mwanzo wa mwezi</option>
+            <option>Mwisho wa mwezi</option>
+            <option>Kila wiki</option>
+            <option>Kulingana na biashara</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goStep(3)">← Rudi</button>
+        <button class="btn-next" onclick="goStep(5)">Endelea →</button>
+      </div>
+    </div>
+
+    <!-- ══ STEP 5: PASSWORD ══ -->
+    <div class="form-step" id="step5">
+      <div class="step-header">
+        <div class="step-num">Hatua 5 ya 6</div>
+        <h2>Weka nenosiri</h2>
+        <p>Nenosiri litakusaidia kuingia kwenye akaunti yako. Kumbuka vizuri — tunaweza kukusaidia kupona kwa SMS.</p>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Nenosiri <span class="required-star">*</span></label>
+        <div class="pwd-wrap">
+          <input class="form-input" type="password" id="password" placeholder="Angalau herufi 8..." oninput="checkStrength(this.value);saveField('password',this.value)"/>
+          <button class="pwd-toggle" type="button" onclick="togglePwd('password',this)">👁️</button>
+        </div>
+        <div class="strength-bar">
+          <div class="strength-seg" id="s1"></div>
+          <div class="strength-seg" id="s2"></div>
+          <div class="strength-seg" id="s3"></div>
+          <div class="strength-seg" id="s4"></div>
+        </div>
+        <div class="strength-label" id="strength-label">Weka nenosiri kuona nguvu yake</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Thibitisha Nenosiri <span class="required-star">*</span></label>
+        <div class="pwd-wrap">
+          <input class="form-input" type="password" id="confirm-pwd" placeholder="Rudia nenosiri lile lile..." oninput="checkMatch()"/>
+          <button class="pwd-toggle" type="button" onclick="togglePwd('confirm-pwd',this)">👁️</button>
+        </div>
+        <div class="error-msg" id="pwd-match-err" style="display:none">Manenosiri hayalingani. Jaribu tena.</div>
+        <div style="color:var(--green);font-size:11px;margin-top:4px;display:none" id="pwd-match-ok">✅ Manenosiri yanalingana</div>
+      </div>
+
+      <div style="background:var(--cream);border-radius:var(--radius);padding:12px 14px;font-size:12px;color:var(--muted);line-height:1.8;margin-bottom:8px">
+        Nenosiri lazima liwe na:<br/>
+        <span id="req-len" style="color:var(--muted)">○ Angalau herufi 8</span><br/>
+        <span id="req-upper" style="color:var(--muted)">○ Herufi kubwa moja (A-Z)</span><br/>
+        <span id="req-num" style="color:var(--muted)">○ Nambari moja (0-9)</span>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goStep(4)">← Rudi</button>
+        <button class="btn-next" id="btn5" onclick="goStep(6)" disabled>Endelea →</button>
+      </div>
+    </div>
+
+    <!-- ══ STEP 6: REVIEW ══ -->
+    <div class="form-step" id="step6">
+      <div class="step-header">
+        <div class="step-num">Hatua 6 ya 6</div>
+        <h2>Pitia taarifa zako</h2>
+        <p>Hakikisha kila kitu ni sahihi kabla ya kutuma. Unaweza kurudi nyuma kubadilisha.</p>
+      </div>
+
+      <div class="review-section">
+        <div class="review-section-title">📱 Mawasiliano</div>
+        <div class="review-row"><span class="review-label">Nambari ya Simu</span><span class="review-val" id="rv-phone">—</span></div>
+      </div>
+      <div class="review-section">
+        <div class="review-section-title">🪪 Utambulisho</div>
+        <div class="review-row"><span class="review-label">Jina Kamili</span><span class="review-val" id="rv-name">—</span></div>
+        <div class="review-row"><span class="review-label">Aina ya ID</span><span class="review-val" id="rv-idtype">—</span></div>
+        <div class="review-row"><span class="review-label">Nambari ya ID</span><span class="review-val" id="rv-idnum">—</span></div>
+        <div class="review-row"><span class="review-label">Tarehe ya Kuzaliwa</span><span class="review-val" id="rv-dob">—</span></div>
+        <div class="review-row"><span class="review-label">Jinsia</span><span class="review-val" id="rv-gender">—</span></div>
+      </div>
+      <div class="review-section">
+        <div class="review-section-title">📍 Mahali</div>
+        <div class="review-row"><span class="review-label">Mkoa</span><span class="review-val">Kilimanjaro</span></div>
+        <div class="review-row"><span class="review-label">Wilaya</span><span class="review-val" id="rv-district">—</span></div>
+        <div class="review-row"><span class="review-label">Kata / Mtaa</span><span class="review-val" id="rv-ward">—</span></div>
+      </div>
+      <div class="review-section">
+        <div class="review-section-title">💼 Kazi</div>
+        <div class="review-row"><span class="review-label">Aina ya Kazi</span><span class="review-val" id="rv-job">—</span></div>
+        <div class="review-row"><span class="review-label">Kipato cha Wastani</span><span class="review-val" id="rv-income">—</span></div>
+      </div>
+
+      <div class="terms-box">
+        Kwa kujiandikisha, unakubali <strong>Masharti ya Matumizi</strong> ya KiliSmart na <strong>Sera ya Faragha</strong> yetu. Fedha zako zinashikiliwa salama kwenye akaunti ya escrow iliyosajiliwa. Ada ya 5% inakatwa kwenye kutoa pesa kabla ya kukamilisha lengo.
+      </div>
+      <div class="terms-check">
+        <input type="checkbox" id="terms-cb" onchange="document.getElementById('btn-submit').disabled=!this.checked"/>
+        Nakubali Masharti ya Matumizi na Sera ya Faragha ya KiliSmart
+      </div>
+      <div class="terms-check">
+        <input type="checkbox" id="whatsapp-cb" checked/>
+        Nakubali kupokea arifa kupitia WhatsApp kuhusu mipango yangu ya kuhifadhi
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goStep(5)">← Rudi</button>
+        <button class="btn-next" id="btn-submit" onclick="submitRegistration()" disabled>✅ Maliza Usajili</button>
+      </div>
+    </div>
+
+    <!-- ══ SUCCESS ══ -->
+    <div class="form-step" id="step-success">
+      <div class="success-wrap">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">Hongera, umefanikiwa!</div>
+        <p class="success-sub">Akaunti yako ya KiliSmart imefunguliwa. Unapata TZS 2,000 bonus kwenye wallet yako kama zawadi ya kuanza.</p>
+        <div class="success-info">
+          <div class="success-info-row"><span class="success-info-label">Jina</span><span class="success-info-val" id="s-name">—</span></div>
+          <div class="success-info-row"><span class="success-info-label">Nambari ya Simu</span><span class="success-info-val" id="s-phone">—</span></div>
+          <div class="success-info-row"><span class="success-info-label">Wilaya</span><span class="success-info-val" id="s-district">—</span></div>
+          <div class="success-info-row"><span class="success-info-label">Wallet Bonus</span><span class="success-info-val">🎁 TZS 2,000</span></div>
+        </div>
+        <a href="dashboard.html" style="display:block;background:var(--green);color:#fff;padding:14px 24px;border-radius:var(--radius);font-weight:700;font-size:15px;text-decoration:none;margin-bottom:10px;text-align:center">Nenda kwenye Dashboard →</a>
+        <a href="index.html" style="display:block;color:var(--green);font-size:13px;text-align:center;text-decoration:none">au Rudi Dukani</a>
+      </div>
+    </div>
+
+  </div><!-- end right-panel -->
+</div><!-- end page-wrap -->
+
+<div id="toast" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green3);color:#fff;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:600;transition:transform .3s;white-space:nowrap"></div>
+
+<script>
+let data={phone:'',idType:'nida',fullname:'',idNumber:'',dob:'',gender:'',district:'',ward:'',street:'',house:'',job:'',income:'',password:''};
+let currentStep=1;
+let otpSent=false;
+
+const progressMap={1:16,2:33,3:50,4:67,5:83,6:100};
+
+function saveField(k,v){data[k]=v;}
+
+function goStep(n){
+  document.getElementById('step'+currentStep).classList.remove('active');
+  if(n>6){document.getElementById('step'+currentStep).classList.remove('active');document.getElementById('step-success').classList.add('active');}
+  else{
+    document.getElementById('step'+n).classList.add('active');
+    document.getElementById('progress').style.width=progressMap[n]+'%';
+    updateSideSteps(n);
+    if(n===6) populateReview();
+  }
+  currentStep=n;
+  window.scrollTo(0,0);
+}
+
+function updateSideSteps(n){
+  for(let i=1;i<=6;i++){
+    const el=document.getElementById('sc'+i);
+    el.classList.remove('done','active');
+    if(i<n) el.classList.add('done'), el.textContent='✓';
+    else if(i===n) el.classList.add('active'), el.textContent=i;
+    else el.textContent=i;
+  }
+}
+
+function formatPhone(el){
+  let v=el.value.replace(/[^0-9+]/g,'');
+  if(v.startsWith('0')) v='+255'+v.slice(1);
+  el.value=v;
+  data.phone=v;
+}
+
+function handleStep1(){
+  const btn=document.getElementById('btn1');
+  const phone=document.getElementById('phone').value;
+  if(!phone||phone.length<10){
+    document.getElementById('phone-group').classList.add('has-error');
+    return;
+  }
+  document.getElementById('phone-group').classList.remove('has-error');
+  if(!otpSent){
+    otpSent=true;
+    document.getElementById('otp-section').style.display='block';
+    document.getElementById('otp-sent-text').textContent='SMS imetumwa kwa '+phone;
+    btn.textContent='Thibitisha OTP →';
+    document.getElementById('otp0').focus();
+  } else {
+    // Check OTP (in real app, validate with server)
+    const otp=[0,1,2,3,4,5].map(i=>document.getElementById('otp'+i).value).join('');
+    if(otp.length===6){ data.phone=phone; goStep(2); }
+    else showToast('Weka nambari zote 6 za OTP');
+  }
+}
+
+function otpNext(el,idx){
+  el.value=el.value.slice(-1);
+  if(el.value && idx<5) document.getElementById('otp'+(idx+1)).focus();
+  // Auto-submit if all filled
+  const full=[0,1,2,3,4,5].every(i=>document.getElementById('otp'+i).value);
+  if(full) setTimeout(()=>{data.phone=document.getElementById('phone').value;goStep(2);},300);
+}
+
+function selectIdType(type){
+  data.idType=type;
+  document.getElementById('id-nida').classList.toggle('selected',type==='nida');
+  document.getElementById('id-license').classList.toggle('selected',type==='license');
+  document.getElementById('nida-group').style.display=type==='nida'?'block':'none';
+  document.getElementById('license-group').style.display=type==='license'?'block':'none';
+}
+
+function fakeUpload(zoneId,successId,iconId,titleId){
+  const zone=document.getElementById(zoneId);
+  zone.classList.add('uploaded');
+  document.getElementById(iconId).textContent='✅';
+  document.getElementById(titleId).textContent='Picha imepakiwa';
+  document.getElementById(successId).style.display='block';
+}
+
+function selectWork(el,job){
+  document.querySelectorAll('.work-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  data.job=job;
+  document.getElementById('other-work-group').style.display=job==='Nyingine'?'block':'none';
+}
+
+function checkStrength(pwd){
+  const hasLen=pwd.length>=8;
+  const hasUpper=/[A-Z]/.test(pwd);
+  const hasNum=/[0-9]/.test(pwd);
+  const hasSpec=/[^A-Za-z0-9]/.test(pwd);
+  const score=[hasLen,hasUpper,hasNum,hasSpec].filter(Boolean).length;
+  const colors=['','#dc2626','#d97706','#ca8a04','#16a34a'];
+  const labels=['','Dhaifu sana','Dhaifu','Wastani','Nguvu'];
+  for(let i=1;i<=4;i++){
+    document.getElementById('s'+i).style.background=i<=score?colors[score]:getComputedStyle(document.documentElement).getPropertyValue('--border');
+  }
+  document.getElementById('strength-label').textContent=score?labels[score]:'';
+  document.getElementById('req-len').textContent=(hasLen?'✅':'○')+' Angalau herufi 8';
+  document.getElementById('req-len').style.color=hasLen?'var(--green)':'var(--muted)';
+  document.getElementById('req-upper').textContent=(hasUpper?'✅':'○')+' Herufi kubwa moja (A-Z)';
+  document.getElementById('req-upper').style.color=hasUpper?'var(--green)':'var(--muted)';
+  document.getElementById('req-num').textContent=(hasNum?'✅':'○')+' Nambari moja (0-9)';
+  document.getElementById('req-num').style.color=hasNum?'var(--green)':'var(--muted)';
+  document.getElementById('btn5').disabled=!(hasLen&&hasUpper&&hasNum);
+  checkMatch();
+}
+
+function checkMatch(){
+  const p=document.getElementById('password').value;
+  const c=document.getElementById('confirm-pwd').value;
+  if(!c) return;
+  const match=p===c;
+  document.getElementById('pwd-match-err').style.display=match?'none':'block';
+  document.getElementById('pwd-match-ok').style.display=match?'block':'none';
+}
+
+function togglePwd(id,btn){
+  const el=document.getElementById(id);
+  el.type=el.type==='password'?'text':'password';
+  btn.textContent=el.type==='password'?'👁️':'🙈';
+}
+
+function populateReview(){
+  document.getElementById('rv-phone').textContent=data.phone||'—';
+  document.getElementById('rv-name').textContent=document.getElementById('fullname').value||'—';
+  document.getElementById('rv-idtype').textContent=data.idType==='nida'?'NIDA':'Leseni ya Udereva';
+  document.getElementById('rv-idnum').textContent=data.idNumber?data.idNumber.slice(0,4)+'••••••••••••':'—';
+  document.getElementById('rv-dob').textContent=document.getElementById('dob').value||'—';
+  document.getElementById('rv-gender').textContent=document.getElementById('gender').value||'—';
+  document.getElementById('rv-district').textContent=document.getElementById('district').value||'—';
+  const ward=document.getElementById('ward').value;
+  const street=document.getElementById('street').value;
+  document.getElementById('rv-ward').textContent=[ward,street].filter(Boolean).join(', ')||'—';
+  document.getElementById('rv-job').textContent=data.job||'—';
+  document.getElementById('rv-income').textContent=document.getElementById('income').value||'—';
+}
+
+function submitRegistration(){
+  // Show success
+  document.querySelectorAll('.form-step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step-success').classList.add('active');
+  document.getElementById('progress').style.width='100%';
+  document.getElementById('s-name').textContent=document.getElementById('fullname').value||'Mteja';
+  document.getElementById('s-phone').textContent=data.phone||'—';
+  document.getElementById('s-district').textContent=document.getElementById('district').value||'—';
+  for(let i=1;i<=6;i++){const el=document.getElementById('sc'+i);el.classList.add('done');el.classList.remove('active');el.textContent='✓';}
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>t.style.transform='translateX(-50%) translateY(80px)',3000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,2799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>KiliSmart Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --g:#1a6b3c;--g2:#145530;--g3:#0d3d22;
+  --gold:#c9a84c;
+  --cream:#f9f6f0;--white:#fff;
+  --text:#1a1a1a;--muted:#6b7280;--light:#9ca3af;
+  --border:#e5e7eb;--border2:#d1d5db;
+  --danger:#dc2626;--danger-bg:#fef2f2;
+  --warning:#d97706;--warning-bg:#fffbeb;
+  --info:#1d4ed8;--info-bg:#eff6ff;
+  --success:#16a34a;--success-bg:#f0fdf4;
+  --r:10px;--rl:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f1f3f0;color:var(--text);font-size:13px;line-height:1.5}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+/* ── LAYOUT ── */
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sb{background:var(--g3);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto;flex-shrink:0}
+.mn{overflow-x:hidden;display:flex;flex-direction:column}
+
+/* ── SIDEBAR ── */
+.sb-logo{padding:16px 18px;border-bottom:1px solid rgba(255,255,255,.07)}
+.sb-logo-t{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:#fff}
+.sb-logo-t span{color:var(--gold)}
+.sb-badge{display:inline-block;background:rgba(220,38,38,.25);border:1px solid rgba(220,38,38,.4);color:#fca5a5;font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;letter-spacing:.8px;margin-top:4px}
+.sb-nav{flex:1;padding:8px 0}
+.sb-sec{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;opacity:.35;color:#fff;padding:10px 16px 4px}
+.si{display:flex;align-items:center;gap:9px;padding:8px 16px;font-size:12px;font-weight:500;color:rgba(255,255,255,.65);cursor:pointer;border-left:3px solid transparent;transition:all .18s;position:relative}
+.si:hover{background:rgba(255,255,255,.06);color:#fff}
+.si.on{background:rgba(255,255,255,.1);color:#fff;border-left-color:var(--gold)}
+.si-icon{width:16px;text-align:center;font-size:14px;flex-shrink:0}
+.sb-cnt{margin-left:auto;background:var(--danger);color:#fff;border-radius:20px;padding:1px 7px;font-size:9px;font-weight:700}
+.sb-cnt.gold{background:var(--gold)}
+.sb-cnt.blue{background:var(--info)}
+.sb-bottom{padding:12px 16px;border-top:1px solid rgba(255,255,255,.07)}
+.sb-user{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.sb-av{width:30px;height:30px;border-radius:50%;background:var(--g);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.sb-uname{font-size:12px;font-weight:600;color:#fff}
+.sb-urole{font-size:10px;color:rgba(255,255,255,.4)}
+.sb-out{font-size:11px;color:rgba(255,255,255,.4);cursor:pointer}
+.sb-out:hover{color:#fff}
+
+/* ── TOPBAR ── */
+.tb{background:#fff;border-bottom:1px solid var(--border);padding:0 22px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.tb-title{font-family:'Fraunces',serif;font-size:16px;font-weight:700}
+.tb-r{display:flex;align-items:center;gap:8px}
+.tb-btn{height:32px;padding:0 14px;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;transition:all .2s}
+.tb-outline{background:none;border:1.5px solid var(--border2);color:var(--text)}
+.tb-outline:hover{border-color:var(--g);color:var(--g)}
+.tb-green{background:var(--g);color:#fff}
+.tb-green:hover{background:var(--g2)}
+.tb-notif{position:relative;width:32px;height:32px;border:1.5px solid var(--border2);border-radius:7px;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px}
+.notif-dot{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;background:var(--danger);border:1.5px solid #fff}
+
+/* ── PAGES ── */
+.pg{display:none;padding:18px 22px;flex:1}
+.pg.on{display:block}
+
+/* ── KPI ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:14px 16px;position:relative;overflow:hidden;transition:box-shadow .2s}
+.kc:hover{box-shadow:0 2px 12px rgba(0,0,0,.07)}
+.kc::after{content:attr(data-icon);position:absolute;right:10px;top:10px;font-size:22px;opacity:.12}
+.kc-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:7px;font-weight:600}
+.kc-val{font-family:'Fraunces',serif;font-size:24px;font-weight:700;line-height:1;margin-bottom:5px}
+.kc-ch{font-size:11px;color:var(--muted)}
+.kc-ch.up{color:var(--success)}
+.kc-ch.dn{color:var(--danger)}
+.kc-bar{height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden}
+.kc-bar-fill{height:100%;border-radius:2px}
+
+/* ── SECTION HEADER ── */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sh-title{font-family:'Fraunces',serif;font-size:14px;font-weight:700}
+.sh-actions{display:flex;gap:8px}
+.filter-sel{height:30px;border:1.5px solid var(--border2);border-radius:7px;padding:0 10px;font-size:12px;font-family:'DM Sans',sans-serif;background:#fff;color:var(--text);outline:none;cursor:pointer}
+
+/* ── TABLE ── */
+.tw{background:#fff;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:14px}
+.ts{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ts input{flex:1;min-width:160px;height:32px;border:1.5px solid var(--border2);border-radius:7px;padding:0 10px;font-size:12px;font-family:'DM Sans',sans-serif;outline:none;background:var(--cream)}
+.ts input:focus{border-color:var(--g);background:#fff}
+table{width:100%;border-collapse:collapse}
+thead{background:#f9fafb}
+th{padding:9px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.td-name{font-weight:600;color:var(--text)}
+
+/* ── PILLS ── */
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;white-space:nowrap}
+.pill-g{background:var(--success-bg);color:var(--success)}
+.pill-gold{background:#fefce8;color:var(--gold)}
+.pill-r{background:var(--danger-bg);color:var(--danger)}
+.pill-b{background:var(--info-bg);color:var(--info)}
+.pill-gray{background:#f3f4f6;color:var(--muted)}
+.pdot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.pdot.pulse{animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── ACTION BUTTONS ── */
+.ab{padding:4px 9px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;transition:all .2s}
+.ab-edit{background:#f0f9ff;color:var(--info)}
+.ab-edit:hover{background:var(--info);color:#fff}
+.ab-del{background:var(--danger-bg);color:var(--danger)}
+.ab-del:hover{background:var(--danger);color:#fff}
+.ab-view{background:#f3f4f6;color:var(--muted)}
+.ab-view:hover{background:var(--g);color:#fff}
+.ab-approve{background:var(--success-bg);color:var(--success)}
+.ab-approve:hover{background:var(--success);color:#fff}
+.ab-wa{background:#dcfce7;color:#16a34a}
+.ab-wa:hover{background:#16a34a;color:#fff}
+
+/* ── MINI PROGRESS ── */
+.mp{height:5px;background:var(--border);border-radius:3px;overflow:hidden;width:80px;display:inline-block;vertical-align:middle}
+.mf{height:100%;border-radius:3px}
+
+/* ── CARDS ── */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:12px}
+.card-title{font-family:'Fraunces',serif;font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between}
+
+/* ── TWO / THREE COL ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+
+/* ── STAT ROWS ── */
+.sr{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:.5px solid var(--border);font-size:12px}
+.sr:last-child{border-bottom:none}
+.sr-l{color:var(--muted)}
+.sr-v{font-weight:600;color:var(--text)}
+
+/* ── ACTIVITY FEED ── */
+.fi{display:flex;gap:9px;padding:9px 0;border-bottom:.5px solid var(--border)}
+.fi:last-child{border-bottom:none}
+.fdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.fc{flex:1}
+.ft{font-size:12px;color:var(--text);line-height:1.5}
+.fti{font-size:10px;color:var(--muted);margin-top:1px}
+
+/* ── MODAL ── */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(3px)}
+.mo.open{display:flex;animation:mfi .2s}
+@keyframes mfi{from{opacity:0}to{opacity:1}}
+.mb{background:#fff;border-radius:var(--rl);width:100%;overflow:hidden;animation:msu .22s ease;max-height:90vh;overflow-y:auto}
+@keyframes msu{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+.mh{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1}
+.mh h3{font-family:'Fraunces',serif;font-size:15px;font-weight:700}
+.mc{width:28px;height:28px;border:1.5px solid var(--border2);border-radius:50%;background:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.mbody{padding:18px 20px}
+
+/* ── FORM ── */
+.fg{margin-bottom:14px}
+.fl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text);display:block;margin-bottom:5px}
+.req{color:var(--danger)}
+.fi-in{width:100%;height:42px;border:1.5px solid var(--border2);border-radius:var(--r);padding:0 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border-color .2s}
+.fi-in:focus{border-color:var(--g)}
+.fi-ta{width:100%;border:1.5px solid var(--border2);border-radius:var(--r);padding:10px 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;resize:vertical;min-height:80px;transition:border-color .2s;line-height:1.6}
+.fi-ta:focus{border-color:var(--g)}
+.fi-sel{width:100%;height:42px;border:1.5px solid var(--border2);border-radius:var(--r);padding:0 12px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+.fi-sel:focus{border-color:var(--g)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.5}
+.form-actions{display:flex;gap:8px;margin-top:16px;padding-top:16px;border-top:1px solid var(--border)}
+.btn-full{width:100%;height:44px;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;border:none}
+.btn-g{background:var(--g);color:#fff}
+.btn-g:hover{background:var(--g2)}
+.btn-out{background:none;border:1.5px solid var(--border2);color:var(--muted)}
+.btn-out:hover{border-color:var(--g);color:var(--g)}
+.btn-d{background:var(--danger);color:#fff}
+
+/* ── IMAGE UPLOAD GRID ── */
+.img-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:6px}
+.img-slot{aspect-ratio:1;border:2px dashed var(--border2);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;background:var(--cream);position:relative;overflow:hidden}
+.img-slot:hover{border-color:var(--g);background:#f0faf4}
+.img-slot.has-img{border-style:solid;border-color:var(--g)}
+.img-slot-icon{font-size:22px;margin-bottom:4px;color:var(--muted)}
+.img-slot-label{font-size:10px;color:var(--muted);text-align:center}
+.img-slot-remove{position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;background:var(--danger);color:#fff;border:none;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center;line-height:1}
+.img-slot.has-img .img-slot-remove{display:flex}
+.img-slot-emoji{font-size:32px}
+
+/* ── SPEC BUILDER ── */
+.spec-row{display:flex;gap:8px;margin-bottom:8px;align-items:center}
+.spec-row .fi-in{flex:1}
+.spec-del{width:32px;height:32px;border:1.5px solid var(--border2);border-radius:7px;background:#fff;cursor:pointer;font-size:14px;color:var(--muted);flex-shrink:0;transition:all .2s}
+.spec-del:hover{border-color:var(--danger);color:var(--danger)}
+.add-spec{background:none;border:1.5px dashed var(--border2);border-radius:7px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--muted);width:100%;transition:all .2s;margin-bottom:4px}
+.add-spec:hover{border-color:var(--g);color:var(--g)}
+
+/* ── PRODUCT CARD (catalogue view) ── */
+.prod-card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.pc{background:#fff;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:box-shadow .2s;position:relative}
+.pc:hover{box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.pc-img{height:130px;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:48px;position:relative}
+.pc-badge{position:absolute;top:8px;left:8px;padding:3px 8px;border-radius:20px;font-size:9px;font-weight:700;text-transform:uppercase}
+.pc-info{padding:10px 12px}
+.pc-cat{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--g);margin-bottom:4px}
+.pc-name{font-size:13px;font-weight:600;margin-bottom:4px;line-height:1.35}
+.pc-price{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--g);margin-bottom:4px}
+.pc-margin{font-size:11px;color:var(--muted)}
+.pc-savers{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px;margin-bottom:8px}
+.pc-actions{display:flex;gap:6px}
+.pc-actions .ab{flex:1;text-align:center}
+.pc-menu{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.85);border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);font-weight:700;color:var(--muted)}
+
+/* ── CAT / SUPPLIER CARD ── */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.cat-card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:14px;text-align:center;transition:border-color .2s}
+.cat-card:hover{border-color:var(--g)}
+.cat-icon-big{font-size:32px;margin-bottom:6px}
+.cat-name{font-size:13px;font-weight:600;margin-bottom:2px}
+.cat-count{font-size:11px;color:var(--muted)}
+.cat-actions{display:flex;gap:6px;justify-content:center;margin-top:8px}
+
+/* ── FULFILLMENT TIMELINE ── */
+.timeline{display:flex;align-items:center;gap:0;margin:10px 0}
+.tl-step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative}
+.tl-step:not(:last-child)::after{content:'';position:absolute;left:50%;top:12px;width:100%;height:2px;background:var(--border);z-index:0}
+.tl-step.done:not(:last-child)::after{background:var(--g)}
+.tl-circle{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;z-index:1;color:var(--muted)}
+.tl-step.done .tl-circle{background:var(--g);border-color:var(--g);color:#fff}
+.tl-step.active .tl-circle{border-color:var(--g);color:var(--g);background:#fff}
+.tl-label{font-size:10px;color:var(--muted);margin-top:4px;text-align:center}
+.tl-step.done .tl-label{color:var(--g);font-weight:600}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--g3);color:#fff;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:500;z-index:600;transition:transform .3s;white-space:nowrap}
+
+@media(max-width:900px){
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .two-col,.three-col,.form-row,.form-row-3{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .app{grid-template-columns:1fr}
+  .sb{display:none}
+  .pg{padding:12px}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ── API SETTINGS PAGE ───────────────────────────────────────────── */
+.api-card{background:#fff;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;transition:box-shadow .2s;margin-bottom:0}
+.api-card:hover{box-shadow:0 3px 16px rgba(0,0,0,.07)}
+.api-card-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.api-logo{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.api-name{font-size:14px;font-weight:700;line-height:1.2}
+.api-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.api-status-pill{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.3px;white-space:nowrap}
+.api-status-pill.green{background:var(--success-bg);color:var(--success)}
+.api-status-pill.orange{background:var(--warning-bg);color:var(--warning)}
+.api-status-pill.red{background:var(--danger-bg);color:var(--danger)}
+.api-test-btn{background:var(--cream);border:1.5px solid var(--border2);border-radius:7px;padding:4px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;color:var(--muted)}
+.api-test-btn:hover{border-color:var(--g);color:var(--g);background:#f0faf4}
+.api-body{padding:14px 16px}
+/* Environment toggle */
+.api-env-switch{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.api-env-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.env-toggle{display:flex;border:1.5px solid var(--border2);border-radius:8px;overflow:hidden}
+.env-btn{padding:5px 14px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;background:#fff;color:var(--muted);transition:all .18s}
+.env-btn.on{background:var(--g);color:#fff}
+.env-warning{font-size:10px;font-weight:700;color:var(--danger);background:var(--danger-bg);padding:3px 8px;border-radius:5px}
+/* Fields */
+.api-fields{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.api-field-row{display:flex;gap:10px}
+.af{flex:1;position:relative;min-width:0}
+.af-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);display:block;margin-bottom:4px}
+.af-input{width:100%;height:38px;border:1.5px solid var(--border2);border-radius:var(--r);padding:0 34px 0 10px;font-size:12px;font-family:'DM Sans',sans-serif;color:var(--text);background:#fff;outline:none;transition:border-color .2s}
+.af-input:focus{border-color:var(--g)}
+.af-eye{position:absolute;right:8px;top:24px;background:none;border:none;cursor:pointer;font-size:13px;opacity:.5;padding:2px}
+.af-eye:hover{opacity:1}
+/* Callbacks */
+.api-callbacks{background:var(--cream);border-radius:var(--r);padding:10px 12px;margin-bottom:12px}
+.cb-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px}
+.cb-row{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.cb-row:last-child{margin-bottom:0}
+.cb-label{font-size:10px;font-weight:700;color:var(--muted);width:90px;flex-shrink:0}
+.cb-url{font-size:10px;font-family:monospace;background:#fff;border:1px solid var(--border);border-radius:5px;padding:3px 8px;color:var(--text);cursor:pointer;flex:1;display:flex;justify-content:space-between;align-items:center;gap:6px;word-break:break-all;transition:border-color .2s}
+.cb-url:hover{border-color:var(--g)}
+.cb-copy{opacity:.4;flex-shrink:0}
+/* Footer */
+.api-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border)}
+.api-docs-link{font-size:11px;color:var(--info);text-decoration:none;font-weight:600}
+.api-docs-link:hover{text-decoration:underline}
+.api-save-btn{background:var(--g);color:#fff;border:none;border-radius:7px;padding:7px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+.api-save-btn:hover{background:var(--g2)}
+/* Future APIs */
+.future-api-card{border:1.5px dashed var(--border2);border-radius:var(--rl);padding:14px;background:#fafafa;transition:border-color .2s}
+.future-api-card:hover{border-color:var(--g);background:#f0faf4}
+.future-api-btn{width:100%;background:none;border:1.5px solid var(--border2);border-radius:7px;padding:7px;font-size:11px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--muted);transition:all .18s}
+.future-api-btn:hover{border-color:var(--g);color:var(--g)}
+.phase-badge{background:#eff6ff;color:var(--info);font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:.5px;white-space:nowrap}
+.phase-badge-3{background:#fef3c7;color:var(--warning)}
+.phase-badge-4{background:#f3f4f6;color:var(--muted)}
+/* AI feature rows */
+.ai-feature-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text)}
+.ai-feat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+/* API Log */
+.api-log-row{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border);font-size:12px}
+.api-log-row:last-child{border-bottom:none}
+.api-log-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.api-log-body{flex:1}
+.api-log-endpoint{font-family:monospace;font-size:11px;color:var(--info);margin-top:2px}
+.api-log-time{font-size:10px;color:var(--muted);text-align:right;flex-shrink:0;white-space:nowrap}
+.api-method{display:inline-block;padding:1px 6px;border-radius:4px;font-size:9px;font-weight:700;font-family:monospace;margin-right:4px}
+.method-get{background:#eff6ff;color:var(--info)}
+.method-post{background:#f0fdf4;color:var(--success)}
+.method-put{background:#fefce8;color:var(--warning)}
+@media(max-width:900px){
+  #pg-api-settings .two-col-api,.api-field-row{flex-direction:column}
+  #pg-api-settings > div:first-child + div{grid-template-columns:1fr}
+}
+
+
+/* ── USERS & ROLES ─────────────────────────────────────────── */
+.role-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700}
+.role-superadmin{background:#fef3c7;color:#92400e}
+.role-manager{background:#ede9fe;color:#5b21b6}
+.role-care{background:#eff6ff;color:#1d4ed8}
+.role-sales{background:#f0fdf4;color:#166534}
+.role-rider{background:#fff7ed;color:#c2410c}
+.role-supplier{background:#fdf4ff;color:#7e22ce}
+.role-viewer{background:#f3f4f6;color:#374151}
+
+.perm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:10px 0}
+.perm-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:12px;cursor:pointer;transition:all .18s}
+.perm-item:hover{border-color:var(--g);background:#f0faf4}
+.perm-item.on{border-color:var(--g);background:#f0faf4}
+.perm-check{width:16px;height:16px;border:2px solid var(--border2);border-radius:4px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;transition:all .18s}
+.perm-item.on .perm-check{background:var(--g);border-color:var(--g);color:#fff}
+
+/* ── CMS ───────────────────────────────────────────────────── */
+.cms-slide-card{background:#fff;border:2px solid var(--border);border-radius:var(--rl);padding:16px;margin-bottom:12px;transition:border-color .2s;position:relative}
+.cms-slide-card.active-slide{border-color:var(--g)}
+.cms-slide-preview{height:100px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:12px;color:#fff;position:relative;overflow:hidden;font-size:13px;font-weight:500;gap:10px}
+.cms-slide-number{position:absolute;top:8px;left:8px;background:rgba(255,255,255,.25);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:700}
+.cms-slide-status{position:absolute;top:8px;right:8px}
+.cms-drag-handle{position:absolute;top:16px;right:16px;color:var(--muted);cursor:grab;font-size:16px}
+.cms-img-upload{border:2px dashed var(--border2);border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;transition:all .2s;background:var(--cream);position:relative;overflow:hidden}
+.cms-img-upload:hover{border-color:var(--g);background:#f0faf4}
+.cms-img-upload.has-img{border-style:solid;border-color:var(--g);background:#f0faf4}
+.cms-img-preview{width:100%;height:80px;object-fit:cover;border-radius:6px;display:none}
+.cms-img-upload.has-img .cms-img-preview{display:block}
+.cms-img-upload.has-img .cms-upload-placeholder{display:none}
+.color-swatch-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.color-swatch{width:28px;height:28px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all .2s;flex-shrink:0}
+.color-swatch.sel{border-color:var(--text);transform:scale(1.15)}
+
+/* ── PRODUCT IMAGE UPLOAD (Real) ────────────────────────────── */
+.img-slot-real{aspect-ratio:1;border:2px dashed var(--border2);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;background:var(--cream);position:relative;overflow:hidden}
+.img-slot-real:hover{border-color:var(--g);background:#f0faf4}
+.img-slot-real.has-file{border-style:solid;border-color:var(--g);background:#f0faf4}
+.img-slot-real input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.img-slot-real img{width:100%;height:100%;object-fit:cover;display:none;border-radius:calc(var(--r) - 2px)}
+.img-slot-real.has-file img{display:block}
+.img-slot-real.has-file .img-slot-placeholder{display:none}
+.img-slot-remove-btn{position:absolute;top:4px;right:4px;width:20px;height:20px;border-radius:50%;background:var(--danger);color:#fff;border:none;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:2}
+.img-slot-real.has-file .img-slot-remove-btn{display:flex}
+.img-slot-placeholder{display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none}
+.img-slot-order{position:absolute;bottom:4px;left:4px;background:rgba(26,107,60,.85);color:#fff;border-radius:5px;padding:1px 6px;font-size:9px;font-weight:700;display:none}
+.img-slot-real.has-file .img-slot-order{display:block}
+
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ SIDEBAR ══ -->
+<div class="sb">
+  <div class="sb-logo">
+    <div class="sb-logo-t">Kili<span>Smart</span></div>
+    <span class="sb-badge">ADMIN PANEL</span>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-sec">Dashboard</div>
+    <div class="si on"  onclick="nav('overview',this)"><span class="si-icon">📊</span>Overview</div>
+    <div class="si" onclick="nav('customers',this)"><span class="si-icon">👥</span>Customers<span class="sb-cnt blue">487</span></div>
+
+    <div class="sb-sec">Catalogue</div>
+    <div class="si" onclick="nav('products',this)"><span class="si-icon">🛍️</span>Products<span class="sb-cnt blue">15</span></div>
+    <div class="si" onclick="nav('categories',this)"><span class="si-icon">🏷️</span>Categories<span class="sb-cnt blue">9</span></div>
+    <div class="si" onclick="nav('suppliers',this)"><span class="si-icon">🏭</span>Suppliers<span class="sb-cnt blue">6</span></div>
+
+    <div class="sb-sec">Operations</div>
+    <div class="si" onclick="nav('plans',this)"><span class="si-icon">🎯</span>Saving Plans<span class="sb-cnt gold">312</span></div>
+    <div class="si" onclick="nav('fulfillment',this)"><span class="si-icon">📦</span>Fulfillment<span class="sb-cnt">7</span></div>
+    <div class="si" onclick="nav('withdrawals',this)"><span class="si-icon">↩️</span>Withdrawals<span class="sb-cnt">4</span></div>
+    <div class="si" onclick="nav('inactive',this)"><span class="si-icon">😴</span>Inactive<span class="sb-cnt gold">23</span></div>
+    <div class="si" onclick="nav('deliveries',this)"><span class="si-icon">🚚</span>Deliveries</div>
+
+    <div class="sb-sec">Reports</div>
+    <div class="si" onclick="nav('finance',this)"><span class="si-icon">💰</span>Financial</div>
+    <div class="si" onclick="nav('expenses',this)"><span class="si-icon">🧾</span>Matumizi ya Ndani</div>
+    <div class="sb-sec">Timu ya KiliSmart</div>
+    <div class="si" onclick="nav('sales-team',this)"><span class="si-icon">🎯</span>Sales & Marketing</div>
+    <div class="si" onclick="nav('customer-care',this)"><span class="si-icon">🎧</span>Customer Care</div>
+    <div class="si" onclick="nav('delivery-team',this)"><span class="si-icon">🏍️</span>Delivery People</div>
+    <div class="si" onclick="nav('api-settings',this)"><span class="si-icon">🔌</span>API Settings</div>
+    <div class="si" onclick="nav('users-roles',this)"><span class="si-icon">👥</span>Users &amp; Roles</div>
+    <div class="si" onclick="nav('cms',this)"><span class="si-icon">🖼️</span>Homepage CMS</div>
+    <div class="si" onclick="nav('settings',this)"><span class="si-icon">⚙️</span>Business Settings</div>
+  </nav>
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-av">KS</div>
+      <div><div class="sb-uname">Admin</div><div class="sb-urole">KiliSmart Owner</div></div>
+    </div>
+    <div class="sb-out" onclick="showToast('Logging out...')">🚪 Logout</div>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<div class="mn">
+  <div class="tb">
+    <div class="tb-title" id="pg-title">Overview</div>
+    <div class="tb-r">
+      <button class="tb-btn tb-outline" onclick="showToast('Exporting report...')">⬇ Export</button>
+      <button class="tb-notif" onclick="showToast('7 new alerts')">🔔<span class="notif-dot"></span></button>
+      <button class="tb-btn tb-green" id="tb-action-btn" onclick="handleTopAction()">+ Add Product</button>
+    </div>
+  </div>
+
+  <!-- ══ OVERVIEW ══ -->
+  <div class="pg on" id="pg-overview">
+    <div class="kpi-grid">
+      <div class="kc" data-icon="👥"><div class="kc-label">Total Customers</div><div class="kc-val">487</div><div class="kc-ch up">↑ +34 this month</div><div class="kc-bar"><div class="kc-bar-fill" style="width:78%;background:var(--g)"></div></div></div>
+      <div class="kc" data-icon="💰"><div class="kc-label">Total Float (Wallets)</div><div class="kc-val">TZS 48.7M</div><div class="kc-ch up">↑ +TZS 3.2M this week</div><div class="kc-bar"><div class="kc-bar-fill" style="width:65%;background:var(--gold)"></div></div></div>
+      <div class="kc" data-icon="📦"><div class="kc-label">Orders Fulfilled</div><div class="kc-val">43</div><div class="kc-ch up">↑ +12 vs last month</div><div class="kc-bar"><div class="kc-bar-fill" style="width:55%;background:var(--info)"></div></div></div>
+      <div class="kc" data-icon="📈"><div class="kc-label">Revenue (Month)</div><div class="kc-val">TZS 2.1M</div><div class="kc-ch up">↑ +18% vs last month</div><div class="kc-bar"><div class="kc-bar-fill" style="width:42%;background:var(--success)"></div></div></div>
+    </div>
+    <div class="two-col">
+      <div class="card"><div class="card-title">Live Activity</div><div id="feed"></div></div>
+      <div>
+        <div class="card" style="border-left:3px solid var(--danger)">
+          <div class="card-title" style="color:var(--danger)">🚨 Action Needed</div>
+          <div class="sr"><span class="sr-l">Fulfillment queue (100% reached)</span><span class="sr-v" style="color:var(--danger)">7 orders</span></div>
+          <div class="sr"><span class="sr-l">Withdrawal approvals pending</span><span class="sr-v" style="color:var(--warning)">4 requests</span></div>
+          <div class="sr"><span class="sr-l">Inactive customers (14+ days)</span><span class="sr-v" style="color:var(--warning)">23</span></div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="ab ab-approve" style="flex:1" onclick="nav('fulfillment',null)">Go to Fulfillment →</button>
+            <button class="ab ab-edit" style="flex:1" onclick="nav('withdrawals',null)">Go to Withdrawals →</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">This Month</div>
+          <div class="sr"><span class="sr-l">New registrations</span><span class="sr-v">34</span></div>
+          <div class="sr"><span class="sr-l">Deposits received</span><span class="sr-v">TZS 8.4M</span></div>
+          <div class="sr"><span class="sr-l">Withdrawals paid out</span><span class="sr-v">TZS 1.2M</span></div>
+          <div class="sr"><span class="sr-l">Withdrawal fees (5%)</span><span class="sr-v" style="color:var(--g)">TZS 61,000</span></div>
+          <div class="sr"><span class="sr-l">Product margin</span><span class="sr-v" style="color:var(--g)">TZS 2.04M</span></div>
+          <div class="sr"><span class="sr-l">Plans completed</span><span class="sr-v">43</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Top Products This Month</div>
+      <table><thead><tr><th>Product</th><th>Active Savers</th><th>Completed</th><th>Avg Time</th><th>Revenue</th></tr></thead>
+      <tbody>
+        <tr><td>📱 <span class="td-name">Samsung Galaxy A15</span></td><td>68</td><td>14</td><td>11 weeks</td><td style="color:var(--g);font-weight:600">TZS 560,000</td></tr>
+        <tr><td>🪑 <span class="td-name">Sofa Set ya Plastiki</span></td><td>53</td><td>9</td><td>8 weeks</td><td style="color:var(--g);font-weight:600">TZS 108,000</td></tr>
+        <tr><td>🍳 <span class="td-name">Sufuria Set (8 pcs)</span></td><td>91</td><td>11</td><td>5 weeks</td><td style="color:var(--g);font-weight:600">TZS 93,500</td></tr>
+        <tr><td>🌞 <span class="td-name">Solar Panel 100W Kit</span></td><td>22</td><td>4</td><td>16 weeks</td><td style="color:var(--g);font-weight:600">TZS 252,000</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ PRODUCTS ══ -->
+  <div class="pg" id="pg-products">
+    <div class="sh">
+      <div class="sh-title">Product Catalogue</div>
+      <div class="sh-actions">
+        <select class="filter-sel" onchange="filterProds(this.value)">
+          <option value="">All Categories</option>
+          <option>Smart Phones</option><option>Home Appliances</option>
+          <option>Solar & Energy</option><option>Furniture</option>
+          <option>Computers & TV</option><option>Kilimo</option>
+          <option>BodaBoda</option><option>School & Kids</option>
+        </select>
+        <select class="filter-sel">
+          <option>All Status</option><option>Active</option><option>Hidden</option>
+        </select>
+        <button class="tb-btn tb-green" onclick="openProductModal()">+ Add Product</button>
+      </div>
+    </div>
+    <div class="prod-card-grid" id="prod-grid"></div>
+  </div>
+
+  <!-- ══ CATEGORIES ══ -->
+  <div class="pg" id="pg-categories">
+    <div class="sh">
+      <div class="sh-title">Category Management</div>
+      <button class="tb-btn tb-green" onclick="openCatModal()">+ Add Category</button>
+    </div>
+    <div class="cat-grid" id="cat-grid"></div>
+    <div class="card">
+      <div class="card-title">Category Sort Order</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Drag to reorder categories as they appear on the homepage.</p>
+      <div id="cat-sort-list"></div>
+    </div>
+  </div>
+
+  <!-- ══ SUPPLIERS ══ -->
+  <div class="pg" id="pg-suppliers">
+    <div class="sh">
+      <div class="sh-title">Supplier Directory</div>
+      <button class="tb-btn tb-green" onclick="openSupplierModal()">+ Add Supplier</button>
+    </div>
+    <div class="three-col" id="supplier-cards"></div>
+    <div class="card">
+      <div class="card-title">All Supplier Products</div>
+      <div class="tw">
+        <table><thead><tr><th>Supplier</th><th>Product</th><th>Category</th><th>Retail Price</th><th>Wholesale</th><th>Margin</th><th>Savers</th><th>Status</th></tr></thead>
+        <tbody id="sup-prod-table"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CUSTOMERS ══ -->
+  <div class="pg" id="pg-customers">
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kc" data-icon="👥"><div class="kc-label">Total Registered</div><div class="kc-val">487</div><div class="kc-ch up">↑ 34 this month</div></div>
+      <div class="kc" data-icon="🎯"><div class="kc-label">Active Savers</div><div class="kc-val">312</div><div class="kc-ch">64% of total</div></div>
+      <div class="kc" data-icon="😴"><div class="kc-label">Inactive 14+ days</div><div class="kc-val">23</div><div class="kc-ch dn">↑ 5 vs last week</div></div>
+    </div>
+    <div class="tw">
+      <div class="ts">
+        <input placeholder="Search by name, phone, district..." oninput="filterTbl('cust-tbody',this.value)"/>
+        <select class="filter-sel"><option>All Districts</option><option>Moshi Mjini</option><option>Hai</option><option>Rombo</option><option>Siha</option><option>Same</option></select>
+        <select class="filter-sel"><option>All Status</option><option>Active</option><option>Inactive</option></select>
+      </div>
+      <table><thead><tr><th>#</th><th>Customer</th><th>District</th><th>Joined</th><th>Active Plans</th><th>Total Saved</th><th>Last Deposit</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="cust-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ SAVING PLANS ══ -->
+  <div class="pg" id="pg-plans">
+    <div class="kpi-grid">
+      <div class="kc" data-icon="🎯"><div class="kc-label">Active Plans</div><div class="kc-val">312</div><div class="kc-ch">Across 487 customers</div></div>
+      <div class="kc" data-icon="✅"><div class="kc-label">Completed (All Time)</div><div class="kc-val">184</div><div class="kc-ch up">↑ 43 this month</div></div>
+      <div class="kc" data-icon="❌"><div class="kc-label">Cancelled</div><div class="kc-val">29</div><div class="kc-ch dn">6% cancellation rate</div></div>
+      <div class="kc" data-icon="💰"><div class="kc-label">Avg Plan Value</div><div class="kc-val">TZS 156K</div><div class="kc-ch">Per active plan</div></div>
+    </div>
+    <div class="tw">
+      <div class="ts">
+        <input placeholder="Search customer or product..." oninput="filterTbl('plans-tbody',this.value)"/>
+        <select class="filter-sel"><option>All Progress</option><option>Under 25%</option><option>25–50%</option><option>50–75%</option><option>75–99%</option><option>100% Ready</option></select>
+      </div>
+      <table><thead><tr><th>#</th><th>Customer</th><th>Product</th><th>Saved</th><th>Target</th><th>Progress</th><th>Est. Complete</th><th>Status</th></tr></thead>
+      <tbody id="plans-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ FULFILLMENT ══ -->
+  <div class="pg" id="pg-fulfillment">
+    <div style="background:var(--info-bg);border:1px solid #bfdbfe;border-radius:var(--rl);padding:12px 16px;margin-bottom:14px;font-size:12px;color:var(--info);line-height:1.6">
+      📦 <strong>7 customers have reached 100%</strong> and are waiting for their products. Process oldest first.
+    </div>
+    <div class="tw">
+      <table><thead><tr><th>Priority</th><th>Order #</th><th>Customer</th><th>Product</th><th>Paid</th><th>Date</th><th>District</th><th>Stage</th><th>Actions</th></tr></thead>
+      <tbody id="ff-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ WITHDRAWALS ══ -->
+  <div class="pg" id="pg-withdrawals">
+    <div style="background:var(--warning-bg);border:1px solid #fde68a;border-radius:var(--rl);padding:12px 16px;margin-bottom:14px;font-size:12px;color:var(--warning)">
+      ⚠️ <strong>Manual approval required.</strong> Verify cooling-off period and 5% fee before approving.
+    </div>
+    <div class="tw">
+      <table><thead><tr><th>#</th><th>Customer</th><th>Plan</th><th>Requested</th><th>Fee (5%)</th><th>Net Payout</th><th>Date</th><th>Cooling OK?</th><th>Actions</th></tr></thead>
+      <tbody id="wd-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ INACTIVE ══ -->
+  <div class="pg" id="pg-inactive">
+    <div style="background:#fefce8;border:1px solid #fde68a;border-radius:var(--rl);padding:12px 16px;margin-bottom:14px;font-size:12px;color:var(--warning)">
+      😴 <strong>23 customers</strong> have not deposited in 14+ days. Send a friendly reminder.
+    </div>
+    <div class="sh"><div class="sh-title">Inactive Customers</div>
+      <button class="tb-btn tb-green" onclick="showToast('WhatsApp broadcast sent to 23 customers!')">📱 Send Bulk Reminder</button>
+    </div>
+    <div class="tw">
+      <table><thead><tr><th>Customer</th><th>Product</th><th>Saved</th><th>Progress</th><th>Last Deposit</th><th>Days Silent</th><th>Actions</th></tr></thead>
+      <tbody id="ia-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ DELIVERIES ══ -->
+  <div class="pg" id="pg-deliveries">
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="kc" data-icon="🚚"><div class="kc-label">In Transit Today</div><div class="kc-val">5</div><div class="kc-ch">3 Moshi · 2 Hai</div></div>
+      <div class="kc" data-icon="✅"><div class="kc-label">Delivered This Month</div><div class="kc-val">43</div><div class="kc-ch up">100% success rate</div></div>
+      <div class="kc" data-icon="⏱️"><div class="kc-label">Avg Delivery Time</div><div class="kc-val">2.4 days</div><div class="kc-ch up">↓ from 3.1 last month</div></div>
+    </div>
+    <div class="tw">
+      <table><thead><tr><th>Order #</th><th>Customer</th><th>Product</th><th>District</th><th>Agent</th><th>Dispatched</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="del-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- ══ FINANCIAL ══ -->
+  <div class="pg" id="pg-finance">
+    <div class="kpi-grid">
+      <div class="kc" data-icon="💰"><div class="kc-label">Total Float</div><div class="kc-val">TZS 48.7M</div><div class="kc-ch">Customer savings in escrow</div></div>
+      <div class="kc" data-icon="📈"><div class="kc-label">Revenue This Month</div><div class="kc-val">TZS 2.1M</div><div class="kc-ch up">↑ 18% vs last month</div></div>
+      <div class="kc" data-icon="💸"><div class="kc-label">Operating Costs</div><div class="kc-val">TZS 750K</div><div class="kc-ch">Fixed monthly</div></div>
+      <div class="kc" data-icon="✅"><div class="kc-label">Net Profit</div><div class="kc-val">TZS 1.35M</div><div class="kc-ch up">Profitable since Month 8</div></div>
+    </div>
+    <div class="two-col">
+      <div class="card"><div class="card-title">Revenue Breakdown</div>
+        <div class="sr"><span class="sr-l">Product margin (avg 20%)</span><span class="sr-v" style="color:var(--g)">TZS 2,040,000</span></div>
+        <div class="sr"><span class="sr-l">Withdrawal fees (5%)</span><span class="sr-v" style="color:var(--g)">TZS 61,000</span></div>
+        <div class="sr"><span class="sr-l">Float interest (est.)</span><span class="sr-v" style="color:var(--g)">TZS 48,700</span></div>
+        <div class="sr" style="border-top:2px solid var(--border);padding-top:10px;margin-top:4px"><span class="sr-l" style="font-weight:700;color:var(--text)">Total Revenue</span><span class="sr-v" style="color:var(--g);font-size:15px">TZS 2,149,700</span></div>
+      </div>
+      <div class="card"><div class="card-title">Operating Costs</div>
+        <div class="sr"><span class="sr-l">DigitalOcean server</span><span class="sr-v">TZS 48,000</span></div>
+        <div class="sr"><span class="sr-l">WhatsApp Business API</span><span class="sr-v">TZS 30,000</span></div>
+        <div class="sr"><span class="sr-l">Africa's Talking (SMS)</span><span class="sr-v">TZS 50,000</span></div>
+        <div class="sr"><span class="sr-l">Part-time staff</span><span class="sr-v">TZS 300,000</span></div>
+        <div class="sr"><span class="sr-l">Marketing</span><span class="sr-v">TZS 200,000</span></div>
+        <div class="sr"><span class="sr-l">Delivery (boda boda)</span><span class="sr-v">TZS 122,000</span></div>
+        <div class="sr" style="border-top:2px solid var(--border);padding-top:10px;margin-top:4px"><span class="sr-l" style="font-weight:700;color:var(--text)">Total Costs</span><span class="sr-v" style="color:var(--danger);font-size:15px">TZS 750,000</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Monthly History</div>
+      <table><thead><tr><th>Month</th><th>New Customers</th><th>Deposits In</th><th>Withdrawals Out</th><th>Fulfillments</th><th>Revenue</th><th>Net Profit</th></tr></thead>
+      <tbody>
+        <tr><td>April 2026</td><td>34</td><td>TZS 8.4M</td><td>TZS 1.2M</td><td>43</td><td style="color:var(--g);font-weight:600">TZS 2.1M</td><td style="color:var(--g);font-weight:600">TZS 1.35M</td></tr>
+        <tr><td>March 2026</td><td>28</td><td>TZS 7.1M</td><td>TZS 980K</td><td>37</td><td style="color:var(--g);font-weight:600">TZS 1.78M</td><td style="color:var(--g);font-weight:600">TZS 1.03M</td></tr>
+        <tr><td>February 2026</td><td>21</td><td>TZS 5.8M</td><td>TZS 740K</td><td>29</td><td style="color:var(--g);font-weight:600">TZS 1.39M</td><td style="color:var(--g);font-weight:600">TZS 640K</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+
+
+  <!-- ══ USERS & ROLES ══ -->
+  <div class="pg" id="pg-users-roles">
+
+    <!-- Role overview cards -->
+    <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:16px">
+      <div class="kc" data-icon="👑"><div class="kc-label">Super Admins</div><div class="kc-val">1</div><div class="kc-sub">Full system access</div></div>
+      <div class="kc" data-icon="🎛️"><div class="kc-label">Managers</div><div class="kc-val">2</div><div class="kc-sub">Operations access</div></div>
+      <div class="kc" data-icon="🎧"><div class="kc-label">Care Agents</div><div class="kc-val">3</div><div class="kc-sub">Customer support</div></div>
+      <div class="kc" data-icon="🏍️"><div class="kc-label">Riders / Sales</div><div class="kc-val">11</div><div class="kc-sub">Field team</div></div>
+    </div>
+
+    <div class="two-col" style="align-items:start">
+      <!-- Users list -->
+      <div>
+        <div class="sh"><div class="sh-title">System Users</div>
+          <button class="tb-btn tb-green" onclick="openUserModal()">+ Add User</button>
+        </div>
+        <div class="tw">
+          <div class="ts"><input placeholder="Search by name or phone..." oninput="filterTbl('users-tbody',this.value)"/></div>
+          <table><thead><tr>
+            <th>Name</th><th>Phone</th><th>Role</th>
+            <th>Last Login</th><th>Status</th><th>Actions</th>
+          </tr></thead>
+          <tbody id="users-tbody"></tbody></table>
+        </div>
+      </div>
+
+      <!-- Roles & Permissions -->
+      <div>
+        <div class="sh"><div class="sh-title">Roles & Permissions</div>
+          <button class="tb-btn tb-outline" onclick="openRoleModal()">Edit Role</button>
+        </div>
+        <div id="roles-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HOMEPAGE CMS ══ -->
+  <div class="pg" id="pg-cms">
+    <div style="background:var(--info-bg);border:1px solid #bfdbfe;border-radius:var(--rl);padding:12px 16px;margin-bottom:16px;font-size:12px;color:var(--info);line-height:1.6">
+      🖼️ <strong>Homepage CMS</strong> — Badilisha maudhui ya homepage yako bila kugusa code yoyote. Mabadiliko yanafanya kazi mara moja unapobonyeza "Publish".
+    </div>
+
+    <!-- CMS Navigation tabs -->
+    <div style="display:flex;gap:6px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0">
+      <button class="cms-tab on" onclick="cmsTab('slider',this)">🎠 Hero Slider</button>
+      <button class="cms-tab" onclick="cmsTab('flash',this)">🔥 Flash Sale</button>
+      <button class="cms-tab" onclick="cmsTab('featured',this)">⭐ Featured Products</button>
+      <button class="cms-tab" onclick="cmsTab('announcement',this)">📢 Announcement Bar</button>
+      <button class="cms-tab" onclick="cmsTab('seo',this)">🔍 SEO</button>
+    </div>
+    <style>
+      .cms-tab{padding:8px 16px;border:none;background:none;font-size:12px;font-weight:600;cursor:pointer;font-family:"DM Sans",sans-serif;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+      .cms-tab.on{color:var(--g);border-bottom-color:var(--g)}
+      .cms-tab:hover{color:var(--g)}
+    </style>
+
+    <!-- SLIDER TAB -->
+    <div class="cms-panel on" id="cms-slider">
+      <div class="sh">
+        <div class="sh-title">Hero Slider (4 Slides)</div>
+        <div class="sh-actions">
+          <button class="tb-btn tb-outline" onclick="previewHomepage()">👁 Preview</button>
+          <button class="tb-btn tb-green" onclick="publishCMS()">✅ Publish Changes</button>
+        </div>
+      </div>
+
+      <!-- Global slider settings -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-title">Global Slider Settings</div>
+        <div class="form-row">
+          <div class="fg"><label class="fl">Slide Height (px)</label>
+            <input class="fi-in" id="slider-height" type="number" value="480" min="300" max="700" oninput="updateSliderPreview()"/>
+            <div class="hint">Desktop height. Mobile adapts automatically. (Min: 300 · Max: 700)</div>
+          </div>
+          <div class="fg"><label class="fl">Auto-advance Speed (seconds)</label>
+            <input class="fi-in" id="slider-speed" type="number" value="5" min="2" max="15"/>
+          </div>
+          <div class="fg"><label class="fl">Show Progress Bar</label>
+            <select class="fi-sel" id="slider-progress">
+              <option value="yes" selected>Yes — show progress bar at bottom</option>
+              <option value="no">No — hide progress bar</option>
+            </select>
+          </div>
+        </div>
+        <!-- Live preview strip -->
+        <div style="background:var(--cream);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--muted)">
+          Preview: Slider at <strong id="height-preview">480px</strong> height · <strong id="speed-preview">5</strong>s per slide
+        </div>
+      </div>
+
+      <!-- Slide cards -->
+      <div id="slides-container"></div>
+
+      <button class="tb-btn tb-green" style="width:100%;margin-top:4px;height:40px" onclick="publishCMS()">✅ Publish Slider Changes</button>
+    </div>
+
+    <!-- FLASH SALE TAB -->
+    <div class="cms-panel" id="cms-flash" style="display:none">
+      <div class="card">
+        <div class="card-title">🔥 Flash Sale Settings</div>
+        <div class="form-row">
+          <div class="fg"><label class="fl">Flash Sale End Time</label>
+            <input class="fi-in" type="datetime-local" id="flash-end"/></div>
+          <div class="fg"><label class="fl">Flash Sale Label</label>
+            <input class="fi-in" id="flash-label" value="Flash Sale Inaisha:"/></div>
+        </div>
+        <div class="card-title" style="margin-top:14px;font-size:13px">Products in Flash Sale Bar</div>
+        <div id="flash-products-list"></div>
+        <button class="ab ab-edit" style="margin-top:10px;width:100%" onclick="showToast('Ongeza bidhaa ya flash sale')">+ Add Product to Flash Sale</button>
+      </div>
+      <button class="tb-btn tb-green" style="width:100%;margin-top:8px;height:40px" onclick="publishCMS()">✅ Publish Flash Sale</button>
+    </div>
+
+    <!-- FEATURED PRODUCTS TAB -->
+    <div class="cms-panel" id="cms-featured" style="display:none">
+      <div class="card">
+        <div class="card-title">⭐ Featured Products Order</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">Buruta (drag) bidhaa kubadilisha mpangilio zinaoonyeshwa kwenye homepage. Bidhaa 8 za kwanza zinaonekana kwenye "Featured" strip.</p>
+        <div id="featured-drag-list"></div>
+      </div>
+      <button class="tb-btn tb-green" style="width:100%;margin-top:8px;height:40px" onclick="publishCMS()">✅ Publish Order</button>
+    </div>
+
+    <!-- ANNOUNCEMENT BAR TAB -->
+    <div class="cms-panel" id="cms-announcement" style="display:none">
+      <div class="card">
+        <div class="card-title">📢 Announcement Bar (Top of Site)</div>
+        <div class="fg"><label class="fl">Show Announcement Bar</label>
+          <select class="fi-sel" id="ann-visible">
+            <option>Yes — show at top of homepage</option>
+            <option>No — hide it</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Announcement Text</label>
+          <input class="fi-in" id="ann-text" value="🎉 Jisajili sasa upate BONUS ya TZS 2,000! · Delivery Kilimanjaro yote · 0% Riba"/></div>
+        <div class="form-row">
+          <div class="fg"><label class="fl">Background Color</label>
+            <input class="fi-in" type="color" id="ann-bg" value="#1a6b3c" style="height:42px;padding:4px"/></div>
+          <div class="fg"><label class="fl">Text Color</label>
+            <input class="fi-in" type="color" id="ann-text-color" value="#ffffff" style="height:42px;padding:4px"/></div>
+          <div class="fg"><label class="fl">Scroll Speed</label>
+            <select class="fi-sel"><option>Slow</option><option selected>Normal</option><option>Fast</option><option>Static (no scroll)</option></select>
+          </div>
+        </div>
+        <!-- Live preview -->
+        <div style="border-radius:8px;padding:10px 16px;text-align:center;font-size:12px;font-weight:600;margin-top:10px;transition:all .3s" id="ann-preview" style="background:#1a6b3c;color:#fff">
+          🎉 Jisajili sasa upate BONUS ya TZS 2,000! · Delivery Kilimanjaro yote · 0% Riba
+        </div>
+      </div>
+      <button class="tb-btn tb-green" style="width:100%;margin-top:8px;height:40px" onclick="publishCMS()">✅ Publish Announcement</button>
+    </div>
+
+    <!-- SEO TAB -->
+    <div class="cms-panel" id="cms-seo" style="display:none">
+      <div class="card">
+        <div class="card-title">🔍 Homepage SEO Settings</div>
+        <div class="fg"><label class="fl">Page Title (shown in Google)</label>
+          <input class="fi-in" id="seo-title" value="KiliSmart — Duka la Akiba | Nunua kwa M-Pesa Kilimanjaro Tanzania"/>
+          <div class="hint">Bora: Maneno 50–60. Sasa: <span id="seo-title-count">67</span> herufi</div>
+        </div>
+        <div class="fg"><label class="fl">Meta Description (shown under title in Google)</label>
+          <textarea class="fi-ta" id="seo-desc" rows="3" oninput="countSeoDesc()">Nunua simu, samani, solar na zaidi kwa KiliSmart. Hifadhi kidogo kidogo kupitia M-Pesa. Hakuna riba. Delivery Kilimanjaro yote.</textarea>
+          <div class="hint">Bora: Maneno 150–160. Sasa: <span id="seo-desc-count">134</span> herufi</div>
+        </div>
+        <div class="fg"><label class="fl">OG Image (picha inayoonekana ukishirikisha Facebook/WhatsApp)</label>
+          <div class="cms-img-upload" onclick="this.querySelector('input').click()">
+            <input type="file" accept="image/*" onchange="previewOgImg(this)" style="display:none"/>
+            <div class="cms-upload-placeholder" style="font-size:12px;color:var(--muted)">
+              <div style="font-size:24px;margin-bottom:4px">🖼️</div>
+              Bonyeza kupakia OG image (1200×630px recommended)
+            </div>
+            <img id="og-preview" style="display:none;width:100%;border-radius:6px;max-height:160px;object-fit:cover"/>
+          </div>
+        </div>
+        <div class="fg"><label class="fl">Google Analytics Measurement ID</label>
+          <input class="fi-in" id="ga-id" placeholder="G-XXXXXXXXXX"/></div>
+        <div class="fg"><label class="fl">Facebook Pixel ID</label>
+          <input class="fi-in" id="fb-pixel" placeholder="1234567890"/></div>
+        <!-- Google preview -->
+        <div style="border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-top:12px;background:#fff">
+          <div style="font-size:11px;color:var(--success);margin-bottom:2px">kilismart.co.tz</div>
+          <div style="font-size:16px;color:#1a0dab;margin-bottom:3px;line-height:1.4" id="gp-title">KiliSmart — Duka la Akiba | Nunua kwa M-Pesa Kilimanjaro Tanzania</div>
+          <div style="font-size:13px;color:#4d5156;line-height:1.5" id="gp-desc">Nunua simu, samani, solar na zaidi kwa KiliSmart. Hifadhi kidogo kidogo kupitia M-Pesa. Hakuna riba. Delivery Kilimanjaro yote.</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:4px">Google Preview (approximation)</div>
+        </div>
+      </div>
+      <button class="tb-btn tb-green" style="width:100%;margin-top:8px;height:40px" onclick="publishCMS()">✅ Publish SEO Changes</button>
+    </div>
+
+  </div><!-- end cms -->
+  <!-- ══ API SETTINGS ══ -->
+  <div class="pg" id="pg-api-settings">
+
+    <!-- Status Banner -->
+    <div id="api-status-banner" style="background:var(--success-bg);border:1px solid #a7f3d0;border-radius:var(--rl);padding:12px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--success)">
+      <span>🟢 <strong>System Status:</strong> All APIs connected and operational</span>
+      <button onclick="testAllApis()" style="background:var(--success);color:#fff;border:none;border-radius:7px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">▶ Test All Connections</button>
+    </div>
+
+    <!-- API Cards Grid -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+
+      <!-- ── M-PESA DARAJA ─────────────────────────────────── -->
+      <div class="api-card" id="api-mpesa">
+        <div class="api-card-header">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="api-logo" style="background:#00A651">💚</div>
+            <div>
+              <div class="api-name">M-Pesa Daraja</div>
+              <div class="api-desc">Malipo ya M-Pesa — STK Push, C2B, B2C</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="api-status-pill green" id="mpesa-status-pill">🟢 Connected</span>
+            <button class="api-test-btn" onclick="testApi('mpesa')">Test</button>
+          </div>
+        </div>
+        <div class="api-body">
+          <div class="api-env-switch">
+            <span class="api-env-label">Environment:</span>
+            <div class="env-toggle" id="mpesa-env">
+              <button class="env-btn on" onclick="setEnv('mpesa','sandbox',this)">Sandbox</button>
+              <button class="env-btn" onclick="setEnv('mpesa','production',this)">Production</button>
+            </div>
+            <span class="env-warning" id="mpesa-env-warn" style="display:none">⚠️ Live mode</span>
+          </div>
+          <div class="api-fields">
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">Paybill / Shortcode</label><input class="af-input" id="mpesa-shortcode" value="174379" placeholder="e.g. 522522"/></div>
+              <div class="af"><label class="af-label">Passkey</label><input class="af-input af-secret" id="mpesa-passkey" value="bfb279f9aa..." type="password" placeholder="Daraja passkey"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+            </div>
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">Consumer Key</label><input class="af-input af-secret" id="mpesa-key" value="••••••••••••••••" type="password" placeholder="From Daraja portal"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+              <div class="af"><label class="af-label">Consumer Secret</label><input class="af-input af-secret" id="mpesa-secret" value="••••••••••••••••" type="password" placeholder="From Daraja portal"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+            </div>
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">B2C Initiator Name</label><input class="af-input" id="mpesa-initiator" value="testapi" placeholder="Your initiator name"/></div>
+              <div class="af"><label class="af-label">B2C Security Credential</label><input class="af-input af-secret" id="mpesa-b2c-cred" value="••••••••" type="password" placeholder="Encrypted credential"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+            </div>
+          </div>
+          <div class="api-callbacks">
+            <div class="cb-title">📎 Callback URLs — Register these in Daraja portal</div>
+            <div class="cb-row"><span class="cb-label">STK Callback</span><div class="cb-url" onclick="copyUrl(this)">https://test.kilismart.co.tz/api/v1/mpesa/stk-callback <span class="cb-copy">📋</span></div></div>
+            <div class="cb-row"><span class="cb-label">C2B Validate</span><div class="cb-url" onclick="copyUrl(this)">https://test.kilismart.co.tz/api/v1/mpesa/c2b-validate <span class="cb-copy">📋</span></div></div>
+            <div class="cb-row"><span class="cb-label">C2B Confirm</span><div class="cb-url" onclick="copyUrl(this)">https://test.kilismart.co.tz/api/v1/mpesa/c2b-confirm <span class="cb-copy">📋</span></div></div>
+            <div class="cb-row"><span class="cb-label">B2C Result</span><div class="cb-url" onclick="copyUrl(this)">https://test.kilismart.co.tz/api/v1/mpesa/b2c-result <span class="cb-copy">📋</span></div></div>
+            <div class="cb-row"><span class="cb-label">B2C Timeout</span><div class="cb-url" onclick="copyUrl(this)">https://test.kilismart.co.tz/api/v1/mpesa/b2c-timeout <span class="cb-copy">📋</span></div></div>
+          </div>
+          <div class="api-footer">
+            <a class="api-docs-link" href="https://developer.safaricom.co.ke" target="_blank">📖 Daraja Docs ↗</a>
+            <button class="api-save-btn" onclick="saveApi('mpesa')">Save M-Pesa Config</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AFRICA'S TALKING ──────────────────────────────── -->
+      <div class="api-card" id="api-at">
+        <div class="api-card-header">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="api-logo" style="background:#E91E63">📱</div>
+            <div>
+              <div class="api-name">Africa's Talking</div>
+              <div class="api-desc">SMS OTP + USSD Menu (*384#)</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="api-status-pill green" id="at-status-pill">🟢 Connected</span>
+            <button class="api-test-btn" onclick="testApi('at')">Test</button>
+          </div>
+        </div>
+        <div class="api-body">
+          <div class="api-env-switch">
+            <span class="api-env-label">Environment:</span>
+            <div class="env-toggle" id="at-env">
+              <button class="env-btn on" onclick="setEnv('at','sandbox',this)">Sandbox</button>
+              <button class="env-btn" onclick="setEnv('at','production',this)">Production</button>
+            </div>
+          </div>
+          <div class="api-fields">
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">Username</label><input class="af-input" id="at-username" value="sandbox" placeholder="Your AT username"/></div>
+              <div class="af"><label class="af-label">API Key</label><input class="af-input af-secret" id="at-key" value="••••••••••••" type="password" placeholder="From AT dashboard"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+            </div>
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">SMS Sender ID</label><input class="af-input" id="at-sender" value="KiliSmart" placeholder="e.g. KiliSmart"/></div>
+              <div class="af"><label class="af-label">USSD Code</label><input class="af-input" id="at-ussd" value="*384*001#" placeholder="e.g. *384*001#"/></div>
+            </div>
+          </div>
+          <div class="api-callbacks">
+            <div class="cb-title">📎 USSD Callback — Register at account.africastalking.com</div>
+            <div class="cb-row"><span class="cb-label">USSD Handler</span><div class="cb-url" onclick="copyUrl(this)">https://test.kilismart.co.tz/api/v1/ussd <span class="cb-copy">📋</span></div></div>
+          </div>
+          <div class="api-footer">
+            <a class="api-docs-link" href="https://developers.africastalking.com" target="_blank">📖 AT Docs ↗</a>
+            <button class="api-save-btn" onclick="saveApi('at')">Save AT Config</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── WHATSAPP (360dialog) ──────────────────────────── -->
+      <div class="api-card" id="api-whatsapp">
+        <div class="api-card-header">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="api-logo" style="background:#25D366">💬</div>
+            <div>
+              <div class="api-name">WhatsApp Business</div>
+              <div class="api-desc">Arifa za wateja kupitia 360dialog</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="api-status-pill green" id="wa-status-pill">🟢 Connected</span>
+            <button class="api-test-btn" onclick="testApi('whatsapp')">Test</button>
+          </div>
+        </div>
+        <div class="api-body">
+          <div class="api-fields">
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">360dialog API Key</label><input class="af-input af-secret" id="wa-key" value="••••••••••••" type="password" placeholder="From app.360dialog.io"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+              <div class="af"><label class="af-label">Base URL</label><input class="af-input" id="wa-url" value="https://waba.360dialog.io/v1" placeholder="API base URL"/></div>
+            </div>
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">Business Phone Number</label><input class="af-input" id="wa-phone" value="+255 700 000 000" placeholder="Your WhatsApp Business number"/></div>
+              <div class="af"><label class="af-label">Business Name (Display)</label><input class="af-input" id="wa-bname" value="KiliSmart" placeholder="Name shown to customers"/></div>
+            </div>
+          </div>
+          <div class="api-callbacks">
+            <div class="cb-title">📎 Message Templates Configured</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
+              <span style="background:var(--success-bg);color:var(--success);font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px">✓ plan_complete</span>
+              <span style="background:var(--success-bg);color:var(--success);font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px">✓ weekly_reminder</span>
+              <span style="background:var(--success-bg);color:var(--success);font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px">✓ deposit_received</span>
+              <span style="background:var(--success-bg);color:var(--success);font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px">✓ withdrawal_approved</span>
+              <span style="background:var(--success-bg);color:var(--success);font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px">✓ delivery_dispatched</span>
+              <span style="background:var(--info-bg);color:var(--info);font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px">+ Add Template</span>
+            </div>
+          </div>
+          <div class="api-footer">
+            <a class="api-docs-link" href="https://docs.360dialog.com" target="_blank">📖 360dialog Docs ↗</a>
+            <button class="api-save-btn" onclick="saveApi('whatsapp')">Save WhatsApp Config</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SENTRY (Error Monitoring) ─────────────────────── -->
+      <div class="api-card" id="api-sentry">
+        <div class="api-card-header">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="api-logo" style="background:#362D59">🛡️</div>
+            <div>
+              <div class="api-name">Sentry</div>
+              <div class="api-desc">Error tracking & performance monitoring</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="api-status-pill green" id="sentry-status-pill">🟢 Active</span>
+            <button class="api-test-btn" onclick="testApi('sentry')">Test</button>
+          </div>
+        </div>
+        <div class="api-body">
+          <div class="api-fields">
+            <div class="api-field-row">
+              <div class="af" style="flex:2"><label class="af-label">DSN (Data Source Name)</label><input class="af-input af-secret" id="sentry-dsn" value="https://••••@o12345.ingest.sentry.io/67890" type="password" placeholder="From sentry.io → Project Settings → DSN"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+            </div>
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">Environment</label><input class="af-input" value="testing" placeholder="testing / production"/></div>
+              <div class="af"><label class="af-label">Traces Sample Rate</label><input class="af-input" type="number" value="0.1" min="0" max="1" step="0.1" placeholder="0.0 – 1.0"/></div>
+            </div>
+          </div>
+          <div class="api-footer">
+            <a class="api-docs-link" href="https://sentry.io" target="_blank">📖 Sentry Docs ↗</a>
+            <button class="api-save-btn" onclick="saveApi('sentry')">Save Sentry Config</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ANTHROPIC / CLAUDE AI ─────────────────────────── -->
+      <div class="api-card" id="api-ai">
+        <div class="api-card-header">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="api-logo" style="background:#C47A3A">🤖</div>
+            <div>
+              <div class="api-name">Anthropic Claude AI</div>
+              <div class="api-desc">AI Mshauri, Smart Recommendations, NLP Search</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="api-status-pill orange" id="ai-status-pill">🟡 Not Configured</span>
+            <button class="api-test-btn" onclick="testApi('ai')">Test</button>
+          </div>
+        </div>
+        <div class="api-body">
+          <div style="background:#fefce8;border:1px solid #fde68a;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--warning);line-height:1.6">
+            💡 <strong>Phase 2 Feature.</strong> AI inaendelea kufanya kazi bila hii kwa algorithm za msingi. Ongeza API key hii ukitaka AI ya hali ya juu zaidi (Claude kwa Kiswahili).
+          </div>
+          <div class="api-fields">
+            <div class="api-field-row">
+              <div class="af" style="flex:2"><label class="af-label">Anthropic API Key</label><input class="af-input af-secret" id="ai-key" value="" type="password" placeholder="sk-ant-api03-••••••••"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+            </div>
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">Model</label>
+                <select class="fi-in" style="height:42px;cursor:pointer" id="ai-model">
+                  <option value="claude-haiku-4-5-20251001">Claude Haiku (Fast · Cheap) — Recommended</option>
+                  <option value="claude-sonnet-4-6">Claude Sonnet (Smart · Balanced)</option>
+                  <option value="claude-opus-4-6">Claude Opus (Most Powerful · Expensive)</option>
+                </select>
+              </div>
+              <div class="af"><label class="af-label">Max Tokens per Request</label><input class="af-input" type="number" value="500" placeholder="500"/></div>
+            </div>
+          </div>
+          <div class="api-callbacks">
+            <div class="cb-title">🤖 AI Features Enabled</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px;font-size:12px">
+              <div class="ai-feature-row"><span class="ai-feat-dot" style="background:var(--success)"></span>Smart Savings Advisor</div>
+              <div class="ai-feature-row"><span class="ai-feat-dot" style="background:var(--success)"></span>Product Recommender</div>
+              <div class="ai-feature-row"><span class="ai-feat-dot" style="background:var(--success)"></span>NLP Search (Swahili)</div>
+              <div class="ai-feature-row"><span class="ai-feat-dot" style="background:var(--success)"></span>Price Trend Predictor</div>
+              <div class="ai-feature-row"><span class="ai-feat-dot" style="background:var(--success)"></span>Customer Support Bot</div>
+              <div class="ai-feature-row"><span class="ai-feat-dot" style="background:var(--warning)"></span>Claude API (Phase 2)</div>
+            </div>
+          </div>
+          <div class="api-footer">
+            <a class="api-docs-link" href="https://console.anthropic.com" target="_blank">📖 Anthropic Console ↗</a>
+            <button class="api-save-btn" onclick="saveApi('ai')">Save AI Config</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DIGITAL OCEAN SPACES (Storage) ────────────────── -->
+      <div class="api-card" id="api-storage">
+        <div class="api-card-header">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="api-logo" style="background:#0069FF">☁️</div>
+            <div>
+              <div class="api-name">DigitalOcean Spaces</div>
+              <div class="api-desc">Picha za bidhaa, receipts, delivery photos</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="api-status-pill orange" id="storage-status-pill">🟡 Local Storage</span>
+            <button class="api-test-btn" onclick="testApi('storage')">Test</button>
+          </div>
+        </div>
+        <div class="api-body">
+          <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--info);line-height:1.6">
+            ℹ️ Sasa hivi picha zinawekwa kwenye server yako. Ongeza Spaces kuhifadhi picha nje ya server (recommended kwa production).
+          </div>
+          <div class="api-fields">
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">Spaces Access Key</label><input class="af-input af-secret" id="do-key" value="" type="password" placeholder="From DigitalOcean → API → Spaces Keys"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+              <div class="af"><label class="af-label">Spaces Secret Key</label><input class="af-input af-secret" id="do-secret" value="" type="password" placeholder="Secret key"/><button class="af-eye" onclick="toggleSecret(this)">👁</button></div>
+            </div>
+            <div class="api-field-row">
+              <div class="af"><label class="af-label">Bucket Name</label><input class="af-input" id="do-bucket" value="kilismart-test" placeholder="e.g. kilismart-production"/></div>
+              <div class="af"><label class="af-label">Region / Endpoint</label><input class="af-input" id="do-region" value="jnb1.digitaloceanspaces.com" placeholder="Region endpoint"/></div>
+            </div>
+          </div>
+          <div class="api-footer">
+            <a class="api-docs-link" href="https://cloud.digitalocean.com/spaces" target="_blank">📖 DO Spaces ↗</a>
+            <button class="api-save-btn" onclick="saveApi('storage')">Save Storage Config</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end grid -->
+
+    <!-- ══ FUTURE APIs ROOM ══════════════════════════════════ -->
+    <div class="card">
+      <div class="card-title">🔮 APIs Zinazokuja — Phase 2B & Beyond</div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+        Hizi ni integrations zilizopangwa kwa siku zijazo. Zimeandaliwa katika backend (routes zimefunguliwa). Ongeza credentials ukiwa tayari.
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px">
+
+        <div class="future-api-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🔴</span><div><div style="font-size:13px;font-weight:600">Airtel Money</div><div style="font-size:10px;color:var(--muted)">Direct Airtel Tanzania API</div></div></div>
+            <span class="phase-badge">Phase 2B</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Deposits na withdrawals kwa Airtel Money Tanzania moja kwa moja.</div>
+          <button class="future-api-btn" onclick="showToast('Airtel Money integration inakuja Phase 2B!')">Configure when ready →</button>
+        </div>
+
+        <div class="future-api-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🔵</span><div><div style="font-size:13px;font-weight:600">Mixx by Yas</div><div style="font-size:10px;color:var(--muted)">Zamani Tigo Pesa</div></div></div>
+            <span class="phase-badge">Phase 2B</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Deposits na withdrawals kwa Mixx by Yas (Tigo Pesa) Tanzania.</div>
+          <button class="future-api-btn" onclick="showToast('Mixx by Yas integration inakuja Phase 2B!')">Configure when ready →</button>
+        </div>
+
+        <div class="future-api-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🟣</span><div><div style="font-size:13px;font-weight:600">Halopesa</div><div style="font-size:10px;color:var(--muted)">Halotel Tanzania</div></div></div>
+            <span class="phase-badge">Phase 2B</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Deposits kwa wateja wa Halotel kupitia Halopesa API.</div>
+          <button class="future-api-btn" onclick="showToast('Halopesa integration inakuja Phase 2B!')">Configure when ready →</button>
+        </div>
+
+        <div class="future-api-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">📲</span><div><div style="font-size:13px;font-weight:600">Firebase</div><div style="font-size:10px;color:var(--muted)">Push Notifications (Mobile App)</div></div></div>
+            <span class="phase-badge phase-badge-4">Phase 4</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Push notifications kwa mobile app ya KiliSmart (Android & iOS).</div>
+          <button class="future-api-btn" onclick="showToast('Firebase FCM inakuja na Mobile App!')">Configure when ready →</button>
+        </div>
+
+        <div class="future-api-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">📦</span><div><div style="font-size:13px;font-weight:600">Google Maps API</div><div style="font-size:10px;color:var(--muted)">GPS Delivery Tracking</div></div></div>
+            <span class="phase-badge phase-badge-3">Phase 3</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Fuatilia delivery moja kwa moja kwa GPS kwa wakati halisi.</div>
+          <button class="future-api-btn" onclick="showToast('Google Maps GPS Tracking inakuja Phase 3!')">Configure when ready →</button>
+        </div>
+
+        <div class="future-api-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">📊</span><div><div style="font-size:13px;font-weight:600">Google Analytics</div><div style="font-size:10px;color:var(--muted)">Website & App Analytics</div></div></div>
+            <span class="phase-badge phase-badge-3">Phase 3</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Tracking ya visitors, conversions na mwenendo wa wateja kwenye tovuti.</div>
+          <button class="future-api-btn" onclick="showToast('Google Analytics tracking measurement ID!')">Configure when ready →</button>
+        </div>
+
+        <div class="future-api-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">📧</span><div><div style="font-size:13px;font-weight:600">Email (SMTP)</div><div style="font-size:10px;color:var(--muted)">Barua pepe za mfumo</div></div></div>
+            <span class="phase-badge phase-badge-3">Phase 3</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Tuma risiti za malipo na arifa za mfumo kwa barua pepe.</div>
+          <button class="future-api-btn" onclick="openEmailConfig()">Configure now →</button>
+        </div>
+
+        <div class="future-api-card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">🔐</span><div><div style="font-size:13px;font-weight:600">Cloudflare</div><div style="font-size:10px;color:var(--muted)">DNS, WAF, DDoS Protection</div></div></div>
+            <span class="phase-badge phase-badge-3">Phase 3</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:8px">Ongeza usalama wa ziada — CDN, WAF na kinga dhidi ya mashambulizi.</div>
+          <button class="future-api-btn" onclick="showToast('Cloudflare API token inakuja Phase 3!')">Configure when ready →</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══ API LOG ══════════════════════════════════════════════ -->
+    <div class="card">
+      <div class="card-title">📋 API Activity Log (Last 24 Hours)
+        <button class="card-link" onclick="showToast('Downloading API log...')">⬇ Export Log</button>
+      </div>
+      <div id="api-log"></div>
+    </div>
+
+  </div><!-- end api-settings -->
+  <!-- ══ SETTINGS ══ -->
+  <div class="pg" id="pg-settings">
+    <div class="two-col">
+      <div class="card"><div class="card-title">Business Settings</div>
+        <div class="fg"><label class="fl">Business Name</label><input class="fi-in" value="KiliSmart Ltd"/></div>
+        <div class="fg"><label class="fl">WhatsApp Support Number</label><input class="fi-in" value="+255 700 000 000"/></div>
+        <div class="fg"><label class="fl">Delivery Fee (Default TZS)</label><input class="fi-in" type="number" value="5000"/></div>
+        <div class="fg"><label class="fl">Withdrawal Fee (%)</label><input class="fi-in" type="number" value="5"/></div>
+        <div class="fg"><label class="fl">Cooling-off Period (days)</label><input class="fi-in" type="number" value="7"/></div>
+        <div class="fg"><label class="fl">Min Withdrawal (TZS)</label><input class="fi-in" type="number" value="5000"/></div>
+        <div class="fg"><label class="fl">Max Active Plans per Customer</label><input class="fi-in" type="number" value="3"/></div>
+        <div class="fg"><label class="fl">Welcome Bonus (TZS)</label><input class="fi-in" type="number" value="2000"/></div>
+        <div class="fg"><label class="fl">Referral Bonus (TZS)</label><input class="fi-in" type="number" value="2000"/></div>
+        <button class="btn-full btn-g" onclick="showToast('Settings saved!')">Save Settings</button>
+      </div>
+      <div>
+        <div class="card"><div class="card-title">M-Pesa Configuration</div>
+          <div class="fg"><label class="fl">Environment</label>
+            <select class="fi-sel"><option>Sandbox (Testing)</option><option>Production (Live)</option></select></div>
+          <div class="fg"><label class="fl">Shortcode / Paybill</label><input class="fi-in" value="174379"/></div>
+          <div class="fg"><label class="fl">Consumer Key</label><input class="fi-in" value="••••••••••••" type="password"/></div>
+          <div class="fg"><label class="fl">Consumer Secret</label><input class="fi-in" value="••••••••••••" type="password"/></div>
+          <button class="btn-full btn-g" onclick="showToast('M-Pesa config saved!')">Save M-Pesa Config</button>
+        </div>
+        <div class="card"><div class="card-title">Notification Settings</div>
+          <div class="fg"><label class="fl">WhatsApp API Key (360dialog)</label><input class="fi-in" value="••••••••" type="password"/></div>
+          <div class="fg"><label class="fl">Africa's Talking API Key</label><input class="fi-in" value="••••••••" type="password"/></div>
+          <div class="fg"><label class="fl">Weekly Reminder Day</label>
+            <select class="fi-sel"><option>Monday</option><option>Tuesday</option><option selected>Wednesday</option><option>Thursday</option><option>Friday</option></select></div>
+          <div class="fg"><label class="fl">Reminder Time</label><input class="fi-in" type="time" value="09:00"/></div>
+          <button class="btn-full btn-g" onclick="showToast('Notification settings saved!')">Save Notifications</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ══ SALES & MARKETING ══ -->
+  <div class="pg" id="pg-sales-team">
+    <div class="kpi-grid">
+      <div class="kc" data-icon="🎯"><div class="kc-label">Team Members</div><div class="kc-val">4</div><div class="kc-sub">Active this month</div></div>
+      <div class="kc" data-icon="👥"><div class="kc-label">New Registrations</div><div class="kc-val">34</div><div class="kc-ch up">↑ 87% of target (39)</div></div>
+      <div class="kc" data-icon="💰"><div class="kc-label">Deposits Brought In</div><div class="kc-val">TZS 8.4M</div><div class="kc-ch up">↑ 105% of target</div></div>
+      <div class="kc" data-icon="🏆"><div class="kc-label">Top Performer</div><div class="kc-val" style="font-size:15px">Baraka J.</div><div class="kc-sub">12 registrations this month</div></div>
+    </div>
+    <div class="sh"><div class="sh-title">Sales Team Members & Targets</div>
+      <button class="tb-btn tb-green" onclick="openTeamModal('sales')">+ Add Member</button></div>
+    <div class="tw"><table><thead><tr>
+      <th>Jina</th><th>Jukumu</th><th>Eneo</th><th>Simu</th>
+      <th>Target: Wasajili</th><th>Wasajili Halisi</th>
+      <th>Target: Amana</th><th>Amana Halisi</th>
+      <th>Bonus %</th><th>Hali</th><th>Actions</th>
+    </tr></thead><tbody id="sales-tbody"></tbody></table></div>
+    <div class="two-col">
+      <div class="card"><div class="card-title">Performance vs Target (Mwezi Huu)</div>
+        <div id="sales-chart"></div>
+      </div>
+      <div class="card"><div class="card-title">Commission ya Mwezi Huu</div>
+        <div id="commission-summary"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CUSTOMER CARE ══ -->
+  <div class="pg" id="pg-customer-care">
+    <div class="kpi-grid">
+      <div class="kc" data-icon="🎧"><div class="kc-label">Care Agents</div><div class="kc-val">3</div><div class="kc-sub">Active</div></div>
+      <div class="kc" data-icon="📞"><div class="kc-label">Queries This Month</div><div class="kc-val">287</div><div class="kc-ch up">Resolved: 94%</div></div>
+      <div class="kc" data-icon="⏱️"><div class="kc-label">Avg Response Time</div><div class="kc-val">18 min</div><div class="kc-ch up">↓ Better than 30min target</div></div>
+      <div class="kc" data-icon="⭐"><div class="kc-label">Customer Satisfaction</div><div class="kc-val">4.6/5</div><div class="kc-ch up">↑ +0.2 vs last month</div></div>
+    </div>
+    <div class="sh"><div class="sh-title">Customer Care Agents</div>
+      <button class="tb-btn tb-green" onclick="openTeamModal('care')">+ Add Agent</button></div>
+    <div class="tw"><table><thead><tr>
+      <th>Jina</th><th>Shift</th><th>Simu ya Kazi</th><th>WhatsApp</th>
+      <th>Maswali Yaliyojibiwa</th><th>% Iliyosuluhishwa</th>
+      <th>Muda wa Jibu (avg)</th><th>Rating ya Wateja</th><th>Status</th><th>Actions</th>
+    </tr></thead><tbody id="care-tbody"></tbody></table></div>
+    <div class="card"><div class="card-title">Open Tickets / Maswali Yanayosubiri</div>
+      <div id="open-tickets"></div>
+    </div>
+  </div>
+
+  <!-- ══ DELIVERY TEAM ══ -->
+  <div class="pg" id="pg-delivery-team">
+    <div class="kpi-grid">
+      <div class="kc" data-icon="🏍️"><div class="kc-label">Riders Active</div><div class="kc-val">6</div><div class="kc-sub">Kilimanjaro region</div></div>
+      <div class="kc" data-icon="✅"><div class="kc-label">Deliveries (Month)</div><div class="kc-val">43</div><div class="kc-ch up">100% success rate</div></div>
+      <div class="kc" data-icon="⏱️"><div class="kc-label">Avg Delivery Time</div><div class="kc-val">2.4 days</div><div class="kc-ch up">↓ from 3.1 last month</div></div>
+      <div class="kc" data-icon="⭐"><div class="kc-label">Avg Rider Rating</div><div class="kc-val">4.8/5</div><div class="kc-ch up">Excellent</div></div>
+    </div>
+    <div class="sh"><div class="sh-title">Delivery Riders & Details</div>
+      <button class="tb-btn tb-green" onclick="openTeamModal('rider')">+ Add Rider</button></div>
+    <div class="tw"><table><thead><tr>
+      <th>Jina</th><th>Simu</th><th>Gari / Boda</th><th>Plate #</th>
+      <th>Eneo Analofanya</th><th>Deliveries (Mwezi)</th>
+      <th>Rating</th><th>Ada kwa Delivery</th><th>Jumla Alipwa</th><th>Status</th><th>Actions</th>
+    </tr></thead><tbody id="delivery-tbody"></tbody></table></div>
+    <div class="two-col">
+      <div class="card"><div class="card-title">Deliveries Leo</div>
+        <div id="deliveries-today"></div>
+      </div>
+      <div class="card"><div class="card-title">Rider Performance (Mwezi Huu)</div>
+        <div id="rider-performance"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ INTERNAL EXPENSES ══ -->
+  <div class="pg" id="pg-expenses">
+    <div class="kpi-grid">
+      <div class="kc" data-icon="💸"><div class="kc-label">Matumizi (Mwezi Huu)</div><div class="kc-val">TZS 750K</div><div class="kc-ch dn">↑ TZS 50K vs last month</div></div>
+      <div class="kc" data-icon="💰"><div class="kc-label">Mapato (Mwezi Huu)</div><div class="kc-val">TZS 2.1M</div><div class="kc-ch up">↑ 18%</div></div>
+      <div class="kc" data-icon="✅"><div class="kc-label">Faida Halisi</div><div class="kc-val" style="color:var(--success)">TZS 1.35M</div><div class="kc-ch up">Profit margin: 64%</div></div>
+      <div class="kc" data-icon="📊"><div class="kc-label">Jumla ya Mwaka (YTD)</div><div class="kc-val">TZS 3.8M</div><div class="kc-ch up">↑ Faida</div></div>
+    </div>
+    <div class="sh"><div class="sh-title">Rekodi ya Matumizi</div>
+      <div class="sh-actions">
+        <select class="filter-sel" onchange="filterExpenses(this.value)">
+          <option value="">Aina Zote</option><option>Mishahara</option>
+          <option>Delivery</option><option>API & Teknolojia</option>
+          <option>Ofisi</option><option>Marketing</option><option>Nyingine</option>
+        </select>
+        <select class="filter-sel">
+          <option>Aprili 2026</option><option>Machi 2026</option><option>Februari 2026</option>
+        </select>
+        <button class="tb-btn tb-green" onclick="openExpenseModal()">+ Add Expense</button>
+      </div>
+    </div>
+    <div class="tw"><table><thead><tr>
+      <th>Tarehe</th><th>Kichwa</th><th>Aina</th><th>Mlipaji</th>
+      <th>Kiasi (TZS)</th><th>Njia ya Malipo</th><th>Iliyoidhinishwa na</th><th>Receipt</th><th>Actions</th>
+    </tr></thead><tbody id="expense-tbody"></tbody></table></div>
+    <div class="two-col">
+      <div class="card"><div class="card-title">Muhtasari wa Matumizi kwa Aina</div>
+        <div id="expense-summary"></div>
+      </div>
+      <div class="card"><div class="card-title">P&amp;L Statement (Mwezi Huu)</div>
+        <div id="pl-statement"></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end main -->
+</div><!-- end app -->
+
+<!-- TEAM MODAL -->
+<div class="mo" id="team-modal" onclick="if(event.target===this)closeTeamModal()">
+  <div class="mb" style="max-width:520px">
+    <div class="mh"><h3 id="team-modal-title">Add Team Member</h3><button class="mc" onclick="closeTeamModal()">×</button></div>
+    <div class="mbody" id="team-modal-body"></div>
+  </div>
+</div>
+
+<!-- EXPENSE MODAL -->
+<div class="mo" id="expense-modal" onclick="if(event.target===this)closeExpenseModal()">
+  <div class="mb" style="max-width:460px">
+    <div class="mh"><h3 id="expense-modal-title">Add Expense</h3><button class="mc" onclick="closeExpenseModal()">×</button></div>
+    <div class="mbody">
+      <div class="fg"><label class="fl">Tarehe</label><input class="fi-in" type="date" id="exp-date"/></div>
+      <div class="fg"><label class="fl">Kichwa cha Gharama *</label><input class="fi-in" id="exp-title" placeholder="e.g. Mishahara ya Aprili — Baraka Juma"/></div>
+      <div class="form-row">
+        <div class="fg"><label class="fl">Aina *</label>
+          <select class="fi-sel" id="exp-cat">
+            <option>Mishahara</option><option>Delivery</option>
+            <option>API & Teknolojia</option><option>Ofisi</option>
+            <option>Marketing</option><option>M-Pesa Fees</option>
+            <option>WhatsApp API</option><option>Nyingine</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Kiasi (TZS) *</label><input class="fi-in" type="number" id="exp-amount" placeholder="0"/></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label class="fl">Njia ya Malipo</label>
+          <select class="fi-sel" id="exp-method">
+            <option>M-Pesa</option><option>Benki</option><option>Cash</option><option>Airtel Money</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Mlipaji (Aliyolipwa)</label><input class="fi-in" id="exp-payee" placeholder="e.g. Baraka Juma"/></div>
+      </div>
+      <div class="fg"><label class="fl">Maelezo</label><textarea class="fi-ta" id="exp-notes" rows="2" placeholder="Maelezo zaidi..."></textarea></div>
+      <div class="fg"><label class="fl">Receipt / Stakabadhi</label>
+        <div style="border:2px dashed var(--border2);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;background:var(--cream)" onclick="showToast('Receipt upload - itawezekana baada ya deployment!')">
+          <div style="font-size:24px;margin-bottom:6px">📎</div>
+          <div style="font-size:12px;color:var(--muted)">Bonyeza kupakia receipt (JPG, PDF)</div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-full btn-g" onclick="saveExpense()">Hifadhi Gharama</button>
+        <button class="btn-full btn-out" onclick="closeExpenseModal()">Ghairi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRODUCT MODAL ══ -->
+<div class="mo" id="prod-modal" onclick="if(event.target===this)closeProdModal()">
+  <div class="mb" style="max-width:680px">
+    <div class="mh"><h3 id="pm-title">Add New Product</h3><button class="mc" onclick="closeProdModal()">×</button></div>
+    <div class="mbody">
+      <!-- Image upload -->
+      <div class="fg">
+        <label class="fl">Product Images (up to 4 angles)</label>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:6px" id="img-grid">
+          <div class="img-slot-real" id="img-slot-0">
+            <input type="file" accept="image/jpeg,image/png,image/webp" onchange="loadProductImg(this,0)"/>
+            <button class="img-slot-remove-btn" onclick="clearProductImg(event,0)" title="Remove">×</button>
+            <img id="img-preview-0" alt="Main Photo"/>
+            <div class="img-slot-placeholder"><span style="font-size:22px">📷</span><span style="font-size:10px;color:var(--muted)">Main Photo</span></div>
+            <span class="img-slot-order">1st</span>
+          </div>
+          <div class="img-slot-real" id="img-slot-1">
+            <input type="file" accept="image/jpeg,image/png,image/webp" onchange="loadProductImg(this,1)"/>
+            <button class="img-slot-remove-btn" onclick="clearProductImg(event,1)" title="Remove">×</button>
+            <img id="img-preview-1" alt="Back View"/>
+            <div class="img-slot-placeholder"><span style="font-size:22px">📷</span><span style="font-size:10px;color:var(--muted)">Back View</span></div>
+            <span class="img-slot-order">2nd</span>
+          </div>
+          <div class="img-slot-real" id="img-slot-2">
+            <input type="file" accept="image/jpeg,image/png,image/webp" onchange="loadProductImg(this,2)"/>
+            <button class="img-slot-remove-btn" onclick="clearProductImg(event,2)" title="Remove">×</button>
+            <img id="img-preview-2" alt="Side View"/>
+            <div class="img-slot-placeholder"><span style="font-size:22px">📷</span><span style="font-size:10px;color:var(--muted)">Side View</span></div>
+            <span class="img-slot-order">3rd</span>
+          </div>
+          <div class="img-slot-real" id="img-slot-3">
+            <input type="file" accept="image/jpeg,image/png,image/webp" onchange="loadProductImg(this,3)"/>
+            <button class="img-slot-remove-btn" onclick="clearProductImg(event,3)" title="Remove">×</button>
+            <img id="img-preview-3" alt="Detail Shot"/>
+            <div class="img-slot-placeholder"><span style="font-size:22px">📷</span><span style="font-size:10px;color:var(--muted)">Detail Shot</span></div>
+            <span class="img-slot-order">4th</span>
+          </div>
+        </div>
+        <div class="hint">Bonyeza kila slot kuchagua picha (JPG/PNG/WebP · Max 5MB kila moja). Picha inakuonyeshwa preview mara moja ukichagua. Picha ya kwanza inaonekana kwenye catalogue.</div>
+      </div>
+      <div class="fg" style="background:#e8f5ee;border-radius:8px;padding:10px 12px;font-size:12px;color:var(--g2);line-height:1.6">
+        📸 <strong>Pakia picha za bidhaa hapo juu.</strong> Picha ya kwanza itaonekana kwenye catalogue (homepage, search, category). Picha 2–4 zinaonekana kwenye ukurasa wa maelezo ya bidhaa. Hakuna emoji — picha halisi tu.
+      </div>
+      <div class="form-row">
+        <div class="fg"><label class="fl">Name (English) <span class="req">*</span></label><input class="fi-in" id="pm-name" placeholder="e.g. Samsung Galaxy A15"/></div>
+        <div class="fg"><label class="fl">Jina (Swahili) <span class="req">*</span></label><input class="fi-in" id="pm-name-sw" placeholder="e.g. Samsung Galaxy A15"/></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label class="fl">Category <span class="req">*</span></label>
+          <select class="fi-sel" id="pm-cat">
+            <option value="">— Select —</option>
+            <option value="smart-phones">Smart Phones</option>
+            <option value="home-appliances">Home Appliances</option>
+            <option value="boda-vehicles">BodaBoda & Vehicles</option>
+            <option value="kilimo-farming">Kilimo & Farming</option>
+            <option value="solar-energy">Solar & Energy</option>
+            <option value="furniture">Furniture</option>
+            <option value="computers-tv">Computers & TV</option>
+            <option value="school-kids">School & Kids</option>
+            <option value="beauty-health">Beauty & Health</option>
+          </select>
+        </div>
+        <div class="fg"><label class="fl">Supplier <span class="req">*</span></label>
+          <select class="fi-sel" id="pm-supplier">
+            <option value="">— Select —</option>
+            <option>TechMoshi Ltd</option>
+            <option>Moshi Furniture</option>
+            <option>HomeGoods Tz</option>
+            <option>Solar Africa Ltd</option>
+            <option>SleepWell Tz</option>
+            <option>AgriTools Kili</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row-3">
+        <div class="fg"><label class="fl">Retail Price (TZS) <span class="req">*</span></label><input class="fi-in" id="pm-retail" type="number" placeholder="280000" oninput="calcMargin()"/></div>
+        <div class="fg"><label class="fl">Wholesale Price (TZS) <span class="req">*</span></label><input class="fi-in" id="pm-wholesale" type="number" placeholder="220000" oninput="calcMargin()"/></div>
+        <div class="fg"><label class="fl">Margin</label><input class="fi-in" id="pm-margin" readonly placeholder="Calculated auto" style="background:var(--cream);color:var(--g);font-weight:700"/></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label class="fl">Delivery Fee (TZS)</label><input class="fi-in" id="pm-delivery-fee" type="number" value="5000"/></div>
+        <div class="fg"><label class="fl">Badge</label>
+          <select class="fi-sel" id="pm-badge">
+            <option value="">None</option><option value="hot">HOT 🔥</option><option value="new">MPYA ✨</option><option value="sale">PUNGUZO 💸</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">Description (Swahili) <span class="req">*</span></label>
+        <textarea class="fi-ta" id="pm-desc" rows="3" placeholder="Maelezo kamili ya bidhaa hii kwa Kiswahili..."></textarea></div>
+      <div class="fg"><label class="fl">Delivery Info</label><input class="fi-in" id="pm-delivery-info" placeholder="3–5 siku Moshi · 5–7 maeneo mengine"/></div>
+      <div class="fg"><label class="fl">Warranty</label><input class="fi-in" id="pm-warranty" placeholder="Mwaka 1 (Brand Tanzania)"/></div>
+      <div class="fg"><label class="fl">What's in the Box</label><input class="fi-in" id="pm-inbox" placeholder="Simu · Charger · USB Cable · Manual"/></div>
+      <div class="fg"><label class="fl">Color Variants (comma separated)</label><input class="fi-in" id="pm-colors" placeholder="Nyeusi, Bluu ya Bahari, Nyeupe"/></div>
+      <div class="fg">
+        <label class="fl">Key Highlights (shown as checkmarks)</label>
+        <div id="highlights-list"></div>
+        <button class="add-spec" onclick="addHighlight()">+ Add Highlight</button>
+      </div>
+      <div class="fg">
+        <label class="fl">Product Specifications</label>
+        <div id="specs-list"></div>
+        <button class="add-spec" onclick="addSpec()">+ Add Specification Row</button>
+      </div>
+      <div class="fg">
+        <label class="fl">Status</label>
+        <select class="fi-sel" id="pm-status"><option value="active">Active — Visible on website</option><option value="hidden">Hidden — Not visible</option><option value="out_of_stock">Out of Stock</option></select>
+      </div>
+      <div class="form-actions">
+        <button class="btn-full btn-g" onclick="saveProduct()">Save Product</button>
+        <button class="btn-full btn-out" onclick="closeProdModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CATEGORY MODAL ══ -->
+<div class="mo" id="cat-modal" onclick="if(event.target===this)closeCatModal()">
+  <div class="mb" style="max-width:420px">
+    <div class="mh"><h3 id="cm-title">Add Category</h3><button class="mc" onclick="closeCatModal()">×</button></div>
+    <div class="mbody">
+      <div class="fg"><label class="fl">Icon (Emoji) <span class="req">*</span></label><input class="fi-in" id="cm-icon" placeholder="e.g. 📱" maxlength="4"/></div>
+      <div class="fg"><label class="fl">Name (English) <span class="req">*</span></label><input class="fi-in" id="cm-name" placeholder="Smart Phones"/></div>
+      <div class="fg"><label class="fl">Jina (Swahili) <span class="req">*</span></label><input class="fi-in" id="cm-name-sw" placeholder="Simu za Kisasa"/></div>
+      <div class="fg"><label class="fl">URL Slug <span class="req">*</span></label><input class="fi-in" id="cm-slug" placeholder="smart-phones"/></div>
+      <div class="fg"><label class="fl">Sort Order</label><input class="fi-in" id="cm-sort" type="number" value="10"/></div>
+      <div class="fg"><label class="fl">Status</label>
+        <select class="fi-sel" id="cm-status"><option value="active">Active</option><option value="hidden">Hidden</option></select></div>
+      <div class="form-actions">
+        <button class="btn-full btn-g" onclick="saveCat()">Save Category</button>
+        <button class="btn-full btn-out" onclick="closeCatModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SUPPLIER MODAL ══ -->
+<div class="mo" id="sup-modal" onclick="if(event.target===this)closeSupModal()">
+  <div class="mb" style="max-width:480px">
+    <div class="mh"><h3 id="sm-title">Add Supplier</h3><button class="mc" onclick="closeSupModal()">×</button></div>
+    <div class="mbody">
+      <div class="fg"><label class="fl">Business Name <span class="req">*</span></label><input class="fi-in" id="sm-name" placeholder="TechMoshi Ltd"/></div>
+      <div class="form-row">
+        <div class="fg"><label class="fl">Contact Person <span class="req">*</span></label><input class="fi-in" id="sm-contact" placeholder="James Kileo"/></div>
+        <div class="fg"><label class="fl">WhatsApp Number <span class="req">*</span></label><input class="fi-in" id="sm-phone" placeholder="+255 712 000 000"/></div>
+      </div>
+      <div class="form-row">
+        <div class="fg"><label class="fl">Location <span class="req">*</span></label><input class="fi-in" id="sm-loc" placeholder="Moshi Mjini"/></div>
+        <div class="fg"><label class="fl">Average Lead Days <span class="req">*</span></label><input class="fi-in" id="sm-lead" type="number" value="2" min="1"/></div>
+      </div>
+      <div class="fg"><label class="fl">Stock Categories (what they sell)</label>
+        <textarea class="fi-ta" id="sm-cats" rows="2" placeholder="Smart Phones · Kompyuta · Accessories"></textarea>
+        <div class="hint">Hii inasaidia kujua wanachouza — itaonekana kwenye supplier portal yao</div>
+      </div>
+      <div class="fg"><label class="fl">Notes</label><textarea class="fi-ta" id="sm-notes" rows="2" placeholder="Any notes about this supplier..."></textarea></div>
+      <div class="fg"><label class="fl">Status</label>
+        <select class="fi-sel" id="sm-status"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
+      <div class="form-actions">
+        <button class="btn-full btn-g" onclick="saveSupplier()">Save Supplier</button>
+        <button class="btn-full btn-out" onclick="closeSupModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FULFILLMENT DETAIL MODAL ══ -->
+<div class="mo" id="ff-modal" onclick="if(event.target===this)closeFfModal()">
+  <div class="mb" style="max-width:500px">
+    <div class="mh"><h3>📦 Process Fulfillment</h3><button class="mc" onclick="closeFfModal()">×</button></div>
+    <div class="mbody" id="ff-modal-body">
+      <div id="ff-timeline" style="margin-bottom:16px"></div>
+      <div id="ff-info"></div>
+      <div style="background:var(--info-bg);border-radius:8px;padding:12px 14px;margin:12px 0;font-size:12px;color:var(--info);line-height:1.7">
+        <strong>Next Steps:</strong><br>
+        1. Contact supplier and confirm stock<br>
+        2. Inspect product at collection point<br>
+        3. Send quality photo to customer on WhatsApp<br>
+        4. Arrange boda boda or self-pickup<br>
+        5. Mark delivered after customer confirms
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn-full btn-g" onclick="showToast('Fulfillment started! WhatsApp sent to customer.');closeFfModal()">✅ Start Fulfillment</button>
+        <button class="btn-full btn-out" onclick="closeFfModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WITHDRAWAL REVIEW MODAL ══ -->
+<div class="mo" id="wd-modal" onclick="if(event.target===this)closeWdModal()">
+  <div class="mb" style="max-width:420px">
+    <div class="mh"><h3>↩️ Review Withdrawal</h3><button class="mc" onclick="closeWdModal()">×</button></div>
+    <div class="mbody" id="wd-modal-body"></div>
+  </div>
+</div>
+
+
+<!-- USER MODAL -->
+<div class="mo" id="user-modal" onclick="if(event.target===this)closeUserModal()">
+  <div class="mb" style="max-width:480px">
+    <div class="mh"><h3 id="user-modal-title">Add New User</h3><button class="mc" onclick="closeUserModal()">×</button></div>
+    <div class="mbody" id="user-modal-body"></div>
+  </div>
+</div>
+
+<!-- ROLE PERMISSIONS MODAL -->
+<div class="mo" id="role-modal" onclick="if(event.target===this)closeRoleModal()">
+  <div class="mb" style="max-width:580px">
+    <div class="mh"><h3 id="role-modal-title">Edit Role Permissions</h3><button class="mc" onclick="closeRoleModal()">×</button></div>
+    <div class="mbody" id="role-modal-body"></div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+const fmt=n=>'TZS '+Math.round(n).toLocaleString();
+const pct=(s,t)=>Math.round(s/t*100);
+
+// ── DATA ─────────────────────────────────────────────────────
+const prodData=[
+  {id:1,name:'Samsung Galaxy A15',cat:'Smart Phones',emoji:'📱',retail:280000,wholesale:220000,savers:68,badge:'hot',status:'active',supplier:'TechMoshi Ltd'},
+  {id:2,name:'Tecno Spark 20',cat:'Smart Phones',emoji:'📱',retail:195000,wholesale:148000,savers:44,badge:'new',status:'active',supplier:'TechMoshi Ltd'},
+  {id:3,name:'Itel P55',cat:'Smart Phones',emoji:'📱',retail:115000,wholesale:84000,savers:89,badge:'sale',status:'active',supplier:'TechMoshi Ltd'},
+  {id:4,name:'Godoro la Spring 6×6',cat:'Home Appliances',emoji:'🛏️',retail:195000,wholesale:145000,savers:45,badge:'',status:'active',supplier:'SleepWell Tz'},
+  {id:5,name:'Sufuria Set (8 pcs)',cat:'Home Appliances',emoji:'🍳',retail:85000,wholesale:62000,savers:91,badge:'sale',status:'active',supplier:'HomeGoods Tz'},
+  {id:6,name:'TV Samsung 32" Smart',cat:'Home Appliances',emoji:'📺',retail:520000,wholesale:400000,savers:41,badge:'hot',status:'active',supplier:'TechMoshi Ltd'},
+  {id:7,name:'Solar Panel 100W Kit',cat:'Solar & Energy',emoji:'🌞',retail:420000,wholesale:310000,savers:22,badge:'new',status:'active',supplier:'Solar Africa Ltd'},
+  {id:8,name:'Taa ya Jua + Chaja',cat:'Solar & Energy',emoji:'🔦',retail:45000,wholesale:28000,savers:156,badge:'sale',status:'active',supplier:'Solar Africa Ltd'},
+  {id:9,name:'Sofa Set ya Plastiki',cat:'Furniture',emoji:'🪑',retail:120000,wholesale:88000,savers:53,badge:'hot',status:'active',supplier:'Moshi Furniture'},
+  {id:10,name:'Meza ya Chakula (4 viti)',cat:'Furniture',emoji:'🪵',retail:245000,wholesale:180000,savers:21,badge:'',status:'active',supplier:'Moshi Furniture'},
+  {id:11,name:'Laptop Lenovo IdeaPad 3',cat:'Computers & TV',emoji:'💻',retail:680000,wholesale:540000,savers:18,badge:'',status:'active',supplier:'TechMoshi Ltd'},
+  {id:12,name:'Pampu ya Maji (150W)',cat:'Kilimo & Farming',emoji:'💧',retail:350000,wholesale:260000,savers:12,badge:'new',status:'active',supplier:'AgriTools Kili'},
+  {id:13,name:'Dawa ya Kupulizia 16L',cat:'Kilimo & Farming',emoji:'🌾',retail:95000,wholesale:68000,savers:27,badge:'',status:'active',supplier:'AgriTools Kili'},
+  {id:14,name:'Baiskeli ya Mizigo',cat:'BodaBoda & Vehicles',emoji:'🚲',retail:280000,wholesale:210000,savers:19,badge:'new',status:'active',supplier:'Moshi Furniture'},
+  {id:15,name:'School Bag Set Kamili',cat:'School & Kids',emoji:'🎒',retail:45000,wholesale:30000,savers:134,badge:'sale',status:'active',supplier:'HomeGoods Tz'},
+];
+const catData=[
+  {id:1,icon:'📱',name:'Smart Phones',name_sw:'Simu za Kisasa',count:3},
+  {id:2,icon:'🏠',name:'Home Appliances',name_sw:'Vifaa vya Nyumba',count:3},
+  {id:3,icon:'🏍️',name:'BodaBoda & Vehicles',name_sw:'Vyombo vya Usafiri',count:1},
+  {id:4,icon:'🌾',name:'Kilimo & Farming',name_sw:'Kilimo na Ufugaji',count:2},
+  {id:5,icon:'⚡',name:'Solar & Energy',name_sw:'Solar na Umeme',count:2},
+  {id:6,icon:'🪑',name:'Furniture',name_sw:'Samani',count:2},
+  {id:7,icon:'💻',name:'Computers & TV',name_sw:'Kompyuta na TV',count:1},
+  {id:8,icon:'🎒',name:'School & Kids',name_sw:'Shule na Watoto',count:1},
+  {id:9,icon:'💄',name:'Beauty & Health',name_sw:'Urembo na Afya',count:0},
+];
+const supData=[
+  {name:'TechMoshi Ltd',contact:'James Kileo',phone:'+255 712 xxx 101',loc:'Moshi Mjini',lead:2,cats:'Smart Phones · Kompyuta',products:4,pending:3},
+  {name:'Moshi Furniture',contact:'Maria Swai',phone:'+255 754 xxx 102',loc:'Moshi Mjini',lead:3,cats:'Samani · Viti · Baiskeli',products:3,pending:1},
+  {name:'HomeGoods Tz',contact:'Peter Mlay',phone:'+255 769 xxx 103',loc:'Arusha',lead:4,cats:'Sufuria · Mifuko · Vyombo',products:2,pending:2},
+  {name:'Solar Africa Ltd',contact:'Grace Kimaro',phone:'+255 713 xxx 104',loc:'Dar es Salaam',lead:5,cats:'Solar · Betri · Inverters',products:2,pending:1},
+  {name:'SleepWell Tz',contact:'Ali Hassan',phone:'+255 787 xxx 105',loc:'Moshi Vijijini',lead:2,cats:'Godoro · Mto · Kitanda',products:1,pending:0},
+  {name:'AgriTools Kili',contact:'John Pallangyo',phone:'+255 765 xxx 106',loc:'Moshi Mjini',lead:3,cats:'Zana za Kilimo · Pampu',products:2,pending:1},
+];
+const custData=[
+  {id:1,name:'Amina Moshi',phone:'0712 xxx 001',district:'Moshi Mjini',joined:'1 Jan 2026',plans:2,saved:'TZS 227,600',lastDep:'27 Apr',status:'active'},
+  {id:2,name:'John Pallangyo',phone:'0754 xxx 002',district:'Hai',joined:'5 Jan 2026',plans:1,saved:'TZS 195,000',lastDep:'25 Apr',status:'active'},
+  {id:3,name:'Grace Kimaro',phone:'0769 xxx 003',district:'Rombo',joined:'12 Jan 2026',plans:1,saved:'TZS 45,000',lastDep:'20 Apr',status:'active'},
+  {id:4,name:'Peter Swai',phone:'0713 xxx 004',district:'Siha',joined:'18 Jan 2026',plans:2,saved:'TZS 312,000',lastDep:'26 Apr',status:'active'},
+  {id:5,name:'Mary Lyimo',phone:'0787 xxx 005',district:'Moshi Mjini',joined:'22 Jan 2026',plans:1,saved:'TZS 85,000',lastDep:'10 Apr',status:'inactive'},
+  {id:6,name:'David Urassa',phone:'0765 xxx 006',district:'Same',joined:'28 Jan 2026',plans:1,saved:'TZS 680,000',lastDep:'28 Apr',status:'active'},
+  {id:7,name:'Fatuma Hassan',phone:'0712 xxx 007',district:'Moshi Vijijini',joined:'2 Feb 2026',plans:3,saved:'TZS 156,000',lastDep:'24 Apr',status:'active'},
+];
+const plansData=[
+  {cust:'Amina Moshi',prod:'Samsung Galaxy A15',saved:190400,target:280000,eta:'3 weeks',status:'active'},
+  {cust:'Amina Moshi',prod:'Sofa Set ya Plastiki',saved:37200,target:120000,eta:'7 weeks',status:'active'},
+  {cust:'John Pallangyo',prod:'Godoro la Spring 6×6',saved:195000,target:195000,eta:'Completed',status:'completed'},
+  {cust:'Grace Kimaro',prod:'Sufuria Set (8 pcs)',saved:45000,target:85000,eta:'5 weeks',status:'active'},
+  {cust:'Peter Swai',prod:'Lenovo IdeaPad 3',saved:312000,target:680000,eta:'12 weeks',status:'active'},
+  {cust:'Mary Lyimo',prod:'Fan ya Umeme',saved:28000,target:65000,eta:'Unknown',status:'inactive'},
+  {cust:'David Urassa',prod:'Lenovo IdeaPad 3',saved:680000,target:680000,eta:'Ready!',status:'ready'},
+  {cust:'Fatuma Hassan',prod:'Samsung Galaxy A15',saved:280000,target:280000,eta:'Ready!',status:'ready'},
+];
+const ffData=[
+  {priority:1,order:'KS-0244',cust:'David Urassa',prod:'Lenovo IdeaPad 3',amt:'TZS 680,000',date:'26 Apr',district:'Same',wa:'+255 765 xxx 006',stage:'queued'},
+  {priority:2,order:'KS-0245',cust:'Fatuma Hassan',prod:'Samsung Galaxy A15',amt:'TZS 280,000',date:'27 Apr',district:'Moshi Vijijini',wa:'+255 712 xxx 007',stage:'sourcing'},
+  {priority:3,order:'KS-0246',cust:'Ibrahim Nkya',prod:'Solar Panel 100W',amt:'TZS 420,000',date:'27 Apr',district:'Rombo',wa:'+255 754 xxx 008',stage:'queued'},
+  {priority:4,order:'KS-0247',cust:'Sarah Mwanga',prod:'Sufuria Set',amt:'TZS 85,000',date:'28 Apr',district:'Hai',wa:'+255 769 xxx 009',stage:'quality_check'},
+  {priority:5,order:'KS-0248',cust:'Ali Mganga',prod:'Samsung Galaxy A15',amt:'TZS 280,000',date:'28 Apr',district:'Moshi Mjini',wa:'+255 713 xxx 010',stage:'dispatched'},
+];
+const wdData=[
+  {cust:'Mary Lyimo',plan:'Fan ya Umeme',req:20000,cool:true,date:'27 Apr 2026'},
+  {cust:'James Mlay',plan:'Samsung Galaxy A15',req:150000,cool:true,date:'26 Apr 2026'},
+  {cust:'Anna Kessy',plan:'Sofa Set',req:8000,cool:false,date:'28 Apr 2026'},
+  {cust:'Robert Shao',plan:'Godoro la Spring',req:50000,cool:true,date:'25 Apr 2026'},
+];
+const iaData=[
+  {cust:'Mary Lyimo',prod:'Fan ya Umeme',saved:28000,target:65000,last:'10 Apr 2026',days:19},
+  {cust:'Emmanuel Kiba',prod:'Samsung Galaxy A15',saved:56000,target:280000,last:'8 Apr 2026',days:21},
+  {cust:'Rose Ngowi',prod:'Baiskeli ya Shule',saved:12000,target:185000,last:'5 Apr 2026',days:24},
+  {cust:'Charles Minja',prod:'Sofa Set',saved:45000,target:120000,last:'12 Apr 2026',days:17},
+];
+const delData=[
+  {id:'KS-0243',cust:'Ali Mganga',prod:'Samsung A15',district:'Moshi Mjini',agent:'Juma Boda',date:'28 Apr',status:'in-transit'},
+  {id:'KS-0242',cust:'Sarah Mwanga',prod:'Sufuria Set',district:'Hai',agent:'Hassan Rider',date:'28 Apr',status:'in-transit'},
+  {id:'KS-0241',cust:'Zaina Mbise',prod:'Fan ya Umeme',district:'Moshi Mjini',agent:'Self-pickup',date:'27 Apr',status:'delivered'},
+  {id:'KS-0240',cust:'Francis Lyimo',prod:'Solar Panel',district:'Rombo',agent:'Baraka Boda',date:'26 Apr',status:'delivered'},
+];
+const feedData=[
+  {dot:'#16a34a',text:'<strong>Fatuma Hassan</strong> reached 100% on Samsung Galaxy A15 — TZS 280,000',time:'2 min ago'},
+  {dot:'#1a6b3c',text:'<strong>Amina Moshi</strong> deposited TZS 15,000 → Samsung now at 68%',time:'14 min ago'},
+  {dot:'#1d4ed8',text:'<strong>New registration:</strong> Boniface Mwangi, Rombo District',time:'31 min ago'},
+  {dot:'#1a6b3c',text:'<strong>David Urassa</strong> deposited TZS 20,000 → Lenovo at 46%',time:'1 hr ago'},
+  {dot:'#d97706',text:'<strong>Mary Lyimo</strong> requested withdrawal of TZS 20,000',time:'2 hrs ago'},
+  {dot:'#16a34a',text:'<strong>KS-0241</strong> delivered to Zaina Mbise ✅',time:'3 hrs ago'},
+];
+
+// ── PILL HELPER ───────────────────────────────────────────────
+function pill(s){
+  const map={
+    active:'<span class="pill pill-g"><span class="pdot pulse"></span>Active</span>',
+    inactive:'<span class="pill pill-gold">Inactive</span>',
+    completed:'<span class="pill pill-b">Completed</span>',
+    ready:'<span class="pill pill-g">Ready! ✅</span>',
+    queued:'<span class="pill pill-gold">Queued</span>',
+    sourcing:'<span class="pill pill-b">Sourcing</span>',
+    quality_check:'<span class="pill pill-b">Quality Check</span>',
+    dispatched:'<span class="pill pill-g">Dispatched</span>',
+    'in-transit':'<span class="pill pill-b">In Transit 🚚</span>',
+    delivered:'<span class="pill pill-g">Delivered ✅</span>',
+    hot:'<span class="pill" style="background:#fef2f2;color:#dc2626">HOT 🔥</span>',
+    new:'<span class="pill pill-g">MPYA ✨</span>',
+    sale:'<span class="pill pill-gold">PUNGUZO 💸</span>',
+  };
+  return map[s]||`<span class="pill pill-gray">${s}</span>`;
+}
+
+// ── RENDER ALL ────────────────────────────────────────────────
+function renderAll(){
+  // Feed
+  document.getElementById('feed').innerHTML=feedData.map(f=>`<div class="fi"><div class="fdot" style="background:${f.dot}"></div><div class="fc"><div class="ft">${f.text}</div><div class="fti">${f.time}</div></div></div>`).join('');
+
+  // Products grid
+  document.getElementById('prod-grid').innerHTML=prodData.map(p=>{
+    const margin=Math.round((p.retail-p.wholesale)/p.retail*100);
+    return `<div class="pc">
+      <div class="pc-img">${p.badge?`<span class="pc-badge badge-${p.badge}" style="position:absolute;top:8px;left:8px">${p.badge.toUpperCase()}</span>`:''}
+        <span style="font-size:48px">${p.emoji}</span>
+        <button class="pc-menu" onclick="event.stopPropagation();showToast('Options: Edit, Hide, Delete')" title="More options">⋮</button>
+      </div>
+      <div class="pc-info">
+        <div class="pc-cat">${p.cat}</div>
+        <div class="pc-name">${p.name}</div>
+        <div class="pc-price">${fmt(p.retail)}</div>
+        <div class="pc-margin">Wholesale: ${fmt(p.wholesale)} · Margin: ${margin}%</div>
+        <div class="pc-savers"><span style="width:6px;height:6px;border-radius:50%;background:var(--g);display:inline-block"></span>${p.savers} active savers</div>
+        <div class="pc-actions">
+          <button class="ab ab-edit" onclick="openProductModal(${p.id})">Edit</button>
+          <button class="ab ab-del" onclick="showToast('Product hidden from website')">Hide</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Categories grid
+  document.getElementById('cat-grid').innerHTML=catData.map(c=>`
+    <div class="cat-card">
+      <div class="cat-icon-big">${c.icon}</div>
+      <div class="cat-name">${c.name}</div>
+      <div class="cat-count">${c.name_sw} · ${c.count} products</div>
+      <div class="cat-actions">
+        <button class="ab ab-edit" onclick="openCatModal(${c.id})">Edit</button>
+        <button class="ab ab-del" onclick="showToast('Category hidden')">Hide</button>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('cat-sort-list').innerHTML=catData.map((c,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;background:#fff;cursor:grab">
+      <span style="color:var(--muted);font-size:16px">⋮⋮</span>
+      <span style="font-size:18px">${c.icon}</span>
+      <span style="font-size:13px;font-weight:500;flex:1">${c.name}</span>
+      <span style="font-size:11px;color:var(--muted)">Order: ${i+1}</span>
+    </div>`).join('');
+
+  // Suppliers grid
+  document.getElementById('supplier-cards').innerHTML=supData.map(s=>`
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div>
+          <div style="font-size:14px;font-weight:600">${s.name}</div>
+          <div style="font-size:11px;color:var(--muted)">${s.loc} · Lead: ${s.lead} days</div>
+        </div>
+        <span class="pill pill-g"><span class="pdot"></span>Active</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.5">${s.cats}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+        <div style="background:var(--cream);border-radius:7px;padding:7px 10px;text-align:center">
+          <div style="font-size:10px;color:var(--muted)">Products</div>
+          <div style="font-size:16px;font-weight:700;color:var(--g)">${s.products}</div>
+        </div>
+        <div style="background:${s.pending>0?'#fff3ed':'var(--cream)'};border-radius:7px;padding:7px 10px;text-align:center">
+          <div style="font-size:10px;color:var(--muted)">Pending</div>
+          <div style="font-size:16px;font-weight:700;color:${s.pending>0?'var(--warning)':'var(--muted)'}">${s.pending}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px">
+        <button class="ab ab-edit" style="flex:1" onclick="openSupplierModal('${s.name}')">Edit</button>
+        <button class="ab ab-wa" style="flex:1" onclick="showToast('WhatsApp to ${s.name}')">📱 WhatsApp</button>
+      </div>
+    </div>`).join('');
+
+  // Supplier products table
+  document.getElementById('sup-prod-table').innerHTML=prodData.map(p=>{
+    const m=Math.round((p.retail-p.wholesale)/p.retail*100);
+    return `<tr><td class="td-name">${p.supplier}</td><td>${p.emoji} ${p.name}</td><td>${p.cat}</td>
+      <td style="font-weight:600">${fmt(p.retail)}</td><td>${fmt(p.wholesale)}</td>
+      <td style="color:var(--g);font-weight:600">${m}%</td>
+      <td style="text-align:center">${p.savers}</td>
+      <td>${pill(p.status)}</td></tr>`;
+  }).join('');
+
+  // Customers
+  document.getElementById('cust-tbody').innerHTML=custData.map((c,i)=>`<tr>
+    <td>${i+1}</td>
+    <td><div class="td-name">${c.name}</div><div style="font-size:11px;color:var(--muted)">${c.phone}</div></td>
+    <td>${c.district}</td><td>${c.joined}</td>
+    <td style="text-align:center">${c.plans}</td>
+    <td style="font-weight:600;color:var(--g)">${c.saved}</td>
+    <td>${c.lastDep}</td>
+    <td>${pill(c.status)}</td>
+    <td style="display:flex;gap:4px">
+      <button class="ab ab-view" onclick="showToast('Customer detail for ${c.name}')">View</button>
+      <button class="ab ab-wa" onclick="showToast('WhatsApp to ${c.name}')">📱</button>
+    </td></tr>`).join('');
+
+  // Plans
+  document.getElementById('plans-tbody').innerHTML=plansData.map((p,i)=>{
+    const pc=pct(p.saved,p.target);
+    const col=p.status==='ready'?'#16a34a':p.status==='inactive'?'#d97706':'#1a6b3c';
+    return `<tr><td>${i+1}</td><td class="td-name">${p.cust}</td><td>${p.prod}</td>
+      <td style="font-weight:600;color:var(--g)">${fmt(p.saved)}</td>
+      <td>${fmt(p.target)}</td>
+      <td><div style="display:flex;align-items:center;gap:6px"><div class="mp"><div class="mf" style="width:${pc}%;background:${col}"></div></div><span style="font-size:11px;font-weight:600;color:${col}">${pc}%</span></div></td>
+      <td>${p.eta}</td>
+      <td>${pill(p.status)}</td></tr>`;
+  }).join('');
+
+  // Fulfillment
+  document.getElementById('ff-tbody').innerHTML=ffData.map(f=>`<tr>
+    <td><strong style="color:var(--danger)">#${f.priority}</strong></td>
+    <td style="font-weight:600;color:var(--g)">${f.order}</td>
+    <td class="td-name">${f.cust}</td><td>${f.prod}</td>
+    <td style="font-weight:600;color:var(--g)">${f.amt}</td>
+    <td>${f.date}</td><td>${f.district}</td>
+    <td>${pill(f.stage)}</td>
+    <td style="display:flex;gap:4px">
+      <button class="ab ab-approve" onclick="openFfModal('${f.cust}','${f.prod}','${f.amt}','${f.district}','${f.wa}','${f.stage}')">Process →</button>
+      <button class="ab ab-wa" onclick="showToast('WhatsApp to ${f.cust}')">📱</button>
+    </td></tr>`).join('');
+
+  // Withdrawals
+  document.getElementById('wd-tbody').innerHTML=wdData.map((w,i)=>{
+    const fee=Math.round(w.req*0.05),net=w.req-fee;
+    return `<tr><td>${i+1}</td><td class="td-name">${w.cust}</td><td>${w.plan}</td>
+      <td>${fmt(w.req)}</td>
+      <td style="color:var(--danger)">- ${fmt(fee)}</td>
+      <td style="color:var(--g);font-weight:600">${fmt(net)}</td>
+      <td>${w.date}</td>
+      <td>${w.cool?'<span class="pill pill-g">✓ OK</span>':'<span class="pill pill-r">✗ Too soon</span>'}</td>
+      <td><button class="ab ab-edit" onclick="openWdModal('${w.cust}','${w.plan}',${w.req},${w.cool},'${w.date}')">Review</button></td></tr>`;
+  }).join('');
+
+  // Inactive
+  document.getElementById('ia-tbody').innerHTML=iaData.map(c=>`<tr>
+    <td class="td-name">${c.cust}</td><td>${c.prod}</td>
+    <td style="color:var(--g);font-weight:600">${fmt(c.saved)}</td>
+    <td><div style="display:flex;align-items:center;gap:6px"><div class="mp"><div class="mf" style="width:${pct(c.saved,c.target)}%;background:var(--warning)"></div></div><span style="font-size:11px;color:var(--warning)">${pct(c.saved,c.target)}%</span></div></td>
+    <td>${c.last}</td>
+    <td style="color:var(--danger);font-weight:600">${c.days} days</td>
+    <td><button class="ab ab-wa" onclick="showToast('Reminder sent to ${c.cust}')">📱 Send Reminder</button></td></tr>`).join('');
+
+  // Deliveries
+  document.getElementById('del-tbody').innerHTML=delData.map(d=>`<tr>
+    <td style="font-weight:600;color:var(--g)">${d.id}</td>
+    <td class="td-name">${d.cust}</td><td>${d.prod}</td>
+    <td>${d.district}</td><td>${d.agent}</td><td>${d.date}</td>
+    <td>${pill(d.status)}</td>
+    <td><button class="ab ab-view" onclick="showToast('Delivery detail ${d.id}')">View</button></td></tr>`).join('');
+}
+
+// ── NAVIGATION ────────────────────────────────────────────────
+const pgTitles={
+  'api-settings':'API Keys & Integrations',
+  'users-roles':'Users & Roles',
+  'cms':'Homepage CMS',
+  'sales-team':'Sales & Marketing Team',
+  'customer-care':'Customer Care',
+  'delivery-team':'Delivery Team',
+  'expenses':'Matumizi ya Ndani (Internal Expenses)',overview:'Overview',products:'Product Catalogue',categories:'Category Management',suppliers:'Supplier Directory',customers:'Customers',plans:'Saving Plans',fulfillment:'Fulfillment Queue',withdrawals:'Withdrawal Approvals',inactive:'Inactive Customers',deliveries:'Deliveries',finance:'Financial Report',settings:'Settings'};
+const pgActions={
+  'api-settings':'',
+  'users-roles':'+ Add User',
+  'cms':'',
+  'sales-team':'+ Add Team Member',
+  'customer-care':'+ Add Agent',
+  'delivery-team':'+ Add Rider',
+  'expenses':'+ Add Expense',products:'+ Add Product',categories:'+ Add Category',suppliers:'+ Add Supplier',customers:'',plans:'',fulfillment:'',withdrawals:'',inactive:'Send Bulk WhatsApp',deliveries:'',finance:'⬇ Export',settings:'',overview:''};
+
+function nav(name,el){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.si').forEach(s=>s.classList.remove('on'));
+  const pg=document.getElementById('pg-'+name);
+  if(pg){pg.classList.add('on');}else{console.warn('Page not found: pg-'+name);}
+  if(el)el.classList.add('on');
+  document.getElementById('pg-title').textContent=pgTitles[name]||name;
+  const btn=document.getElementById('tb-action-btn');
+  const action=pgActions[name]||'';
+  btn.textContent=action;
+  btn.style.display=action?'inline-flex':'none';
+  window.scrollTo(0,0);
+}
+
+function handleTopAction(){
+  const title=document.getElementById('pg-title').textContent;
+  if(title.includes('Product Catalogue'))openProductModal();
+  else if(title.includes('Category'))openCatModal();
+  else if(title.includes('Supplier'))openSupplierModal();
+  else if(title.includes('Users'))openUserModal();
+  else if(title.includes('Inactive'))showToast('WhatsApp broadcast sent to 23 customers!');
+  else if(title.includes('Expense'))openExpenseModal();
+  else if(title.includes('Sales'))openTeamModal('sales');
+  else if(title.includes('Customer Care'))openTeamModal('care');
+  else if(title.includes('Delivery Team'))openTeamModal('rider');
+  else showToast('Action triggered!');
+}
+
+// ── PRODUCT MODAL ─────────────────────────────────────────────
+function openProductModal(id){
+  const p=id?prodData.find(x=>x.id===id):null;
+  document.getElementById('pm-title').textContent=p?'Edit Product: '+p.name:'Add New Product';
+  if(p){
+    document.getElementById('pm-name').value=p.name;
+    if(document.getElementById('pm-name-sw')) document.getElementById('pm-name-sw').value=p.name;
+    document.getElementById('pm-retail').value=p.retail;
+    document.getElementById('pm-wholesale').value=p.wholesale;
+    calcMargin();
+  } else {
+    ['pm-name','pm-name-sw','pm-desc','pm-delivery-info','pm-warranty','pm-inbox','pm-colors'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    document.getElementById('pm-retail').value='';
+    document.getElementById('pm-wholesale').value='';
+    const pmm=document.getElementById('pm-margin');if(pmm)pmm.value='';
+    const pmdf=document.getElementById('pm-delivery-fee');if(pmdf)pmdf.value='5000';
+    resetHighlights();resetSpecs();
+  }
+  // Reset image slots and form builders
+  clearAllProductImages();
+  if(!id){ resetHighlights(); resetSpecs(); }
+  const modal = document.getElementById('prod-modal');
+  if(!modal){ console.error('prod-modal not found!'); return; }
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeProdModal(){document.getElementById('prod-modal').classList.remove('open');document.body.style.overflow='';}
+function saveProduct(){showToast('✅ Product saved successfully!');closeProdModal();}
+function calcMargin(){
+  const r=parseFloat(document.getElementById('pm-retail').value)||0;
+  const w=parseFloat(document.getElementById('pm-wholesale').value)||0;
+  if(r&&w){
+    const m=Math.round((r-w)/r*100);
+    document.getElementById('pm-margin').value=m+'% (TZS '+((r-w).toLocaleString())+')';
+    document.getElementById('pm-margin').style.color=m>=15?'var(--g)':'var(--danger)';
+  }
+}
+function fakeImgUpload(idx){
+  const slot=document.getElementById('img-'+idx);
+  const emojis=['📱','💻','🛏️','🍳','🪑','🌞','🔦','🚲','🎒'];
+  const e=emojis[Math.floor(Math.random()*emojis.length)];
+  slot.classList.add('has-img');
+  slot.innerHTML=`<span class="img-slot-emoji">${e}</span><div class="img-slot-label" style="font-size:9px;color:var(--g)">Uploaded ✓</div><button class="img-slot-remove" onclick="clearImg(event,${idx})">×</button>`;
+  showToast('Image uploaded!');
+}
+function clearImg(e,idx){
+  e.stopPropagation();
+  const slot=document.getElementById('img-'+idx);
+  slot.classList.remove('has-img');
+  slot.innerHTML=`<div class="img-slot-icon">📷</div><div class="img-slot-label">${['Main Photo','Back View','Side View','Detail'][idx]}</div><button class="img-slot-remove" onclick="clearImg(event,${idx})">×</button>`;
+}
+function addHighlight(){
+  const list=document.getElementById('highlights-list');
+  const row=document.createElement('div');row.className='spec-row';
+  row.innerHTML=`<input class="fi-in" placeholder="e.g. Screen ya 6.5 inch Super AMOLED"/><button class="spec-del" onclick="this.parentElement.remove()">×</button>`;
+  list.appendChild(row);
+}
+function resetHighlights(){document.getElementById('highlights-list').innerHTML='';addHighlight();addHighlight();}
+function addSpec(){
+  const list=document.getElementById('specs-list');
+  const row=document.createElement('div');row.className='spec-row';
+  row.innerHTML=`<input class="fi-in" placeholder="Label (e.g. Betri)" style="flex:.5"/><input class="fi-in" placeholder="Value (e.g. 5000mAh)"/><button class="spec-del" onclick="this.parentElement.remove()">×</button>`;
+  list.appendChild(row);
+}
+function resetSpecs(){document.getElementById('specs-list').innerHTML='';addSpec();addSpec();addSpec();}
+
+// ── CATEGORY MODAL ────────────────────────────────────────────
+function openCatModal(id){
+  document.getElementById('cm-title').textContent=id?'Edit Category':'Add Category';
+  document.getElementById('cat-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeCatModal(){document.getElementById('cat-modal').classList.remove('open');document.body.style.overflow='';}
+function saveCat(){showToast('✅ Category saved!');closeCatModal();}
+
+// ── SUPPLIER MODAL ────────────────────────────────────────────
+function openSupplierModal(name){
+  document.getElementById('sm-title').textContent=name?'Edit Supplier: '+name:'Add Supplier';
+  if(name){
+    const s=supData.find(x=>x.name===name);
+    if(s){
+      document.getElementById('sm-name').value=s.name;
+      document.getElementById('sm-contact').value=s.contact;
+      document.getElementById('sm-phone').value=s.phone;
+      document.getElementById('sm-loc').value=s.loc;
+      document.getElementById('sm-lead').value=s.lead;
+      document.getElementById('sm-cats').value=s.cats;
+    }
+  } else {
+    ['sm-name','sm-contact','sm-phone','sm-loc','sm-cats','sm-notes'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('sm-lead').value='2';
+  }
+  document.getElementById('sup-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSupModal(){document.getElementById('sup-modal').classList.remove('open');document.body.style.overflow='';}
+function saveSupplier(){showToast('✅ Supplier saved!');closeSupModal();}
+
+// ── FULFILLMENT MODAL ─────────────────────────────────────────
+function openFfModal(cust,prod,amt,dist,wa,stage){
+  const stages=['queued','sourcing','quality_check','dispatched','delivered'];
+  const idx=stages.indexOf(stage);
+  const labels=['Queued','Sourcing','Quality Check','Dispatched','Delivered'];
+  document.getElementById('ff-timeline').innerHTML=`<div class="timeline">${stages.map((s,i)=>`<div class="tl-step ${i<=idx?'done':''} ${i===idx?'active':''}"><div class="tl-circle">${i<idx?'✓':i+1}</div><div class="tl-label">${labels[i]}</div></div>${i<stages.length-1?'':''}`).join('')}</div>`;
+  document.getElementById('ff-info').innerHTML=`
+    <div class="sr"><span class="sr-l">Customer</span><span class="sr-v">${cust}</span></div>
+    <div class="sr"><span class="sr-l">Product</span><span class="sr-v">${prod}</span></div>
+    <div class="sr"><span class="sr-l">Amount Paid</span><span class="sr-v" style="color:var(--g)">${amt}</span></div>
+    <div class="sr"><span class="sr-l">District</span><span class="sr-v">${dist}</span></div>
+    <div class="sr"><span class="sr-l">WhatsApp</span><span class="sr-v">${wa}</span></div>
+    <div class="sr"><span class="sr-l">Current Stage</span><span class="sr-v">${pill(stage)}</span></div>`;
+  document.getElementById('ff-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeFfModal(){document.getElementById('ff-modal').classList.remove('open');document.body.style.overflow='';}
+
+// ── WITHDRAWAL MODAL ──────────────────────────────────────────
+function openWdModal(cust,plan,req,cool,date){
+  const fee=Math.round(req*0.05),net=req-fee;
+  document.getElementById('wd-modal-body').innerHTML=`
+    <div class="sr"><span class="sr-l">Customer</span><span class="sr-v">${cust}</span></div>
+    <div class="sr"><span class="sr-l">Plan</span><span class="sr-v">${plan}</span></div>
+    <div class="sr"><span class="sr-l">Amount Requested</span><span class="sr-v">${fmt(req)}</span></div>
+    <div class="sr"><span class="sr-l">Fee (5%)</span><span class="sr-v" style="color:var(--danger)">- ${fmt(fee)}</span></div>
+    <div class="sr"><span class="sr-l">Net Payout</span><span class="sr-v" style="color:var(--g);font-size:15px">${fmt(net)}</span></div>
+    <div class="sr"><span class="sr-l">Cooling-off (7 days)</span><span class="sr-v">${cool?'<span class="pill pill-g">✓ Passed</span>':'<span class="pill pill-r">✗ Too soon — block this</span>'}</span></div>
+    <div class="sr"><span class="sr-l">Requested On</span><span class="sr-v">${date}</span></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn-full btn-g" ${cool?'':'disabled'} onclick="showToast('✅ Approved! M-Pesa B2C sending ${fmt(net)}...');closeWdModal()">${cool?'✅ Approve & Pay':'Cannot Approve — Cooling Off'}</button>
+      <button class="btn-full btn-d" onclick="showToast('❌ Rejected. Funds returned.');closeWdModal()">❌ Reject</button>
+    </div>`;
+  document.getElementById('wd-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeWdModal(){document.getElementById('wd-modal').classList.remove('open');document.body.style.overflow='';}
+
+// ── UTILITIES ─────────────────────────────────────────────────
+function filterTbl(tbodyId,q){
+  document.getElementById(tbodyId).querySelectorAll('tr').forEach(r=>{
+    r.style.display=r.textContent.toLowerCase().includes(q.toLowerCase())?'':'none';
+  });
+}
+function filterProds(cat){
+  document.querySelectorAll('.pc').forEach((c,i)=>{
+    c.style.display=(!cat||prodData[i].cat===cat)?'':'none';
+  });
+}
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.transform='translateX(-50%) translateY(0)';
+  setTimeout(()=>t.style.transform='translateX(-50%) translateY(80px)',3000);
+}
+
+
+// ══════════════════════════════════════════════════════════════
+//  TEAM & EXPENSES DATA + RENDER FUNCTIONS
+// ══════════════════════════════════════════════════════════════
+const salesTeam=[
+  {name:'Baraka Juma',role:'Sales Executive',area:'Moshi Mjini',phone:'+255 765 xxx 201',target_reg:10,actual_reg:12,target_dep:2000000,actual_dep:2400000,commission_pct:3},
+  {name:'Amina Saleh',role:'Field Agent',area:'Hai & Rombo',phone:'+255 712 xxx 202',target_reg:8,actual_reg:7,target_dep:1600000,actual_dep:1350000,commission_pct:3},
+  {name:'John Msuka',role:'Digital Marketing',area:'Online',phone:'+255 754 xxx 203',target_reg:12,actual_reg:10,target_dep:2400000,actual_dep:2200000,commission_pct:2.5},
+  {name:'Grace Palangyo',role:'Sales Executive',area:'Siha & Same',phone:'+255 769 xxx 204',target_reg:6,actual_reg:5,target_dep:1200000,actual_dep:990000,commission_pct:3},
+];
+const careTeam=[
+  {name:'Fatuma Mbise',shift:'Asubuhi 7–15',work_phone:'+255 700 xxx 301',wa:'+255 712 xxx 301',queries:98,resolved_pct:96,avg_resp:'12 min',rating:4.8},
+  {name:'Peter Kileo',shift:'Mchana 13–21',work_phone:'+255 700 xxx 302',wa:'+255 754 xxx 302',queries:102,resolved_pct:93,avg_resp:'19 min',rating:4.5},
+  {name:'Mary Hassan',shift:'Jioni 19–23',work_phone:'+255 700 xxx 303',wa:'+255 769 xxx 303',queries:87,resolved_pct:94,avg_resp:'22 min',rating:4.7},
+];
+const riders=[
+  {name:'Hassan Rider',phone:'+255 765 xxx 401',vehicle:'Bodaboda',plate:'T123ABC',area:'Moshi Mjini',deliveries:18,rating:4.9,fee_per_del:3500,total_paid:63000},
+  {name:'Ali Boda',phone:'+255 712 xxx 402',vehicle:'Bodaboda',plate:'T456DEF',area:'Hai & Siha',deliveries:11,rating:4.7,fee_per_del:5000,total_paid:55000},
+  {name:'Juma Rider',phone:'+255 754 xxx 403',vehicle:'Pikipiki',plate:'T789GHI',area:'Rombo',deliveries:7,rating:4.8,fee_per_del:6000,total_paid:42000},
+  {name:'Ibrahim Gari',phone:'+255 769 xxx 404',vehicle:'Gari Ndogo',plate:'T321JKL',area:'Same & Mwanga',deliveries:5,rating:4.9,fee_per_del:12000,total_paid:60000},
+  {name:'Saidi Boda',phone:'+255 713 xxx 405',vehicle:'Bodaboda',plate:'T654MNO',area:'Moshi Vijijini',deliveries:2,rating:4.6,fee_per_del:4000,total_paid:8000},
+];
+const expenses=[
+  {date:'28 Apr',title:'Mshahara — Baraka Juma',cat:'Mishahara',payee:'Baraka Juma',amount:400000,method:'M-Pesa',approved:'Owner',receipt:true},
+  {date:'28 Apr',title:'Mshahara — Fatuma Mbise',cat:'Mishahara',payee:'Fatuma Mbise',amount:320000,method:'M-Pesa',approved:'Owner',receipt:true},
+  {date:'28 Apr',title:'Mshahara — Peter Kileo',cat:'Mishahara',payee:'Peter Kileo',amount:300000,method:'M-Pesa',approved:'Owner',receipt:true},
+  {date:'25 Apr',title:'Delivery fees — Aprili',cat:'Delivery',payee:'Wasafirishaji 5',amount:228000,method:'M-Pesa',approved:'Manager',receipt:false},
+  {date:'20 Apr',title:"Africa's Talking SMS",cat:'API & Tech',payee:"Africa's Talking",amount:48000,method:'Benki',approved:'Owner',receipt:true},
+  {date:'20 Apr',title:'360dialog WhatsApp API',cat:'API & Tech',payee:'360dialog',amount:28000,method:'Benki',approved:'Owner',receipt:true},
+  {date:'15 Apr',title:'Facebook/Instagram Ads',cat:'Marketing',payee:'Meta Platforms',amount:150000,method:'Card',approved:'Owner',receipt:true},
+  {date:'10 Apr',title:'Kodi ya Ofisi — Aprili',cat:'Ofisi',payee:'Mwenye Nyumba',amount:80000,method:'Cash',approved:'Owner',receipt:false},
+  {date:'5 Apr',title:'Stationery & Printing',cat:'Ofisi',payee:'Print Center Moshi',amount:22000,method:'Cash',approved:'Manager',receipt:true},
+];
+const openTickets=[
+  {id:'TKT-089',cust:'Emmanuel Kiba',issue:'Hajapata OTP ya kujisajili',agent:'Fatuma Mbise',time:'2 hrs',priority:'high'},
+  {id:'TKT-090',cust:'Rose Ngowi',issue:'Amana haikuingia baada ya M-Pesa',agent:'Peter Kileo',time:'4 hrs',priority:'high'},
+  {id:'TKT-091',cust:'Charles Minja',issue:'Anataka kubadilisha anwani ya delivery',agent:'—',time:'1 day',priority:'medium'},
+  {id:'TKT-092',cust:'Zaina Mbise',issue:'Swali kuhusu dhamana ya Samsung',agent:'Mary Hassan',time:'3 hrs',priority:'low'},
+];
+
+function renderSalesTeam(){
+  if(!document.getElementById('sales-tbody'))return;
+  document.getElementById('sales-tbody').innerHTML=salesTeam.map(m=>{
+    const rp=Math.round(m.actual_reg/m.target_reg*100);
+    const dp=Math.round(m.actual_dep/m.target_dep*100);
+    const rc=rp>=100?'var(--success)':rp>=80?'var(--warning)':'var(--danger)';
+    const dc=dp>=100?'var(--success)':dp>=80?'var(--warning)':'var(--danger)';
+    return `<tr>
+      <td class="td-name">${m.name}</td><td>${m.role}</td><td>${m.area}</td><td>${m.phone}</td>
+      <td style="text-align:center">${m.target_reg}</td>
+      <td><b style="color:${rc}">${m.actual_reg}</b> <span style="font-size:10px;color:${rc}">(${rp}%)</span></td>
+      <td style="text-align:right">${fmt(m.target_dep)}</td>
+      <td><b style="color:${dc}">${fmt(m.actual_dep)}</b> <span style="font-size:10px;color:${dc}">(${dp}%)</span></td>
+      <td style="text-align:center">${m.commission_pct}%</td>
+      <td><span class="pill pill-green"><span class="pdot"></span>Active</span></td>
+      <td><button class="ab ab-edit" onclick="showToast('Edit ${m.name}')">Edit</button></td>
+    </tr>`;
+  }).join('');
+  // Performance bars
+  const sc=document.getElementById('sales-chart');
+  if(sc)sc.innerHTML=salesTeam.map(m=>{
+    const rp=Math.round(m.actual_reg/m.target_reg*100);
+    return `<div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:4px"><span>${m.name}</span><span style="color:${rp>=100?'var(--success)':'var(--warning)'}">${rp}% of target</span></div>
+      <div style="height:7px;background:var(--border);border-radius:4px;overflow:hidden"><div style="height:100%;border-radius:4px;background:${rp>=100?'var(--success)':'var(--warning)'};width:${Math.min(100,rp)}%"></div></div>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">Wasajili: ${m.actual_reg}/${m.target_reg} · Amana: ${fmt(m.actual_dep)}</div>
+    </div>`;
+  }).join('');
+  // Commission
+  const cs=document.getElementById('commission-summary');
+  if(cs){
+    const total=salesTeam.reduce((a,m)=>a+Math.round(m.actual_dep*m.commission_pct/100),0);
+    cs.innerHTML=salesTeam.map(m=>{
+      const c=Math.round(m.actual_dep*m.commission_pct/100);
+      return `<div class="sr"><span class="sr-l">${m.name} (${m.commission_pct}%)</span><span class="sr-v" style="color:var(--g)">${fmt(c)}</span></div>`;
+    }).join('')+`<div class="sr" style="border-top:2px solid var(--border);margin-top:4px;padding-top:8px"><span class="sr-l" style="font-weight:700">Jumla ya Kamisheni</span><span class="sr-v" style="color:var(--g);font-size:14px">${fmt(total)}</span></div>`;
+  }
+}
+
+function renderCareTeam(){
+  const tb=document.getElementById('care-tbody');
+  if(!tb)return;
+  tb.innerHTML=careTeam.map(m=>`<tr>
+    <td class="td-name">${m.name}</td><td>${m.shift}</td><td>${m.work_phone}</td><td>${m.wa}</td>
+    <td style="text-align:center;font-weight:600">${m.queries}</td>
+    <td><b style="color:${m.resolved_pct>=95?'var(--success)':'var(--warning)'}">${m.resolved_pct}%</b></td>
+    <td>${m.avg_resp}</td>
+    <td><b style="color:var(--g)">⭐ ${m.rating}</b></td>
+    <td><span class="pill pill-green"><span class="pdot pulse"></span>Online</span></td>
+    <td><button class="ab ab-edit" onclick="showToast('Edit ${m.name}')">Edit</button></td>
+  </tr>`).join('');
+  const ot=document.getElementById('open-tickets');
+  if(ot)ot.innerHTML=openTickets.map(t=>{
+    const pc={'high':'var(--danger)','medium':'var(--warning)','low':'var(--muted)'}[t.priority];
+    return `<div style="display:flex;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border)">
+      <div style="width:8px;height:8px;border-radius:50%;background:${pc};flex-shrink:0;margin-top:4px"></div>
+      <div style="flex:1"><div style="font-size:12px;font-weight:600">${t.id} — ${t.cust}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${t.issue}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">Agent: ${t.agent} · Wazi kwa ${t.time}</div></div>
+      <div style="display:flex;gap:5px">
+        <button class="ab ab-approve" onclick="showToast('Ticket ${t.id} resolved!')">Resolve</button>
+        <button class="ab ab-edit" onclick="showToast('Assign ${t.id}')">Assign</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderDeliveryTeam(){
+  const tb=document.getElementById('delivery-tbody');
+  if(!tb)return;
+  tb.innerHTML=riders.map(r=>`<tr>
+    <td class="td-name">${r.name}</td><td>${r.phone}</td>
+    <td>${r.vehicle}</td><td style="font-family:monospace">${r.plate}</td>
+    <td>${r.area}</td><td style="text-align:center;font-weight:600">${r.deliveries}</td>
+    <td><b style="color:var(--g)">⭐ ${r.rating}</b></td>
+    <td>${fmt(r.fee_per_del)}/del</td>
+    <td style="color:var(--g);font-weight:600">${fmt(r.total_paid)}</td>
+    <td><span class="pill pill-green"><span class="pdot"></span>Available</span></td>
+    <td><button class="ab ab-edit" onclick="showToast('Edit ${r.name}')">Edit</button></td>
+  </tr>`).join('');
+  const dt=document.getElementById('deliveries-today');
+  if(dt)dt.innerHTML=[
+    {rider:'Hassan Rider',prod:'Samsung A15',dest:'Moshi Mjini',status:'dispatched'},
+    {rider:'Ali Boda',prod:'Sufuria Set',dest:'Hai',status:'sourcing'},
+  ].map(d=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:.5px solid var(--border);font-size:12px">
+    <div><div style="font-weight:600">${d.rider}</div><div style="color:var(--muted);font-size:11px">${d.prod} → ${d.dest}</div></div>
+    <span class="pill ${d.status==='dispatched'?'pill-green':'pill-gold'}">${pill(d.status)}</span>
+  </div>`).join('');
+  const rp=document.getElementById('rider-performance');
+  if(rp)rp.innerHTML=riders.map(r=>`
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+      <div style="font-size:14px">🏍️</div>
+      <div style="flex:1"><div style="font-size:12px;font-weight:500">${r.name} <span style="color:var(--muted);font-weight:400">· ${r.area}</span></div>
+        <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-top:4px">
+          <div style="height:100%;border-radius:3px;background:var(--g);width:${Math.round(r.deliveries/18*100)}%"></div>
+        </div>
+      </div>
+      <div style="text-align:right;font-size:11px"><div style="font-weight:700">${r.deliveries} deliveries</div><div style="color:var(--gold)">⭐ ${r.rating}</div></div>
+    </div>`).join('');
+}
+
+function renderExpenses(){
+  const tb=document.getElementById('expense-tbody');
+  if(!tb)return;
+  tb.innerHTML=expenses.map(e=>`<tr>
+    <td style="font-size:11px">${e.date}</td>
+    <td class="td-name">${e.title}</td>
+    <td><span class="pill pill-gray">${e.cat}</span></td>
+    <td>${e.payee}</td>
+    <td style="text-align:right;font-weight:600;color:var(--danger)">TZS ${e.amount.toLocaleString()}</td>
+    <td>${e.method}</td><td>${e.approved}</td>
+    <td style="text-align:center">${e.receipt?'📎 <span style="color:var(--success);font-size:11px">Yes</span>':'<span style="color:var(--warning);font-size:11px">Missing</span>'}</td>
+    <td><button class="ab ab-edit" onclick="showToast('Edit expense')">Edit</button></td>
+  </tr>`).join('');
+  const cats={};
+  expenses.forEach(e=>{cats[e.cat]=(cats[e.cat]||0)+e.amount;});
+  const total=Object.values(cats).reduce((a,b)=>a+b,0);
+  const es=document.getElementById('expense-summary');
+  if(es)es.innerHTML=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>`
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:9px">
+      <div style="font-size:12px;flex:1">${cat}</div>
+      <div style="width:90px;height:6px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="height:100%;border-radius:3px;background:var(--g);width:${Math.round(amt/total*100)}%"></div>
+      </div>
+      <div style="font-size:12px;font-weight:600;width:70px;text-align:right;color:var(--danger)">TZS ${(amt/1000).toFixed(0)}K</div>
+    </div>`).join('');
+  const revenue=2149700;
+  const pl=document.getElementById('pl-statement');
+  if(pl)pl.innerHTML=`
+    <div class="sr"><span class="sr-l">Mapato ya Bidhaa</span><span class="sr-v" style="color:var(--g)">TZS 2,040,000</span></div>
+    <div class="sr"><span class="sr-l">Ada za Kutoa (5%)</span><span class="sr-v" style="color:var(--g)">TZS 61,000</span></div>
+    <div class="sr"><span class="sr-l">Faida ya Float</span><span class="sr-v" style="color:var(--g)">TZS 48,700</span></div>
+    <div class="sr" style="font-weight:700"><span class="sr-l">Jumla ya Mapato</span><span class="sr-v" style="color:var(--g)">${fmt(revenue)}</span></div>
+    <div style="border-top:2px solid var(--border);margin:8px 0"></div>
+    <div class="sr"><span class="sr-l">Jumla ya Matumizi</span><span class="sr-v" style="color:var(--danger)">TZS ${total.toLocaleString()}</span></div>
+    <div style="border-top:2px solid var(--border);margin:8px 0"></div>
+    <div style="background:#f0fdf4;padding:10px;border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+      <span style="font-weight:700;color:var(--text)">💰 FAIDA HALISI</span>
+      <span style="font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--success)">${fmt(revenue-total)}</span>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px">Profit Margin: ${Math.round((revenue-total)/revenue*100)}%</div>`;
+}
+
+function openTeamModal(type){
+  const configs={
+    sales:{title:'Add Sales Team Member',fields:[
+      {id:'tm-n',l:'Jina Kamili *',t:'text',ph:'Baraka Juma'},
+      {id:'tm-r',l:'Jukumu',t:'sel',opts:['Sales Executive','Field Agent','Digital Marketing','Brand Ambassador']},
+      {id:'tm-a',l:'Eneo la Kazi',t:'text',ph:'Moshi Mjini'},
+      {id:'tm-p',l:'Nambari ya Simu *',t:'tel',ph:'+255 7XX XXX XXX'},
+      {id:'tm-tr',l:'Target: Wasajili/Mwezi',t:'number',ph:'10'},
+      {id:'tm-td',l:'Target: Amana (TZS/Mwezi)',t:'number',ph:'2000000'},
+      {id:'tm-c',l:'Kamisheni (%)',t:'number',ph:'3'},
+      {id:'tm-s',l:'Mshahara wa Msingi (TZS)',t:'number',ph:'300000'},
+    ]},
+    care:{title:'Add Customer Care Agent',fields:[
+      {id:'tm-n',l:'Jina Kamili *',t:'text',ph:'Amina Juma'},
+      {id:'tm-sh',l:'Shift',t:'sel',opts:['Asubuhi 7–15','Mchana 13–21','Jioni 19–23']},
+      {id:'tm-wp',l:'Simu ya Kazi *',t:'tel',ph:'+255 700 XXX XXX'},
+      {id:'tm-wa',l:'WhatsApp ya Binafsi',t:'tel',ph:'+255 7XX XXX XXX'},
+      {id:'tm-s',l:'Mshahara (TZS)',t:'number',ph:'300000'},
+    ]},
+    rider:{title:'Add Delivery Rider',fields:[
+      {id:'tm-n',l:'Jina Kamili *',t:'text',ph:'Hassan Juma'},
+      {id:'tm-p',l:'Nambari ya Simu *',t:'tel',ph:'+255 7XX XXX XXX'},
+      {id:'tm-v',l:'Aina ya Gari',t:'sel',opts:['Bodaboda','Pikipiki','Gari Ndogo','Bajaj']},
+      {id:'tm-pl',l:'Plate Number',t:'text',ph:'T123ABC'},
+      {id:'tm-a',l:'Eneo Analofanya',t:'text',ph:'Moshi Mjini'},
+      {id:'tm-f',l:'Ada kwa Delivery Moja (TZS)',t:'number',ph:'3500'},
+    ]},
+  };
+  const cfg=configs[type]||configs.sales;
+  document.getElementById('team-modal-title').textContent=cfg.title;
+  document.getElementById('team-modal-body').innerHTML=
+    cfg.fields.map(f=>`<div class="fg"><label class="fl">${f.l}</label>${
+      f.t==='sel'
+        ?`<select class="fi-in" id="${f.id}" style="height:42px;cursor:pointer">${f.opts.map(o=>`<option>${o}</option>`).join('')}</select>`
+        :`<input class="fi-in" type="${f.t}" id="${f.id}" placeholder="${f.ph||''}"/>`
+    }</div>`).join('')+
+    `<div class="form-actions">
+      <button class="btn-full btn-g" onclick="showToast('✅ Mwanachama ameongezwa!');closeTeamModal()">Hifadhi</button>
+      <button class="btn-full btn-out" onclick="closeTeamModal()">Ghairi</button>
+    </div>`;
+  document.getElementById('team-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeTeamModal(){document.getElementById('team-modal').classList.remove('open');document.body.style.overflow='';}
+function openExpenseModal(){
+  document.getElementById('exp-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('expense-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeExpenseModal(){document.getElementById('expense-modal').classList.remove('open');document.body.style.overflow='';}
+function saveExpense(){
+  const title=document.getElementById('exp-title').value;
+  const amt=parseFloat(document.getElementById('exp-amount').value)||0;
+  if(!title||!amt){showToast('❌ Jaza sehemu zote zinazohitajika.');return;}
+  showToast('✅ Gharama TZS '+amt.toLocaleString()+' imehifadhiwa!');
+  closeExpenseModal();
+}
+function filterExpenses(cat){showToast('Filtering: '+(cat||'All'));}
+
+
+// ══════════════════════════════════════════════════════════════
+//  API SETTINGS FUNCTIONS
+// ══════════════════════════════════════════════════════════════
+
+// ── API status data ────────────────────────────────────────────
+const apiStatuses = {
+  mpesa:    {ok:true,  label:'M-Pesa',        last:'2 min ago', resp:'423ms'},
+  at:       {ok:true,  label:"Africa's Talking",last:'5 min ago',resp:'218ms'},
+  whatsapp: {ok:true,  label:'WhatsApp',       last:'1 min ago', resp:'342ms'},
+  sentry:   {ok:true,  label:'Sentry',         last:'10 min ago',resp:'195ms'},
+  ai:       {ok:false, label:'Claude AI',      last:'Never',     resp:'—'},
+  storage:  {ok:false, label:'DO Spaces',      last:'Never',     resp:'—'},
+};
+
+const apiLog = [
+  {icon:'✅',status:'200',type:'post',endpoint:'/api/v1/mpesa/stk-callback',desc:'STK callback — TZS 15,000 deposit confirmed',time:'2 min ago'},
+  {icon:'✅',status:'200',type:'post',endpoint:'/api/v1/mpesa/b2c-result',desc:'B2C payout confirmed — TZS 19,000 sent to +255712xxx',time:'14 min ago'},
+  {icon:'📱',status:'200',type:'post',endpoint:'/api/v1/ussd',desc:"USSD session — customer checked balance",time:'22 min ago'},
+  {icon:'✅',status:'200',type:'post',endpoint:'/api/v1/mpesa/stk-callback',desc:'STK callback — TZS 10,000 deposit confirmed',time:'31 min ago'},
+  {icon:'💬',status:'200',type:'post',endpoint:'WhatsApp → +255754xxx',desc:"Message sent: 'Amana yako ya TZS 10,000 imepokelewa!'",time:'31 min ago'},
+  {icon:'📱',status:'200',type:'post',endpoint:'/api/v1/ussd',desc:'USSD session — new plan created via *384#',time:'45 min ago'},
+  {icon:'✅',status:'200',type:'post',endpoint:'/api/v1/mpesa/c2b-confirm',desc:'C2B payment confirmed — TZS 25,000 Paybill',time:'1 hr ago'},
+  {icon:'⚠️',status:'408',type:'post',endpoint:'/api/v1/mpesa/b2c-timeout',desc:'B2C timeout — will retry automatically',time:'2 hrs ago'},
+  {icon:'✅',status:'200',type:'get',endpoint:'/api/v1/ai/recommendations',desc:'AI recommendations served to Amina Moshi',time:'3 hrs ago'},
+  {icon:'✅',status:'200',type:'post',endpoint:'/api/v1/ai/chat',desc:'KiliBot chat session — 3 messages exchanged',time:'4 hrs ago'},
+];
+
+// ── RENDER API LOG ─────────────────────────────────────────────
+function renderApiLog() {
+  const el = document.getElementById('api-log');
+  if (!el) return;
+  el.innerHTML = apiLog.map(e => {
+    const methodClass = {get:'method-get',post:'method-post',put:'method-put'}[e.type]||'method-get';
+    const statusColor = e.status.startsWith('2') ? 'var(--success)' : e.status.startsWith('4') ? 'var(--warning)' : 'var(--danger)';
+    return `<div class="api-log-row">
+      <div class="api-log-icon">${e.icon}</div>
+      <div class="api-log-body">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span class="api-method ${methodClass}">${e.type.toUpperCase()}</span>
+          <span style="font-size:11px;font-weight:700;color:${statusColor}">${e.status}</span>
+          <span style="font-size:12px;color:var(--text)">${e.desc}</span>
+        </div>
+        <div class="api-log-endpoint">${e.endpoint}</div>
+      </div>
+      <div class="api-log-time">${e.time}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── TEST SINGLE API ────────────────────────────────────────────
+function testApi(name) {
+  const pillId = name + '-status-pill';
+  const pill = document.getElementById(pillId);
+  if (pill) { pill.textContent = '🔄 Testing...'; pill.className = 'api-status-pill orange'; }
+
+  // Simulate test (in production: call /api/v1/admin/test-api?service={name})
+  setTimeout(() => {
+    const s = apiStatuses[name];
+    if (pill) {
+      pill.textContent = s.ok ? '🟢 Connected' : '🔴 Not Configured';
+      pill.className = 'api-status-pill ' + (s.ok ? 'green' : 'red');
+    }
+    showToast(s.ok
+      ? '✅ ' + s.label + ' connected — response time: ' + s.resp
+      : '❌ ' + s.label + ' not configured. Add API key and save.'
+    );
+  }, 1200);
+}
+
+// ── TEST ALL APIs ──────────────────────────────────────────────
+function testAllApis() {
+  showToast('Testing all API connections...');
+  const apis = Object.keys(apiStatuses);
+  apis.forEach((name, i) => {
+    setTimeout(() => testApi(name), i * 400);
+  });
+  setTimeout(() => {
+    const connected = Object.values(apiStatuses).filter(s => s.ok).length;
+    showToast('✅ ' + connected + '/' + apis.length + ' APIs connected.');
+  }, apis.length * 400 + 600);
+}
+
+// ── ENV TOGGLE ─────────────────────────────────────────────────
+function setEnv(apiName, env, btn) {
+  const container = document.getElementById(apiName + '-env');
+  if (!container) return;
+  container.querySelectorAll('.env-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  const warn = document.getElementById(apiName + '-env-warn');
+  if (warn) warn.style.display = env === 'production' ? 'inline-block' : 'none';
+  if (env === 'production') {
+    showToast('⚠️ Production mode — malipo ya kweli yatatokea!');
+  }
+}
+
+// ── SAVE API CONFIG ────────────────────────────────────────────
+function saveApi(name) {
+  const labels = {
+    mpesa:'M-Pesa Daraja', at:"Africa's Talking",
+    whatsapp:'WhatsApp 360dialog', sentry:'Sentry',
+    ai:'Claude AI', storage:'DigitalOcean Spaces',
+  };
+  showToast('✅ ' + (labels[name]||name) + ' config imehifadhiwa!');
+  // In production: POST to /api/v1/admin/settings/api with the form data
+}
+
+// ── TOGGLE SECRET VISIBILITY ───────────────────────────────────
+function toggleSecret(btn) {
+  const input = btn.previousElementSibling;
+  if (!input) return;
+  if (input.type === 'password') {
+    input.type = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type = 'password';
+    btn.textContent = '👁';
+  }
+}
+
+// ── COPY CALLBACK URL ──────────────────────────────────────────
+function copyUrl(el) {
+  const text = el.textContent.replace('📋', '').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    showToast('✅ URL imenakilwa: ' + text.split('/').slice(-2).join('/'));
+  }).catch(() => {
+    showToast('Copy failed — select text manually');
+  });
+}
+
+// ── EMAIL CONFIG ───────────────────────────────────────────────
+function openEmailConfig() {
+  showToast('Email config inafunguka kwenye Business Settings...');
+  setTimeout(() => nav('settings', null), 800);
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+renderAll();
+resetHighlights();
+resetSpecs();
+renderSalesTeam();
+renderCareTeam();
+renderDeliveryTeam();
+renderExpenses();
+renderApiLog();
+renderUsers();
+renderSlides();
+renderFlashProducts();
+renderFeaturedList();
+// Hide top action button initially (overview page)
+document.getElementById('tb-action-btn').style.display='none';
+
+// ══════════════════════════════════════════════════════════════
+//  USERS & ROLES
+// ══════════════════════════════════════════════════════════════
+const allUsers=[
+  {id:1,name:'KiliSmart Owner',phone:'+255700000001',role:'superadmin',lastLogin:'Now',status:'active'},
+  {id:2,name:'James Kileo',phone:'+255712000010',role:'manager',lastLogin:'1 hr ago',status:'active'},
+  {id:3,name:'Sarah Mwanga',phone:'+255754000011',role:'manager',lastLogin:'3 hrs ago',status:'active'},
+  {id:4,name:'Fatuma Mbise',phone:'+255712000012',role:'care',lastLogin:'5 min ago',status:'active'},
+  {id:5,name:'Peter Kileo',phone:'+255754000013',role:'care',lastLogin:'12 min ago',status:'active'},
+  {id:6,name:'Mary Hassan',phone:'+255769000014',role:'care',lastLogin:'45 min ago',status:'active'},
+  {id:7,name:'Baraka Juma',phone:'+255765000015',role:'sales',lastLogin:'2 hrs ago',status:'active'},
+  {id:8,name:'Amina Saleh',phone:'+255712000016',role:'sales',lastLogin:'1 day ago',status:'active'},
+  {id:9,name:'Hassan Rider',phone:'+255765000017',role:'rider',lastLogin:'30 min ago',status:'active'},
+  {id:10,name:'Ali Boda',phone:'+255712000018',role:'rider',lastLogin:'2 hrs ago',status:'active'},
+  {id:11,name:'TechMoshi Ltd',phone:'+255712000019',role:'supplier',lastLogin:'Yesterday',status:'active'},
+];
+const roleConfig={
+  superadmin:{label:'Super Admin',color:'role-superadmin',icon:'👑',perms:['overview','products','categories','suppliers','customers','plans','fulfillment','withdrawals','deliveries','finance','expenses','sales-team','customer-care','delivery-team','api-settings','users-roles','cms','settings']},
+  manager:{label:'Manager',color:'role-manager',icon:'🎛️',perms:['overview','products','categories','suppliers','customers','plans','fulfillment','withdrawals','deliveries','finance','expenses']},
+  care:{label:'Customer Care',color:'role-care',icon:'🎧',perms:['overview','customers','plans','inactive']},
+  sales:{label:'Sales Agent',color:'role-sales',icon:'🎯',perms:['overview','customers','plans','inactive']},
+  rider:{label:'Delivery Rider',color:'role-rider',icon:'🏍️',perms:['overview','deliveries','fulfillment']},
+  supplier:{label:'Supplier',color:'role-supplier',icon:'🏭',perms:['overview','products']},
+  viewer:{label:'Read-Only Viewer',color:'role-viewer',icon:'👁️',perms:['overview']},
+};
+const allPerms=[
+  {key:'overview',label:'Dashboard Overview'},{key:'products',label:'Products (CRUD)'},
+  {key:'categories',label:'Categories'},{key:'suppliers',label:'Suppliers'},
+  {key:'customers',label:'Customers'},{key:'plans',label:'Saving Plans'},
+  {key:'fulfillment',label:'Fulfillment Queue'},{key:'withdrawals',label:'Withdrawals'},
+  {key:'inactive',label:'Inactive Customers'},{key:'deliveries',label:'Deliveries'},
+  {key:'finance',label:'Financial Reports'},{key:'expenses',label:'Internal Expenses'},
+  {key:'sales-team',label:'Sales Team'},{key:'customer-care',label:'Customer Care'},
+  {key:'delivery-team',label:'Delivery Team'},{key:'api-settings',label:'API Settings'},
+  {key:'users-roles',label:'Users & Roles'},{key:'cms',label:'Homepage CMS'},
+  {key:'settings',label:'Business Settings'},
+];
+function roleBadge(role){const rc=roleConfig[role]||roleConfig.viewer;return `<span class="role-badge ${rc.color}">${rc.icon} ${rc.label}</span>`;}
+function renderUsers(){
+  const tb=document.getElementById('users-tbody');
+  if(!tb)return;
+  tb.innerHTML=allUsers.map(u=>`<tr>
+    <td class="td-name">${u.name}</td>
+    <td style="font-size:11px;color:var(--muted)">${u.phone}</td>
+    <td>${roleBadge(u.role)}</td>
+    <td style="font-size:11px;color:var(--muted)">${u.lastLogin}</td>
+    <td>${u.status==='active'?'<span class="pill pill-g"><span class="pdot pulse"></span>Active</span>':'<span class="pill pill-gray">Suspended</span>'}</td>
+    <td style="display:flex;gap:4px">
+      <button class="ab ab-edit" onclick="editUser(${u.id})">Edit</button>
+      <button class="ab ab-del" onclick="showToast('User suspended')">Suspend</button>
+    </td>
+  </tr>`).join('');
+  const rl=document.getElementById('roles-list');
+  if(!rl)return;
+  rl.innerHTML=Object.entries(roleConfig).map(([key,rc])=>{
+    const count=allUsers.filter(u=>u.role===key).length;
+    return `<div class="card" style="margin-bottom:10px;cursor:pointer" onclick="showRolePerms('${key}')">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px"><span style="font-size:20px">${rc.icon}</span>
+          <div><div style="font-size:13px;font-weight:700">${rc.label}</div>
+          <div style="font-size:11px;color:var(--muted)">${count} user${count!==1?'s':''} · ${rc.perms.length} permissions</div></div>
+        </div><span class="role-badge ${rc.color}">${rc.label}</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px">
+        ${rc.perms.slice(0,5).map(p=>`<span style="background:var(--cream);border-radius:5px;padding:2px 7px;font-size:10px;color:var(--muted)">${p}</span>`).join('')}
+        ${rc.perms.length>5?`<span style="background:var(--cream);border-radius:5px;padding:2px 7px;font-size:10px;color:var(--muted)">+${rc.perms.length-5} more</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+function showRolePerms(role){
+  const rc=roleConfig[role];
+  document.getElementById('role-modal-title').textContent=rc.icon+' '+rc.label+' — Edit Permissions';
+  document.getElementById('role-modal-body').innerHTML=`
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">Chagua ni nani anayoweza kufikia. Sehemu zilizo na ✓ zinaonyeshwa kwa role hii.</p>
+    <div class="perm-grid">
+      ${allPerms.map(p=>`<div class="perm-item ${rc.perms.includes(p.key)?'on':''}" onclick="togglePerm(this,'${role}','${p.key}')">
+        <div class="perm-check">${rc.perms.includes(p.key)?'✓':''}</div><span>${p.label}</span></div>`).join('')}
+    </div>
+    <div class="form-actions">
+      <button class="btn-full btn-g" onclick="showToast('✅ Permissions ya ${rc.label} zimehifadhiwa!');closeRoleModal()">Save Permissions</button>
+      <button class="btn-full btn-out" onclick="closeRoleModal()">Cancel</button>
+    </div>`;
+  document.getElementById('role-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function togglePerm(el){el.classList.toggle('on');el.querySelector('.perm-check').textContent=el.classList.contains('on')?'✓':'';}
+function openUserModal(id){
+  const u=id?allUsers.find(x=>x.id===id):null;
+  document.getElementById('user-modal-title').textContent=u?'Edit User: '+u.name:'Add New User';
+  document.getElementById('user-modal-body').innerHTML=`
+    <div class="fg"><label class="fl">Full Name *</label><input class="fi-in" id="um-name" value="${u?u.name:''}" placeholder="John Kileo"/></div>
+    <div class="fg"><label class="fl">Phone Number *</label><input class="fi-in" type="tel" id="um-phone" value="${u?u.phone:''}" placeholder="+255 7XX XXX XXX"/></div>
+    <div class="fg"><label class="fl">Role *</label>
+      <select class="fi-in" id="um-role" style="height:42px;cursor:pointer" onchange="updateRoleDesc(this.value)">
+        ${Object.entries(roleConfig).map(([k,v])=>`<option value="${k}" ${u&&u.role===k?'selected':''}>${v.icon} ${v.label}</option>`).join('')}
+      </select>
+      <div class="hint" id="um-role-desc" style="margin-top:6px;padding:8px 10px;background:var(--cream);border-radius:7px;font-size:12px;color:var(--muted);line-height:1.5">
+        ${u?`<strong>${roleConfig[u.role].label}</strong> — ${roleConfig[u.role].perms.slice(0,5).join(', ')}...`:'Select a role to see permissions.'}
+      </div>
+    </div>
+    <div class="fg"><label class="fl">Send Login OTP via SMS</label>
+      <select class="fi-in" style="height:42px;cursor:pointer"><option>Yes — send OTP to phone</option><option>No — they use existing password</option></select>
+    </div>
+    <div class="form-actions">
+      <button class="btn-full btn-g" onclick="showToast('✅ User saved! OTP sent via SMS.');closeUserModal()">Save User</button>
+      <button class="btn-full btn-out" onclick="closeUserModal()">Cancel</button>
+    </div>`;
+  document.getElementById('user-modal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function updateRoleDesc(role){const rc=roleConfig[role];const el=document.getElementById('um-role-desc');if(el)el.innerHTML=`<strong>${rc.label}</strong> anaweza kufikia: ${rc.perms.join(', ')}`;}
+function editUser(id){openUserModal(id);}
+function openRoleModal(){showRolePerms('manager');}
+function closeUserModal(){document.getElementById('user-modal').classList.remove('open');document.body.style.overflow='';}
+function closeRoleModal(){document.getElementById('role-modal').classList.remove('open');document.body.style.overflow='';}
+
+// ══ PRODUCT IMAGE UPLOAD (Real file input) ══════════════════
+function loadProductImg(input,idx){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  if(file.size>5*1024*1024){showToast('❌ Picha ni kubwa — max 5MB');input.value='';return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const slot=document.getElementById('img-slot-'+idx);
+    const preview=document.getElementById('img-preview-'+idx);
+    if(!slot||!preview)return;
+    preview.src=e.target.result;
+    slot.classList.add('has-file');
+    showToast('✅ Picha '+(idx+1)+' imepakiwa!');
+  };
+  reader.readAsDataURL(file);
+}
+function clearProductImg(e,idx){
+  e.stopPropagation();
+  const slot=document.getElementById('img-slot-'+idx);
+  const preview=document.getElementById('img-preview-'+idx);
+  const input=slot&&slot.querySelector('input[type=file]');
+  if(slot)slot.classList.remove('has-file');
+  if(preview)preview.src='';
+  if(input)input.value='';
+  showToast('Picha imeondolewa');
+}
+function clearAllProductImages(){
+  for(let i=0;i<4;i++){
+    try{
+      const slot=document.getElementById('img-slot-'+i);
+      const preview=document.getElementById('img-preview-'+i);
+      const input=slot&&slot.querySelector('input[type=file]');
+      if(slot)slot.classList.remove('has-file');
+      if(preview){preview.src='';preview.style.display='none';}
+      if(input)input.value='';
+    }catch(e){}
+  }
+}
+
+// ══ HOMEPAGE CMS ═══════════════════════════════════════════════
+const slidesData=[
+  {id:0,title:'Nunua kwa akili — hata kama pesa ni kidogo',subtitle:'Hifadhi kidogo kidogo kupitia M-Pesa. Tutakuletea ukifikia lengo lako.',emoji:'🏔️',btn1:'Jisajili Bure →',btn2:'Angalia Bidhaa ↓',bg:'linear-gradient(135deg,#0d3d22,#1a6b3c,#2d9e5f)',active:true},
+  {id:1,title:'Samsung Galaxy A15 — TZS 280,000 tu',subtitle:'Screen ya 6.5" Super AMOLED · Kamera ya 50MP · Betri ya 5000mAh',emoji:'📱',btn1:'Angalia Bidhaa →',btn2:'Simu Zote ↓',bg:'linear-gradient(135deg,#0d2654,#1a4fa0,#1e5eb5)',active:true},
+  {id:2,title:'Solar Panel 100W + Kit kamili ya nyumba',subtitle:'Taa 6 + TV + Chaja ya Simu. Hifadhi TZS 7,000/wiki uipate!',emoji:'🌞',btn1:'Angalia Bidhaa →',btn2:'Solar Zote ↓',bg:'linear-gradient(135deg,#3d1a0d,#8a4520,#b55a2a)',active:true},
+  {id:3,title:'Vifaa vya Kilimo kwa mkulima wa Kili',subtitle:'Pampu ya jua · Dawa ya kupulizia · Vifaa vya umwagiliaji.',emoji:'🚜',btn1:'Angalia Kilimo →',btn2:'Jisajili Bure ↓',bg:'linear-gradient(135deg,#1a1a0d,#4a6b1a,#5a8a22)',active:false},
+];
+function renderSlides(){
+  const el=document.getElementById('slides-container');if(!el)return;
+  el.innerHTML=slidesData.map((s,i)=>`
+    <div class="cms-slide-card ${s.active?'active-slide':''}" id="cms-slide-${i}">
+      <span class="cms-drag-handle">⋮⋮</span>
+      <div class="cms-slide-preview" style="background:${s.bg}">
+        <span style="font-size:36px">${s.emoji}</span>
+        <div style="max-width:60%"><div style="font-size:12px;font-weight:700;line-height:1.4">${s.title.slice(0,50)}...</div>
+          <div style="font-size:10px;opacity:.75;margin-top:3px">${s.subtitle.slice(0,55)}...</div></div>
+        <span class="cms-slide-number">Slide ${i+1}</span>
+        <span class="cms-slide-status"><label style="display:flex;align-items:center;gap:4px;cursor:pointer;font-size:10px;font-weight:700">
+          <input type="checkbox" ${s.active?'checked':''} onchange="toggleSlide(${i},this.checked)" style="accent-color:#fff"/>Active</label></span>
+      </div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div class="fg"><label class="fl">Headline</label><input class="fi-in" value="${s.title}" oninput="slidesData[${i}].title=this.value;refreshSlidePreview(${i})"/></div>
+        <div class="fg"><label class="fl">Sub-headline</label><input class="fi-in" value="${s.subtitle}"/></div>
+      </div>
+      <div class="form-row" style="margin-bottom:10px">
+        <div class="fg"><label class="fl">Button 1 Text</label><input class="fi-in" value="${s.btn1}"/></div>
+        <div class="fg"><label class="fl">Button 2 Text</label><input class="fi-in" value="${s.btn2}"/></div>
+        <div class="fg"><label class="fl">Icon / Emoji</label><input class="fi-in" value="${s.emoji}" maxlength="4" style="font-size:20px;text-align:center" oninput="slidesData[${i}].emoji=this.value;refreshSlidePreview(${i})"/></div>
+      </div>
+      <div class="form-row" style="margin-bottom:8px">
+        <div class="fg">
+          <label class="fl">Slide Background Image <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted)">(optional — overrides color below)</span></label>
+          <div class="cms-img-upload" onclick="this.querySelector('input').click()" id="slide-drop-${i}">
+            <input type="file" accept="image/*" onchange="loadSlideImg(this,${i})" style="display:none"/>
+            <div class="cms-upload-placeholder" style="font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;justify-content:center">
+              <span style="font-size:20px">🖼️</span> Bonyeza kupakia (1440×480px) · JPG/PNG · Max 5MB
+            </div>
+            <img class="cms-img-preview" id="slide-img-${i}" alt="Slide ${i+1}"/>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="fl">Background Color</label>
+          <div class="color-swatch-row">
+            <div class="color-swatch ${s.bg.includes('1a6b3c')?'sel':''}" style="background:linear-gradient(135deg,#0d3d22,#1a6b3c)" onclick="setSlideColor(${i},'linear-gradient(135deg,#0d3d22,#1a6b3c,#2d9e5f)',this)" title="Green (Default)"></div>
+            <div class="color-swatch ${s.bg.includes('1a4fa0')?'sel':''}" style="background:linear-gradient(135deg,#0d2654,#1a4fa0)" onclick="setSlideColor(${i},'linear-gradient(135deg,#0d2654,#1a4fa0,#1e5eb5)',this)" title="Blue"></div>
+            <div class="color-swatch ${s.bg.includes('8a4520')?'sel':''}" style="background:linear-gradient(135deg,#3d1a0d,#8a4520)" onclick="setSlideColor(${i},'linear-gradient(135deg,#3d1a0d,#8a4520,#b55a2a)',this)" title="Brown"></div>
+            <div class="color-swatch ${s.bg.includes('4a6b1a')?'sel':''}" style="background:linear-gradient(135deg,#1a1a0d,#4a6b1a)" onclick="setSlideColor(${i},'linear-gradient(135deg,#1a1a0d,#4a6b1a,#5a8a22)',this)" title="Farm Green"></div>
+            <div class="color-swatch" style="background:linear-gradient(135deg,#1a0d3d,#4a1a8a)" onclick="setSlideColor(${i},'linear-gradient(135deg,#1a0d3d,#4a1a8a,#7c3aed)',this)" title="Purple"></div>
+            <div class="color-swatch" style="background:linear-gradient(135deg,#0d2654,#0f4c75)" onclick="setSlideColor(${i},'linear-gradient(135deg,#0d2654,#0f4c75,#1b6ca8)',this)" title="Navy"></div>
+          </div>
+          <div style="margin-top:8px"><label class="fl" style="margin-bottom:3px">Custom Hex Color</label><input class="fi-in" type="color" style="height:38px;padding:3px" onchange="setSlideColor(${i},'linear-gradient(135deg,'+this.value+','+this.value+')',{parentElement:{querySelectorAll:()=>[]}})"/></div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function setSlideColor(idx,grad,swatch){
+  slidesData[idx].bg=grad;
+  const card=document.getElementById('cms-slide-'+idx);
+  if(card){const prev=card.querySelector('.cms-slide-preview');if(prev)prev.style.background=grad;}
+  const row=swatch.parentElement;
+  if(row&&row.querySelectorAll){row.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('sel'));swatch.classList&&swatch.classList.add('sel');}
+}
+function refreshSlidePreview(idx){
+  const card=document.getElementById('cms-slide-'+idx);if(!card)return;
+  const s=slidesData[idx];
+  const prev=card.querySelector('.cms-slide-preview');
+  if(!prev)return;
+  const t=prev.querySelector('div div:first-child');
+  const ic=prev.querySelector('span:first-child');
+  if(t)t.textContent=s.title.slice(0,50)+'...';
+  if(ic)ic.textContent=s.emoji;
+}
+function loadSlideImg(input,idx){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  if(file.size>5*1024*1024){showToast('❌ Max 5MB');return;}
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const preview=document.getElementById('slide-img-'+idx);
+    const slot=document.getElementById('slide-drop-'+idx);
+    if(preview){preview.src=e.target.result;preview.style.display='block';}
+    if(slot)slot.classList.add('has-img');
+    showToast('✅ Slide '+(idx+1)+' background loaded!');
+  };
+  reader.readAsDataURL(file);
+}
+function toggleSlide(idx,active){
+  slidesData[idx].active=active;
+  const card=document.getElementById('cms-slide-'+idx);
+  if(card)card.classList.toggle('active-slide',active);
+  showToast((active?'✅ Slide ':'⏸ Slide ')+(idx+1)+(active?' activated':' deactivated'));
+}
+function updateSliderPreview(){
+  const h=document.getElementById('slider-height')?.value||480;
+  const s=document.getElementById('slider-speed')?.value||5;
+  const hp=document.getElementById('height-preview');const sp=document.getElementById('speed-preview');
+  if(hp)hp.textContent=h+'px';if(sp)sp.textContent=s;
+}
+function cmsTab(name,btn){
+  document.querySelectorAll('.cms-panel').forEach(p=>p.style.display='none');
+  document.querySelectorAll('.cms-tab').forEach(b=>b.classList.remove('on'));
+  const panel=document.getElementById('cms-'+name);
+  if(panel)panel.style.display='block';
+  btn.classList.add('on');
+}
+function renderFlashProducts(){
+  const el=document.getElementById('flash-products-list');if(!el)return;
+  const items=[
+    {emoji:'📱',name:'Itel P55',price:'TZS 115,000',old:'150,000'},
+    {emoji:'🍳',name:'Sufuria Set',price:'TZS 85,000',old:'110,000'},
+    {emoji:'🔦',name:'Solar Lantern',price:'TZS 45,000',old:'60,000'},
+    {emoji:'🎒',name:'School Bag Set',price:'TZS 45,000',old:'58,000'},
+  ];
+  el.innerHTML=items.map(p=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:.5px solid var(--border)">
+      <span style="font-size:20px">${p.emoji}</span>
+      <div style="flex:1"><div style="font-size:13px;font-weight:600">${p.name}</div>
+        <div style="font-size:11px;color:var(--muted)">Sale: <strong style="color:var(--g)">${p.price}</strong> · Was: <span style="text-decoration:line-through">${p.old}</span></div>
+      </div>
+      <button class="ab ab-edit" onclick="showToast('Edit flash product')">Edit</button>
+      <button class="ab ab-del" onclick="this.closest('div').remove();showToast('Removed from flash sale')">Remove</button>
+    </div>`).join('');
+  const d=document.getElementById('flash-end');
+  if(d){const end=new Date();end.setDate(end.getDate()+1);end.setHours(23,59,0,0);d.value=end.toISOString().slice(0,16);}
+}
+function renderFeaturedList(){
+  const el=document.getElementById('featured-drag-list');if(!el)return;
+  el.innerHTML=prodData.slice(0,8).map((p,i)=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;background:#fff;cursor:grab">
+      <span style="color:var(--muted);font-size:16px">⋮⋮</span>
+      <span style="font-size:20px">${p.emoji}</span>
+      <span style="font-size:13px;font-weight:500;flex:1">${p.name}</span>
+      <span style="font-size:11px;color:var(--muted)">Position: ${i+1}</span>
+      <input type="checkbox" checked style="accent-color:var(--g)" title="Show on homepage"/>
+    </div>`).join('');
+}
+function countSeoDesc(){
+  const el=document.getElementById('seo-desc');const count=document.getElementById('seo-desc-count');
+  const gp=document.getElementById('gp-desc');
+  if(count){count.textContent=el.value.length;count.style.color=el.value.length>160?'var(--danger)':el.value.length<120?'var(--warning)':'var(--success)';}
+  if(gp)gp.textContent=el.value;
+}
+function previewOgImg(input){
+  if(!input.files||!input.files[0])return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.getElementById('og-preview');
+    if(img){img.src=e.target.result;img.style.display='block';}
+    input.closest('.cms-img-upload').classList.add('has-img');
+    showToast('✅ OG image uploaded!');
+  };
+  reader.readAsDataURL(input.files[0]);
+}
+function publishCMS(){showToast('✅ Homepage imesasishwa! Mabadiliko yanaonekana mara moja.');}
+function previewHomepage(){showToast('Preview inafungua...');window.open('index.html','_blank');}
+function updateAnnPreview(){
+  const text=document.getElementById('ann-text')?.value;
+  const bg=document.getElementById('ann-bg')?.value;
+  const tc=document.getElementById('ann-text-color')?.value;
+  const prev=document.getElementById('ann-preview');
+  if(prev){if(text)prev.textContent=text;if(bg)prev.style.background=bg;if(tc)prev.style.color=tc;}
+}
+
+</script>
+</body>
+</html>

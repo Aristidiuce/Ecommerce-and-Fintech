@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8"/>
+<meta name="robots" content="noindex, nofollow, noarchive"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KiliSmart — Ingia</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--green:#1a6b3c;--green2:#145530;--gold:#c9a84c;--cream:#f9f6f0;--border:#e5e7eb;--border2:#d1d5db;--radius:10px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);min-height:100vh;display:flex;flex-direction:column}
+nav{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--green);text-decoration:none}
+.nav-logo span{color:var(--gold)}
+.wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px;width:100%;max-width:380px}
+.logo{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--green);text-align:center;margin-bottom:4px}
+.logo span{color:var(--gold)}
+.subtitle{text-align:center;font-size:13px;color:#6b7280;margin-bottom:24px}
+.role-tabs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:20px}
+.role-tab{border:1.5px solid var(--border2);background:#fff;border-radius:8px;padding:10px 6px;cursor:pointer;text-align:center;font-size:11px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .18s;color:#374151}
+.role-tab.sel{border-color:var(--green);background:#f0faf4;color:var(--green)}
+.role-icon{font-size:18px;display:block;margin-bottom:3px}
+.label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#374151;display:block;margin-bottom:6px}
+.input{width:100%;height:46px;border:1.5px solid var(--border2);border-radius:var(--radius);padding:0 14px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;margin-bottom:14px;background:#fff;color:#1a1a1a}
+.input:focus{border-color:var(--green)}
+.btn{width:100%;height:48px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px;transition:background .2s}
+.btn:hover{background:var(--green2)}
+.forgot{text-align:right;margin-top:-8px;margin-bottom:16px}
+.forgot a{font-size:12px;color:var(--green);text-decoration:none}
+.divider{text-align:center;font-size:12px;color:#9ca3af;margin:16px 0}
+.register-link{text-align:center;font-size:13px;color:#6b7280}
+.register-link a{color:var(--green);font-weight:600;text-decoration:none}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Kili<span>Smart</span></a>
+  <span style="font-size:13px;color:#6b7280">Bado una akaunti? <a href="register.html" style="color:var(--green);font-weight:600;text-decoration:none">Jisajili</a></span>
+</nav>
+<div class="wrap">
+  <div class="card">
+    <div class="logo">Kili<span>Smart</span></div>
+    <div class="subtitle">Ingia kwenye akaunti yako</div>
+    <div class="role-tabs">
+      <button class="role-tab sel" onclick="setRole(this,'customer')">
+        <span class="role-icon">👤</span>Mteja
+      </button>
+      <button class="role-tab" onclick="setRole(this,'admin')">
+        <span class="role-icon">⚙️</span>Admin
+      </button>
+      <button class="role-tab" onclick="setRole(this,'supplier')">
+        <span class="role-icon">🏭</span>Supplier
+      </button>
+    </div>
+    <label class="label">Nambari ya Simu</label>
+    <input class="input" type="tel" placeholder="+255 7XX XXX XXX" id="phone"/>
+    <label class="label">Nenosiri</label>
+    <input class="input" type="password" placeholder="Nenosiri lako..." id="pwd"/>
+    <div class="forgot"><a href="#">Umesahau nenosiri?</a></div>
+    <button class="btn" onclick="doLogin()">Ingia →</button>
+    <div class="divider">au</div>
+    <div class="register-link">Huna akaunti? <a href="register.html">Jisajili bure — dakika 2 tu</a></div>
+  </div>
+</div>
+<script>
+let role='customer';
+function setRole(btn,r){
+  role=r;
+  document.querySelectorAll('.role-tab').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+}
+function doLogin(){
+  const dest={customer:'dashboard.html',admin:'admin.html',supplier:'supplier.html'};
+  window.location=dest[role];
+}
+</script>
+</body>
+</html>
